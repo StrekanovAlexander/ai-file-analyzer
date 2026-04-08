@@ -40,8 +40,8 @@ implementation
 
 procedure TfmMain.btnRunClick(Sender: TObject);
 var
-  Prompt: string;
   ResultStr: string;
+  FilePath: string;
 begin
   if not Assigned(FAIModel) then
   begin
@@ -49,9 +49,16 @@ begin
     Exit;
   end;
 
-  Prompt := 'Hello, model!';
-  ResultStr := FAIModel.Run(Prompt);
-  Memo1.Lines.Text := ResultStr;
+  FilePath := 'D:\ai-organizer-examples\example.txt';
+
+  if not FileExists(FilePath) then
+  begin
+    ShowMessage('File not found: ' + FilePath);
+    Exit;
+  end;
+
+  ResultStr := FAIModel.AnalyzeContent(FilePath);
+  Memo1.Lines.Text := 'File topic: ' + ResultStr;
 end;
 
 procedure TfmMain.FormDestroy(Sender: TObject);
