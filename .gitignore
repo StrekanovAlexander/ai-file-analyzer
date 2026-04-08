@@ -1,0 +1,10 @@
+__history
+__recovery
+*.dcu
+*.~dsk
+*.identcache
+*.local
+*.gguf
+*.rsm
+Win64
+dist/AIFileAnalyzer.exe
