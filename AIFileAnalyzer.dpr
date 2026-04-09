@@ -7,7 +7,9 @@ uses
   Vcl.Styles,
   uAIModel in 'src\core\uAIModel.pas',
   uConsts in 'src\common\uConsts.pas',
-  uAppPaths in 'src\common\uAppPaths.pas';
+  uAppPaths in 'src\common\uAppPaths.pas',
+  uRecords in 'src\common\uRecords.pas',
+  uStringUtils in 'src\common\uStringUtils.pas';
 
 {$R *.res}
 

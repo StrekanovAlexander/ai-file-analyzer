@@ -137,6 +137,8 @@
         <DCCReference Include="src\core\uAIModel.pas"/>
         <DCCReference Include="src\common\uConsts.pas"/>
         <DCCReference Include="src\common\uAppPaths.pas"/>
+        <DCCReference Include="src\common\uRecords.pas"/>
+        <DCCReference Include="src\common\uStringUtils.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

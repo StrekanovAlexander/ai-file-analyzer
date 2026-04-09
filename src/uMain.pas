@@ -15,7 +15,9 @@ uses
   StdCtrls,
   Vcl.Buttons,
   uAppPaths,
-  uAIModel;
+  uAIModel,
+  uRecords,
+  uStringUtils;
 
 type
   TfmMain = class(TForm)
@@ -42,6 +44,7 @@ procedure TfmMain.btnRunClick(Sender: TObject);
 var
   ResultStr: string;
   FilePath: string;
+  AnalysisRecord: TAnalysisRecord;
 begin
   if not Assigned(FAIModel) then
   begin
@@ -57,8 +60,10 @@ begin
     Exit;
   end;
 
-  ResultStr := FAIModel.AnalyzeContent(FilePath);
-  Memo1.Lines.Text := 'File topic: ' + ResultStr;
+  AnalysisRecord := FAIModel.AnalyzeContent(FilePath);
+  Memo1.Lines.Add('Topic: ' + AnalysisRecord.Topic);
+  Memo1.Lines.Add('Summary: ' + AnalysisRecord.Summary);
+  Memo1.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
 end;
 
 procedure TfmMain.FormDestroy(Sender: TObject);
