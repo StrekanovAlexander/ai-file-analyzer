@@ -8,4 +8,4 @@ __recovery
 *.rsm
 Win64
 dist/AIFileAnalyzer.exe
-dist/libs/docx/doctotext.exe
+dist/libs/docx/docxtotext.exe
