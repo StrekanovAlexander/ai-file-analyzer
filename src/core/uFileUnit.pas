@@ -3,7 +3,9 @@ unit uFileUnit;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.IOUtils, ComObj;
+  System.SysUtils, System.Classes, System.IOUtils, ComObj,
+  Windows
+  ;
 
 type TFileUnit = class
   private
@@ -13,6 +15,7 @@ type TFileUnit = class
     function GetFileSize: Int64;
     function GetFileTxtContent: string;
     function GetFileDocContent: string;
+    function GetFilePdfContent: string;
   public
     constructor Create(AFilePath: string);
     destructor Destroy; override;
@@ -46,7 +49,11 @@ begin
   if FFileExt = '.txt' then
     Result := GetFileTxtContent
   else if (FFileExt = '.doc') or (FFileExt = '.docx') then
-    Result := GetFileDocContent;
+    Result := GetFileDocContent
+  else if FFileExt = '.pdf' then
+    Result := GetFilePdfContent
+  else
+    Result := 'File extension ' + FFileExt + ' not support';
 end;
 
 function TFileUnit.GetFileTxtContent: string;
@@ -61,6 +68,59 @@ begin
   finally
     SL.Free;
   end;
+end;
+
+function TFileUnit.GetFilePdfContent: string;
+var
+  SA: TSecurityAttributes;
+  StdOutRead, StdOutWrite: THandle;
+  SI: TStartupInfo;
+  PI: TProcessInformation;
+  Buffer: array[0..4095] of AnsiChar;
+  BytesRead: DWORD;
+  CmdLine: string;
+begin
+  Result := '';
+
+  FillChar(SA, SizeOf(SA), 0);
+  SA.nLength := SizeOf(SA);
+  SA.bInheritHandle := True;
+
+  CreatePipe(StdOutRead, StdOutWrite, @SA, 0);
+
+  FillChar(SI, SizeOf(SI), 0);
+  SI.cb := SizeOf(SI);
+  SI.hStdOutput := StdOutWrite;
+  SI.hStdError := StdOutWrite;
+  SI.dwFlags := STARTF_USESTDHANDLES;
+
+  CmdLine := Format('"%slibs\pdf\pdftotext.exe" "%s" -',
+    [ExtractFilePath(ParamStr(0)), FFilePath]
+  );
+
+  if CreateProcess(nil, PChar(CmdLine), nil, nil, True, 0, nil, nil, SI, PI) then
+  begin
+    CloseHandle(StdOutWrite);
+
+    repeat
+      if ReadFile(StdOutRead, Buffer, SizeOf(Buffer)-1, BytesRead, nil) then
+      begin
+        if BytesRead > 0 then
+        begin
+          Buffer[BytesRead] := #0;
+          Result := Result + UTF8ToString(AnsiString(Buffer));
+        end;
+      end;
+    until BytesRead = 0;
+
+    WaitForSingleObject(PI.hProcess, INFINITE);
+
+    CloseHandle(PI.hProcess);
+    CloseHandle(PI.hThread);
+    CloseHandle(StdOutRead);
+  end
+  else
+    raise Exception.Create('Failed to start pdftotext');
 end;
 
 function TFileUnit.GetFileDocContent: string;

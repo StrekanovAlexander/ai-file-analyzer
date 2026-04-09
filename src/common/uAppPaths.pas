@@ -12,6 +12,7 @@ type
     FBasePath: string;
   public
     constructor Create;
+    function GetPdfToTextExe: string;
     function GetLlamaPath: string;
     function GetModelPath: string;
     function IsCliAvailable: Boolean;
@@ -21,13 +22,19 @@ type
 implementation
 
 const
-  LLAMA_FILE_PATH = 'llama\llama-cli.exe';
-  MODEL_FILE_PATH = 'llama\models\qwen2.5-3b-instruct-q4_k_m.gguf';
+  PDF_TO_TEXT_EXE = 'libs\pdf\pdftotext.exe';
+  LLAMA_FILE_PATH = 'libs\llama\llama-cli.exe';
+  MODEL_FILE_PATH = 'libs\llama\models\qwen2.5-3b-instruct-q4_k_m.gguf';
 
 constructor TAppPaths.Create;
 begin
   inherited Create;
   FBasePath := ExtractFilePath(Application.ExeName);
+end;
+
+function TAppPaths.GetPdfToTextExe: string;
+begin
+  Result := FBasePath + PDF_TO_TEXT_EXE;
 end;
 
 function TAppPaths.GetLlamaPath: string;

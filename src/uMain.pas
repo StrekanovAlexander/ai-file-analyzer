@@ -54,9 +54,9 @@ begin
     Exit;
   end;
 
-  FilePath := 'D:\ai-organizer-examples\example.txt';
-
+//  FilePath := 'D:\ai-organizer-examples\example.txt';
 //  FilePath := 'D:\ai-organizer-examples\sample2.docx';
+  FilePath := 'D:\ai-organizer-examples\sample.pdf';
 
   if not FileExists(FilePath) then
   begin
@@ -64,12 +64,13 @@ begin
     Exit;
   end;
 
+
   FileUnit := TFileUnit.Create(FilePath);
   try
     FileContent := FileUnit.GetFileContent;
     Memo1.Lines.Add(FileContent);
-    Memo1.Lines.Add(IntToStr(FileUnit.FileSize));
-    Memo1.Lines.Add(DateToStr(FileUnit.FileLastModified));
+    //Memo1.Lines.Add(IntToStr(FileUnit.FileSize));
+    //Memo1.Lines.Add(DateToStr(FileUnit.FileLastModified));
   finally
     FileUnit.Free;
   end;
