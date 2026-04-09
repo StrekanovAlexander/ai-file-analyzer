@@ -16,6 +16,7 @@ uses
   Vcl.Buttons,
   uAppPaths,
   uAIModel,
+  uFileUnit,
   uRecords,
   uStringUtils;
 
@@ -42,9 +43,10 @@ implementation
 
 procedure TfmMain.btnRunClick(Sender: TObject);
 var
-  ResultStr: string;
   FilePath: string;
   AnalysisRecord: TAnalysisRecord;
+  FileUnit: TFileUnit;
+  FileContent: string;
 begin
   if not Assigned(FAIModel) then
   begin
@@ -54,16 +56,30 @@ begin
 
   FilePath := 'D:\ai-organizer-examples\example.txt';
 
+//  FilePath := 'D:\ai-organizer-examples\sample2.docx';
+
   if not FileExists(FilePath) then
   begin
     ShowMessage('File not found: ' + FilePath);
     Exit;
   end;
 
+  FileUnit := TFileUnit.Create(FilePath);
+  try
+    FileContent := FileUnit.GetFileContent;
+    Memo1.Lines.Add(FileContent);
+    Memo1.Lines.Add(IntToStr(FileUnit.FileSize));
+    Memo1.Lines.Add(DateToStr(FileUnit.FileLastModified));
+  finally
+    FileUnit.Free;
+  end;
+
+  {
   AnalysisRecord := FAIModel.AnalyzeContent(FilePath);
   Memo1.Lines.Add('Topic: ' + AnalysisRecord.Topic);
   Memo1.Lines.Add('Summary: ' + AnalysisRecord.Summary);
   Memo1.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
+  }
 end;
 
 procedure TfmMain.FormDestroy(Sender: TObject);

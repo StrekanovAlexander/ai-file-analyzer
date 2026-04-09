@@ -9,7 +9,8 @@ uses
   uConsts in 'src\common\uConsts.pas',
   uAppPaths in 'src\common\uAppPaths.pas',
   uRecords in 'src\common\uRecords.pas',
-  uStringUtils in 'src\common\uStringUtils.pas';
+  uStringUtils in 'src\common\uStringUtils.pas',
+  uFileUnit in 'src\core\uFileUnit.pas';
 
 {$R *.res}
 

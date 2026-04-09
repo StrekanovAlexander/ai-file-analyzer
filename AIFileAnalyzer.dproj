@@ -139,6 +139,7 @@
         <DCCReference Include="src\common\uAppPaths.pas"/>
         <DCCReference Include="src\common\uRecords.pas"/>
         <DCCReference Include="src\common\uStringUtils.pas"/>
+        <DCCReference Include="src\core\uFileUnit.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
