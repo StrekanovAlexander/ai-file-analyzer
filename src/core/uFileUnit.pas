@@ -4,7 +4,8 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.IOUtils, ComObj,
-  Windows
+  Windows, Vcl.Dialogs,
+  uPaths
   ;
 
 type TFileUnit = class
@@ -79,8 +80,16 @@ var
   Buffer: array[0..4095] of AnsiChar;
   BytesRead: DWORD;
   CmdLine: string;
+  PdfToTextExe: string;
 begin
   Result := '';
+  if not IsPdfToTextExeAvailable then
+  begin
+    ShowMessage('pdftotext.exe not found');
+    Exit;
+  end;
+
+  PdfToTextExe := GetPdfToTextExe;
 
   FillChar(SA, SizeOf(SA), 0);
   SA.nLength := SizeOf(SA);
@@ -94,11 +103,9 @@ begin
   SI.hStdError := StdOutWrite;
   SI.dwFlags := STARTF_USESTDHANDLES;
 
-  CmdLine := Format('"%slibs\pdf\pdftotext.exe" "%s" -',
-    [ExtractFilePath(ParamStr(0)), FFilePath]
-  );
+  CmdLine := Format('"%s" "%s" -', [PdfToTextExe, FFilePath]);
 
-  if CreateProcess(nil, PChar(CmdLine), nil, nil, True, 0, nil, nil, SI, PI) then
+  if CreateProcess(nil, PChar(CmdLine), nil, nil, True, CREATE_NO_WINDOW, nil, nil, SI, PI) then
   begin
     CloseHandle(StdOutWrite);
 
@@ -124,10 +131,10 @@ begin
 end;
 
 function TFileUnit.GetFileDocContent: string;
-var
-  WordApp, Doc: OleVariant;
+//var WordApp, Doc: OleVariant;
 begin
-  Result := '';
+  Result := 'Doc content example';
+  {
   try
     WordApp := CreateOleObject('Word.Application');
   except
@@ -142,6 +149,7 @@ begin
   finally
     WordApp.Quit;
   end;
+  }
 end;
 
 function TFileUnit.GetFileSize: Int64;

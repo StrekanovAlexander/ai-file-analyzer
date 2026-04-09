@@ -16,7 +16,7 @@ type TAIModel = class
   public
     constructor Create(ALlamaPath: string; AModelPath: string);
     destructor Destroy; override;
-    function AnalyzeContent(const FilePath: string): TAnalysisRecord;
+    function AnalyzeContent(const FileContent: string): TAnalysisRecord;
 end;
 
 implementation
@@ -33,15 +33,13 @@ begin
   inherited;
 end;
 
-function TAIModel.AnalyzeContent(const FilePath: string): TAnalysisRecord;
+function TAIModel.AnalyzeContent(const FileContent: string): TAnalysisRecord;
 var
-  FileContent: string;
   Prompt: string;
   OutputStr: string;
   AnalysisRecord: TAnalysisRecord;
   KeywordsStr: string;
 begin
-  FileContent := TFile.ReadAllText(FilePath, TEncoding.UTF8);
   Prompt := GetAnalysisPrompt + FileContent;
   OutputStr := RunPrompt(Prompt);
   AnalysisRecord.Summary := ExtractField(OutputStr, FIELD_SUMMARY);
@@ -79,7 +77,7 @@ begin
     '"%s" --model "%s" --prompt "%s" --n_predict 128',
     [FLlamaPath, FModelPath, Prompt]
   );
-  if not CreateProcess(nil, PChar(CmdLine), nil, nil, TRUE, 0, nil, nil, SI, PI) then
+  if not CreateProcess(nil, PChar(CmdLine), nil, nil, True, CREATE_NO_WINDOW, nil, nil, SI, PI) then
     raise Exception.Create('Failed to start llama-cli.exe');
   CloseHandle(StdOutWrite);
   WaitForSingleObject(PI.hProcess, INFINITE);

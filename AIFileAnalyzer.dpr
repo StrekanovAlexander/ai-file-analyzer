@@ -7,10 +7,10 @@ uses
   Vcl.Styles,
   uAIModel in 'src\core\uAIModel.pas',
   uConsts in 'src\common\uConsts.pas',
-  uAppPaths in 'src\common\uAppPaths.pas',
   uRecords in 'src\common\uRecords.pas',
   uStringUtils in 'src\common\uStringUtils.pas',
-  uFileUnit in 'src\core\uFileUnit.pas';
+  uFileUnit in 'src\core\uFileUnit.pas',
+  uPaths in 'src\common\uPaths.pas';
 
 {$R *.res}
 
