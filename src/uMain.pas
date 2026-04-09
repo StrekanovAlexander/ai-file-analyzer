@@ -14,6 +14,8 @@ uses
   Dialogs,
   StdCtrls,
   Vcl.Buttons,
+  uGlobal,
+  uCLIRunner,
   uPaths,
   uAIModel,
   uFileUnit,
@@ -27,6 +29,7 @@ type
     procedure btnRunClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     FAIModel: TAIModel;
   public
@@ -54,7 +57,8 @@ begin
 
 //  FilePath := 'D:\ai-organizer-examples\example.txt';
 //  FilePath := 'D:\ai-organizer-examples\sample2.docx';
-  FilePath := 'D:\ai-organizer-examples\sample.pdf';
+//  FilePath := 'D:\ai-organizer-examples\sample.pdf';
+  FilePath := 'D:\ai-organizer-examples\sample7.odt';
 
   if not FileExists(FilePath) then
   begin
@@ -65,19 +69,28 @@ begin
   FileUnit := TFileUnit.Create(FilePath);
   try
     FileContent := FileUnit.GetFileContent;
+    Memo1.Text := FileContent;
+{
     AnalysisRecord := FAIModel.AnalyzeContent(FileContent);
     Memo1.Lines.Add('Topic: ' + AnalysisRecord.Topic);
     Memo1.Lines.Add('Summary: ' + AnalysisRecord.Summary);
     Memo1.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
     Memo1.Lines.Add(IntToStr(FileUnit.FileSize));
     Memo1.Lines.Add(DateToStr(FileUnit.FileLastModified));
+}
   finally
     FileUnit.Free;
   end;
 end;
 
+procedure TfmMain.FormCreate(Sender: TObject);
+begin
+  CLIRunner := TCLIRunner.Create;
+end;
+
 procedure TfmMain.FormDestroy(Sender: TObject);
 begin
+  CLIRunner.Free;
   FAIModel.Free;
 end;
 

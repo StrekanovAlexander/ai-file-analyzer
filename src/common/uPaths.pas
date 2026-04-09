@@ -5,15 +5,19 @@ interface
 uses
   System.SysUtils, Vcl.Forms;
 
-const PDFTOTEXT_EXE = 'libs\pdf\pdftotext.exe';
-const LLAMA_CLI_EXE = 'libs\llama\llama-cli.exe';
-const MODEL_GGUF    = 'libs\llama\models\qwen2.5-3b-instruct-q4_k_m.gguf';
+const DOCX_TO_TEXT_EXE = 'libs\docx\docxtotext.exe';
+const PDF_TO_TEXT_EXE  = 'libs\pdf\pdftotext.exe';
+const LLAMA_CLI_EXE    = 'libs\llama\llama-cli.exe';
+const MODEL_GGUF       = 'libs\llama\models\qwen2.5-3b-instruct-q4_k_m.gguf';
 
 function GetBasePath: string;
+
+function GetDocxToTextExe: string;
 function GetPdfToTextExe: string;
 function GetLlamaCliExe: string;
 function GetModelGguf: string;
 
+function IsDocxToTextExeAvailable: Boolean;
 function IsPdfToTextExeAvailable: Boolean;
 function IsLlamaCliExeAvailable: Boolean;
 function IsModelGgufAvailable: Boolean;
@@ -25,9 +29,14 @@ begin
   Result := ExtractFilePath(Application.ExeName);
 end;
 
+function GetDocxToTextExe: string;
+begin
+  Result := GetBasePath + DOCX_TO_TEXT_EXE;
+end;
+
 function GetPdfToTextExe: string;
 begin
-  Result := GetBasePath + PDFTOTEXT_EXE;
+  Result := GetBasePath + PDF_TO_TEXT_EXE;
 end;
 
 function GetLlamaCliExe: string;
@@ -38,6 +47,11 @@ end;
 function GetModelGguf: string;
 begin
   Result := GetBasePath + MODEL_GGUF;
+end;
+
+function IsDocxToTextExeAvailable: Boolean;
+begin
+  Result := FileExists(GetDocxToTextExe);
 end;
 
 function IsPdfToTextExeAvailable: Boolean;

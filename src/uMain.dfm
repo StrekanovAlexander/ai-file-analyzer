@@ -12,6 +12,7 @@ object fmMain: TfmMain
   Font.Style = []
   Position = poScreenCenter
   StyleName = 'Aqua Graphite'
+  OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   TextHeight = 15

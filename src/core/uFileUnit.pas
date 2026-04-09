@@ -3,10 +3,8 @@ unit uFileUnit;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.IOUtils, ComObj,
-  Windows, Vcl.Dialogs,
-  uPaths
-  ;
+  System.SysUtils, System.Classes, System.IOUtils, Windows, Vcl.Dialogs,
+  uPaths, uGlobal;
 
 type TFileUnit = class
   private
@@ -15,7 +13,7 @@ type TFileUnit = class
     FFileLastModified: TDateTime;
     function GetFileSize: Int64;
     function GetFileTxtContent: string;
-    function GetFileDocContent: string;
+    function GetFileDocxContent: string;
     function GetFilePdfContent: string;
   public
     constructor Create(AFilePath: string);
@@ -49,12 +47,14 @@ begin
   Result := '';
   if FFileExt = '.txt' then
     Result := GetFileTxtContent
-  else if (FFileExt = '.doc') or (FFileExt = '.docx') then
-    Result := GetFileDocContent
+  else if FFileExt = '.docx' then
+    Result := GetFileDocxContent
   else if FFileExt = '.pdf' then
     Result := GetFilePdfContent
+  else if FFileExt = '.odt' then
+    Result := GetFileDocxContent
   else
-    Result := 'File extension ' + FFileExt + ' not support';
+    Result := 'File extension ' + FFileExt + ' not supports';
 end;
 
 function TFileUnit.GetFileTxtContent: string;
@@ -73,12 +73,6 @@ end;
 
 function TFileUnit.GetFilePdfContent: string;
 var
-  SA: TSecurityAttributes;
-  StdOutRead, StdOutWrite: THandle;
-  SI: TStartupInfo;
-  PI: TProcessInformation;
-  Buffer: array[0..4095] of AnsiChar;
-  BytesRead: DWORD;
   CmdLine: string;
   PdfToTextExe: string;
 begin
@@ -88,68 +82,25 @@ begin
     ShowMessage('pdftotext.exe not found');
     Exit;
   end;
-
   PdfToTextExe := GetPdfToTextExe;
-
-  FillChar(SA, SizeOf(SA), 0);
-  SA.nLength := SizeOf(SA);
-  SA.bInheritHandle := True;
-
-  CreatePipe(StdOutRead, StdOutWrite, @SA, 0);
-
-  FillChar(SI, SizeOf(SI), 0);
-  SI.cb := SizeOf(SI);
-  SI.hStdOutput := StdOutWrite;
-  SI.hStdError := StdOutWrite;
-  SI.dwFlags := STARTF_USESTDHANDLES;
-
   CmdLine := Format('"%s" "%s" -', [PdfToTextExe, FFilePath]);
-
-  if CreateProcess(nil, PChar(CmdLine), nil, nil, True, CREATE_NO_WINDOW, nil, nil, SI, PI) then
-  begin
-    CloseHandle(StdOutWrite);
-
-    repeat
-      if ReadFile(StdOutRead, Buffer, SizeOf(Buffer)-1, BytesRead, nil) then
-      begin
-        if BytesRead > 0 then
-        begin
-          Buffer[BytesRead] := #0;
-          Result := Result + UTF8ToString(AnsiString(Buffer));
-        end;
-      end;
-    until BytesRead = 0;
-
-    WaitForSingleObject(PI.hProcess, INFINITE);
-
-    CloseHandle(PI.hProcess);
-    CloseHandle(PI.hThread);
-    CloseHandle(StdOutRead);
-  end
-  else
-    raise Exception.Create('Failed to start pdftotext');
+  Result := CLIRunner.RunCommand(CmdLine);
 end;
 
-function TFileUnit.GetFileDocContent: string;
-//var WordApp, Doc: OleVariant;
+function TFileUnit.GetFileDocxContent: string;
+var
+  CmdLine: string;
+  DocxToTextExe: string;
 begin
-  Result := 'Doc content example';
-  {
-  try
-    WordApp := CreateOleObject('Word.Application');
-  except
-    on E: EOleException do
-      raise Exception.Create('Microsoft Word is not installed or cannot be started.');
+  Result := '';
+  if not IsDocxToTextExeAvailable then
+  begin
+    ShowMessage('docxtotext.exe not found');
+    Exit;
   end;
-  WordApp.Visible := False;
-  try
-    Doc := WordApp.Documents.Open(FFilePath, ReadOnly := True);
-    Result := Doc.Content.Text;
-    Doc.Close(False);
-  finally
-    WordApp.Quit;
-  end;
-  }
+  DocxToTextExe := GetDocxToTextExe;
+  CmdLine := Format('"%s" "%s" -t plain -o -', [DocxToTextExe, FFilePath]);
+  Result := CLIRunner.RunCommand(CmdLine);
 end;
 
 function TFileUnit.GetFileSize: Int64;

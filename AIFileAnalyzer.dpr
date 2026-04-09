@@ -10,7 +10,9 @@ uses
   uRecords in 'src\common\uRecords.pas',
   uStringUtils in 'src\common\uStringUtils.pas',
   uFileUnit in 'src\core\uFileUnit.pas',
-  uPaths in 'src\common\uPaths.pas';
+  uPaths in 'src\common\uPaths.pas',
+  uCLIRunner in 'src\core\uCLIRunner.pas',
+  uGlobal in 'src\core\uGlobal.pas';
 
 {$R *.res}
 
