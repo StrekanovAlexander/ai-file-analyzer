@@ -5,12 +5,19 @@ interface
 uses
   System.Classes,
   System.SysUtils,
-  Vcl.ComCtrls;
+  System.IOUtils,
+  Vcl.ComCtrls,
+  uConsts,
+  uFileSystemService;
 
 type
   TFilePointer = class
   public
     Path: string;
+    Ext: string;
+    Size: Int64;
+    LastModified: TDateTime;
+    Status: TFileStatus;
     constructor Create(const APath: string);
   end;
 
@@ -18,10 +25,10 @@ type
   private
     FListView: TListView;
     procedure Clear;
+    function StatusToStr(Status: TFileStatus): string;
   public
     constructor Create(AListView: TListView);
     destructor Destroy; override;
-
     procedure Bind(const FileList: TStrings);
   end;
 
@@ -32,6 +39,13 @@ constructor TFilePointer.Create(const APath: string);
 begin
   inherited Create;
   Path := APath;
+  Ext := ExtractFileExt(APath);
+  Size := TFile.GetSize(APath);
+  LastModified := TFile.GetLastWriteTime(APath);
+  if (Ext = '.txt') or (Ext = '.pdf') or (Ext = '.docx') or (Ext = '.odt') then
+    Status := fsPending
+  else
+    Status := fsSkipped;
 end;
 
 { TFileListController }
@@ -61,6 +75,7 @@ procedure TFileListController.Bind(const FileList: TStrings);
 var
   Item: TListItem;
   FilePath: string;
+  FilePointer: TFilePointer;
 begin
   if not Assigned(FListView) then
     Exit;
@@ -70,14 +85,28 @@ begin
     for var I := 0 to FileList.Count - 1 do
     begin
       FilePath := FileList[I];
+      FilePointer := TFilePointer.Create(FilePath);
       Item := FListView.Items.Add;
       Item.Caption := ExtractFileName(FilePath);
-      Item.SubItems.Add('');
-      Item.SubItems.Add(ExtractFileExt(FilePath));
-      Item.Data := TFilePointer.Create(FilePath);
+      Item.SubItems.Add(TFileSystemService.FormatFileSize(FilePointer.Size));
+      Item.SubItems.Add(FilePointer.Ext);
+      Item.SubItems.Add(DateTimeToStr(FilePointer.LastModified));
+      Item.SubItems.Add(StatusToStr(FilePointer.Status));
+      Item.Data := FilePointer;
     end;
   finally
     FListView.Items.EndUpdate;
+  end;
+end;
+
+function TFileListController.StatusToStr(Status: TFileStatus): string;
+begin
+  case Status of
+    fsPending: Result := 'Pending';
+    fsProcessing: Result := 'Processing';
+    fsDone: Result := 'Done';
+    fsError: Result := 'Error';
+    fsSkipped: Result := 'Skipped';
   end;
 end;
 

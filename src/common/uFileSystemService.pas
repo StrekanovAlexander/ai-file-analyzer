@@ -9,6 +9,7 @@ uses
 type TFileSystemService = class
   public
     class function ScanFolder(Path: string): TStringList;
+    class function FormatFileSize(Size: Int64): string;
 end;
 
 implementation
@@ -27,6 +28,19 @@ begin
   finally
     FindClose(SR);
   end;
+end;
+
+class function TFileSystemService.FormatFileSize(Size: Int64): string;
+const
+  KB = 1024;
+  MB = KB * 1024;
+begin
+  if Size >= MB then
+    Result := Format('%.2f MB', [Size / MB])
+  else if Size >= KB then
+    Result := Format('%.2f KB', [Size / KB])
+  else
+    Result := Format('%d B', [Size]);
 end;
 
 end.

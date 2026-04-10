@@ -10,11 +10,6 @@ type TFileUnit = class
   private
     FFilePath: string;
     FFileExt: string;
-    FFileLastModified: TDateTime;
-    FFileSize: Int64;
-    function GetFileSize: Int64;
-    function GetFormattedFileSize: string;
-    function GetFormattedFileLastModified: string;
     function GetFileTxtContent: string;
     function GetFileDocxContent: string;
     function GetFilePdfContent: string;
@@ -22,11 +17,6 @@ type TFileUnit = class
     constructor Create(AFilePath: string);
     destructor Destroy; override;
     property FilePath: string read FFilePath;
-    property FileExt: string read FFileExt;
-    property FileSize: Int64 read FFileSize;
-    property FormattedFileSize: string read GetFormattedFileSize;
-    property FileLastModified: TDateTime read FFileLastModified;
-    property FormattedFileLastModified: string read GetFormattedFileLastModified;
     function GetFileContent: string;
 end;
 
@@ -39,8 +29,6 @@ begin
   inherited Create;
   FFilePath := AFilePath;
   FFileExt := LowerCase(ExtractFileExt(AFilePath));
-  FFileLastModified := TFile.GetLastWriteTime(FFilePath);
-  FFileSize := GetFileSize;
 end;
 
 destructor TFileUnit.Destroy;
@@ -53,12 +41,10 @@ begin
   Result := '';
   if FFileExt = '.txt' then
     Result := GetFileTxtContent
-  else if FFileExt = '.docx' then
+  else if (FFileExt = '.docx') or (FFileExt = '.odt') then
     Result := GetFileDocxContent
   else if FFileExt = '.pdf' then
     Result := GetFilePdfContent
-  else if FFileExt = '.odt' then
-    Result := GetFileDocxContent
   else
     Result := 'File extension ' + FFileExt + ' not supports';
 end;
@@ -107,36 +93,6 @@ begin
   DocxToTextExe := GetDocxToTextExe;
   CmdLine := Format('"%s" "%s" -t plain -o -', [DocxToTextExe, FFilePath]);
   Result := CLIRunner.RunCommand(CmdLine);
-end;
-
-function TFileUnit.GetFileSize: Int64;
-var
-  FS: TFileStream;
-begin
-  FS := TFileStream.Create(FFilePath, fmOpenRead or fmShareDenyWrite);
-  try
-    Result := FS.Size;
-  finally
-    FS.Free;
-  end;
-end;
-
-function TFileUnit.GetFormattedFileSize: string;
-const
-  KB = 1024;
-  MB = KB * 1024;
-begin
-  if FFileSize >= MB then
-    Result := Format('%.2f MB', [FFileSize / MB])
-  else if FFileSize >= KB then
-    Result := Format('%.2f KB', [FFileSize / KB])
-  else
-    Result := Format('%d B', [FFileSize]);
-end;
-
-function TFileUnit.GetFormattedFileLastModified: string;
-begin
-  Result := DateTimeToStr(FFileLastModified);
 end;
 
 end.

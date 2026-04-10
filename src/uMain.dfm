@@ -25,7 +25,6 @@ object fmMain: TfmMain
     Align = alBottom
     ScrollBars = ssVertical
     TabOrder = 3
-    ExplicitTop = 424
   end
   object pnlHeader: TPanel
     AlignWithMargins = True
@@ -63,7 +62,6 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 4
       OnClick = btnAnalyseClick
-      ExplicitLeft = 903
     end
     object edSourcePath: TEdit
       AlignWithMargins = True
@@ -78,9 +76,6 @@ object fmMain: TfmMain
       ReadOnly = True
       TabOrder = 0
       Text = 'Source path...'
-      ExplicitLeft = 16
-      ExplicitTop = 8
-      ExplicitWidth = 121
       ExplicitHeight = 23
     end
     object btnBrowse: TBitBtn
@@ -96,8 +91,6 @@ object fmMain: TfmMain
       ImageName = 'folder_open'
       Images = svgBtns
       TabOrder = 1
-      ExplicitLeft = 472
-      ExplicitHeight = 25
     end
     object btnScan: TBitBtn
       AlignWithMargins = True
@@ -112,8 +105,6 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 2
       OnClick = btnScanClick
-      ExplicitLeft = 600
-      ExplicitHeight = 25
     end
     object btnStopScan: TBitBtn
       AlignWithMargins = True
@@ -127,8 +118,6 @@ object fmMain: TfmMain
       ImageName = 'stop'
       Images = svgBtns
       TabOrder = 3
-      ExplicitLeft = 691
-      ExplicitHeight = 25
     end
   end
   object pnlProgress: TPanel
@@ -140,9 +129,6 @@ object fmMain: TfmMain
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitLeft = 368
-    ExplicitTop = 144
-    ExplicitWidth = 185
     object lblProgressStatus: TLabel
       AlignWithMargins = True
       Left = 3
@@ -151,8 +137,6 @@ object fmMain: TfmMain
       Height = 18
       Align = alLeft
       Caption = 'Progress Status'
-      ExplicitLeft = 4
-      ExplicitTop = 21
       ExplicitHeight = 15
     end
     object pbProgressStatus: TProgressBar
@@ -162,9 +146,6 @@ object fmMain: TfmMain
       Height = 17
       Align = alTop
       TabOrder = 0
-      ExplicitLeft = 288
-      ExplicitTop = 16
-      ExplicitWidth = 150
     end
   end
   object stbMain: TStatusBar
@@ -174,9 +155,6 @@ object fmMain: TfmMain
     Width = 978
     Height = 19
     Panels = <>
-    ExplicitLeft = 424
-    ExplicitTop = 632
-    ExplicitWidth = 0
   end
   object lvwMain: TListView
     AlignWithMargins = True
@@ -193,11 +171,17 @@ object fmMain: TfmMain
         Width = 200
       end
       item
+        Alignment = taRightJustify
         Caption = 'Size'
         Width = 100
       end
       item
+        Alignment = taCenter
         Caption = 'Ext'
+      end
+      item
+        Caption = 'Last Modified'
+        Width = 150
       end
       item
         AutoSize = True

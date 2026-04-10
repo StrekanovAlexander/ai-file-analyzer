@@ -73,8 +73,6 @@ begin
     Memo1.Lines.Add('Topic: ' + AnalysisRecord.Topic);
     Memo1.Lines.Add('Summary: ' + AnalysisRecord.Summary);
     Memo1.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
-    Memo1.Lines.Add('Size: ' + FileUnit.FormattedFileSize);
-    Memo1.Lines.Add('DateTime: ' + FileUnit.FormattedFileLastModified);
   finally
     FileUnit.Free;
   end;
