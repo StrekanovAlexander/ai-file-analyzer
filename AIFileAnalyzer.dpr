@@ -12,7 +12,10 @@ uses
   uFileUnit in 'src\core\uFileUnit.pas',
   uPaths in 'src\common\uPaths.pas',
   uCLIRunner in 'src\core\uCLIRunner.pas',
-  uGlobal in 'src\core\uGlobal.pas';
+  uGlobal in 'src\core\uGlobal.pas',
+  uAppServices in 'src\common\uAppServices.pas',
+  uFileSystemService in 'src\common\uFileSystemService.pas',
+  uFileListController in 'src\controllers\uFileListController.pas';
 
 {$R *.res}
 
