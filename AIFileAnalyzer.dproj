@@ -145,6 +145,7 @@
         <DCCReference Include="src\common\uAppServices.pas"/>
         <DCCReference Include="src\common\uFileSystemService.pas"/>
         <DCCReference Include="src\controllers\uFileListController.pas"/>
+        <DCCReference Include="src\core\uFileItem.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

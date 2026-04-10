@@ -15,7 +15,8 @@ uses
   uGlobal in 'src\core\uGlobal.pas',
   uAppServices in 'src\common\uAppServices.pas',
   uFileSystemService in 'src\common\uFileSystemService.pas',
-  uFileListController in 'src\controllers\uFileListController.pas';
+  uFileListController in 'src\controllers\uFileListController.pas',
+  uFileItem in 'src\core\uFileItem.pas';
 
 {$R *.res}
 

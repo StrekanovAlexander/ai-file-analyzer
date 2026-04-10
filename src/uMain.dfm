@@ -168,12 +168,12 @@ object fmMain: TfmMain
     Columns = <
       item
         Caption = 'File'
-        Width = 200
+        Width = 150
       end
       item
         Alignment = taRightJustify
         Caption = 'Size'
-        Width = 100
+        Width = 75
       end
       item
         Alignment = taCenter
@@ -184,12 +184,25 @@ object fmMain: TfmMain
         Width = 150
       end
       item
-        AutoSize = True
         Caption = 'Status'
+        Width = 100
+      end
+      item
+        Caption = 'Topic'
+        Width = 150
+      end
+      item
+        Caption = 'Keywords'
+        Width = 150
+      end
+      item
+        AutoSize = True
+        Caption = 'Summary'
       end>
     GridLines = True
     ReadOnly = True
     RowSelect = True
+    SmallImages = svgExts
     TabOrder = 5
     ViewStyle = vsReport
   end
@@ -235,5 +248,67 @@ object fmMain: TfmMain
     Scaled = True
     Left = 851
     Top = 13
+  end
+  object svgExts: TSVGIconImageList
+    Size = 20
+    SVGIconItems = <
+      item
+        IconName = 'file-word'
+        SVGText = 
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" v' +
+          'iewBox="0 0 24 24"><path fill="currentColor" d="M14 2H6a2 2 0 0 ' +
+          '0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zm1.2 18h-1.4L12 13.2L1' +
+          '0.2 20H8.8l-2.2-9h1.5l1.4 6.8l1.8-6.8h1.3l1.8 6.8l1.4-6.8h1.5zM1' +
+          '3 9V3.5L18.5 9z"/></svg>'
+        FixedColor = clHotLight
+      end
+      item
+        IconName = 'file-pdf'
+        SVGText = 
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" v' +
+          'iewBox="0 0 24 24"><path d="M13 9h5.5L13 3.5V9M6 2h8l6 6v12a2 2 ' +
+          '0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m4.1 9.4c-.02.04-.29 1.' +
+          '76-2.1 4.69c0 0-3.5 1.82-2.67 3.18c.67 1.08 2.32-.04 3.74-2.68c0' +
+          ' 0 1.82-.64 4.24-.82c0 0 3.86 1.73 4.39-.11c.52-1.86-3.06-1.44-3' +
+          '.7-1.25c0 0-2-1.35-2.5-3.21c0 0 1.14-3.95-.61-3.9c-1.75.05-1.09 ' +
+          '3.13-.79 4.1m.81 1.04c.03.01.47 1.21 1.89 2.46c0 0-2.33.46-3.39.' +
+          '9c0 0 1-1.73 1.5-3.36m3.93 2.72c.58-.16 2.33.15 2.26.48c-.06.33-' +
+          '2.26-.48-2.26-.48M7.77 17c-.53 1.24-1.44 2-1.67 2c-.23 0 .7-1.6 ' +
+          '1.67-2m3.14-6.93c0-.07-.36-2.2 0-2.15c.54.08 0 2.08 0 2.15z" fil' +
+          'l="currentColor"/></svg>'
+        FixedColor = clOrangered
+      end
+      item
+        IconName = 'file-text'
+        SVGText = 
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" v' +
+          'iewBox="0 0 24 24"><path fill="currentColor" d="M13 9h5.5L13 3.5' +
+          'zM6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4c0-1.11.89-2 2-2m9' +
+          ' 16v-2H6v2zm3-4v-2H6v2z"/></svg>'
+        FixedColor = clSteelblue
+      end
+      item
+        IconName = 'file-text-outline'
+        SVGText = 
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" v' +
+          'iewBox="0 0 24 24"><path fill="currentColor" d="M6 2a2 2 0 0 0-2' +
+          ' 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 2h7v5h5v11H6zm2 8' +
+          'v2h8v-2zm0 4v2h5v-2z"/></svg>'
+      end
+      item
+        IconName = 'file-hidden'
+        SVGText = 
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" v' +
+          'iewBox="0 0 24 24"><path fill="currentColor" d="M13 9h1v2h-3V7h2' +
+          'zm5.5 0l-2.12-2.12l1.25-1.25L20 8v2h-2v1h-3V9zM13 3.5V2h-1v2h1v2' +
+          'h-2V4H9V2H8v2H6v1H4V4c0-1.11.89-2 2-2h8l2.36 2.36l-1.25 1.25zM20' +
+          ' 20a2 2 0 0 1-2 2h-2v-2h2v-1h2zm-2-5h2v3h-2zm-6 7v-2h3v2zm-4 0v-' +
+          '2h3v2zm-2 0a2 2 0 0 1-2-2v-2h2v2h1v2zm-2-8h2v3H4zm0-4h2v3H4zm14 ' +
+          '1h2v3h-2zM4 6h2v3H4z"/></svg>'
+        FixedColor = clGray
+      end>
+    Scaled = True
+    Left = 352
+    Top = 288
   end
 end

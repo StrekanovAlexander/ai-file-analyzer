@@ -27,6 +27,7 @@ type
     btnBrowse: TBitBtn;
     btnScan: TBitBtn;
     btnStopScan: TBitBtn;
+    svgExts: TSVGIconImageList;
     procedure btnAnalyseClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);

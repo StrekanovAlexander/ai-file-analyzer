@@ -5,27 +5,18 @@ interface
 uses
   System.Classes,
   System.SysUtils,
-  System.IOUtils,
   Vcl.ComCtrls,
   uConsts,
+  uFileItem,
   uFileSystemService;
 
-type
-  TFilePointer = class
-  public
-    Path: string;
-    Ext: string;
-    Size: Int64;
-    LastModified: TDateTime;
-    Status: TFileStatus;
-    constructor Create(const APath: string);
-  end;
-
-  TFileListController = class
+type TFileListController = class
   private
     FListView: TListView;
     procedure Clear;
     function StatusToStr(Status: TFileStatus): string;
+    procedure UpdateListItem(ListItem: TListItem);
+    function GetIconIndex(const Ext: string): Integer;
   public
     constructor Create(AListView: TListView);
     destructor Destroy; override;
@@ -34,21 +25,6 @@ type
 
 implementation
 
-{ TFilePointer }
-constructor TFilePointer.Create(const APath: string);
-begin
-  inherited Create;
-  Path := APath;
-  Ext := ExtractFileExt(APath);
-  Size := TFile.GetSize(APath);
-  LastModified := TFile.GetLastWriteTime(APath);
-  if (Ext = '.txt') or (Ext = '.pdf') or (Ext = '.docx') or (Ext = '.odt') then
-    Status := fsPending
-  else
-    Status := fsSkipped;
-end;
-
-{ TFileListController }
 constructor TFileListController.Create(AListView: TListView);
 begin
   inherited Create;
@@ -72,10 +48,12 @@ begin
 end;
 
 procedure TFileListController.Bind(const FileList: TStrings);
+const
+  SUBITEMS_COUNT = 6;
 var
-  Item: TListItem;
+  ListItem: TListItem;
   FilePath: string;
-  FilePointer: TFilePointer;
+  FileItem: TFileItem;
 begin
   if not Assigned(FListView) then
     Exit;
@@ -85,14 +63,13 @@ begin
     for var I := 0 to FileList.Count - 1 do
     begin
       FilePath := FileList[I];
-      FilePointer := TFilePointer.Create(FilePath);
-      Item := FListView.Items.Add;
-      Item.Caption := ExtractFileName(FilePath);
-      Item.SubItems.Add(TFileSystemService.FormatFileSize(FilePointer.Size));
-      Item.SubItems.Add(FilePointer.Ext);
-      Item.SubItems.Add(DateTimeToStr(FilePointer.LastModified));
-      Item.SubItems.Add(StatusToStr(FilePointer.Status));
-      Item.Data := FilePointer;
+      FileItem := TFileItem.Create(FilePath);
+      ListItem := FListView.Items.Add;
+      ListItem.Data := FileItem;
+      ListItem.ImageIndex := GetIconIndex(FileItem.Ext);
+      for var J := 0 to SUBITEMS_COUNT do
+        ListItem.SubItems.Add('');
+      UpdateListItem(ListItem);
     end;
   finally
     FListView.Items.EndUpdate;
@@ -108,6 +85,44 @@ begin
     fsError: Result := 'Error';
     fsSkipped: Result := 'Skipped';
   end;
+end;
+
+procedure TFileListController.UpdateListItem(ListItem: TListItem);
+var
+  FileItem: TFileItem;
+begin
+  if not Assigned(ListItem) then
+    Exit;
+
+  FileItem := TFileItem(ListItem.Data);
+  if not Assigned(FileItem) then
+    Exit;
+
+  with ListItem do
+  begin
+    Caption := ExtractFileName(FileItem.Path);
+    SubItems[0] := TFileSystemService.FormatFileSize(FileItem.Size);
+    SubItems[1] := FileItem.Ext;
+    SubItems[2] := DateTimeToStr(FileItem.LastModified);
+    SubItems[3] := StatusToStr(FileItem.Status);
+    SubItems[4] := FileItem.Topic;
+    SubItems[5] := FileItem.Keywords;
+    SubItems[6] := FileItem.Summary;
+  end;
+end;
+
+function TFileListController.GetIconIndex(const Ext: string): Integer;
+begin
+  if Ext = '.docx' then
+    Result := 0
+  else if Ext = '.pdf' then
+    Result := 1
+  else if Ext = '.odt' then
+    Result := 2
+  else if Ext = '.txt' then
+    Result := 3
+  else
+    Result := 4;
 end;
 
 end.
