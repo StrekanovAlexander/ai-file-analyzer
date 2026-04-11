@@ -14,7 +14,6 @@ uses
 
 type
   TfmMain = class(TForm)
-    memoOutput: TMemo;
     pnlHeader: TPanel;
     pnlControls: TPanel;
     btnAnalyse: TBitBtn;
@@ -27,7 +26,14 @@ type
     svgExts: TSVGIconImageList;
     pbProgressStatus: TProgressBar;
     btnStop: TBitBtn;
-    lblProgressStatus: TLabel;
+    splMain: TSplitter;
+    memoOutput: TMemo;
+    pnlFilters: TPanel;
+    chkDOCX: TCheckBox;
+    chkPDF: TCheckBox;
+    chkODT: TCheckBox;
+    chkTXT: TCheckBox;
+    chkOTHERS: TCheckBox;
     procedure btnAnalyseClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -42,10 +48,13 @@ type
     FFileReader: TFileReader;
     FFileListController: TFileListController;
     FWaitForm: TfmWait;
+    FExtFilterRecord: TExtFilterRecord;
     procedure OnScanDone(Sender: TObject; FileList: TStringList);
     procedure ShowWait(const Msg: string);
     procedure HideWait;
+    procedure BuildFilter;
   public
+
   end;
 
 var
@@ -181,6 +190,23 @@ begin
     FWaitForm.Close;
     FreeAndNil(FWaitForm);
   end;
+end;
+
+procedure TfmMain.BuildFilter;
+var
+  Exts: TArray<string>;
+begin
+  SetLength(Exts, 0);
+  if chkDOCX.Checked then
+    Exts := Exts + ['.docx'];
+  if chkPDF.Checked then
+    Exts := Exts + ['.pdf'];
+  if chkODT.Checked then
+    Exts := Exts + ['.odt'];
+  if chkTXT.Checked then
+    Exts := Exts + ['.txt'];
+  FExtFilterRecord.Exts := Exts;
+  FExtFilterRecord.ShowOthers := chkOTHERS.Checked;
 end;
 
 end.

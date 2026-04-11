@@ -16,28 +16,16 @@ object fmMain: TfmMain
   OnDestroy = FormDestroy
   OnShow = FormShow
   TextHeight = 15
-  object lblProgressStatus: TLabel
+  object splMain: TSplitter
     AlignWithMargins = True
     Left = 3
-    Top = 129
+    Top = 577
     Width = 978
-    Height = 15
-    Margins.Top = 0
-    Margins.Bottom = 10
-    Align = alTop
-    Caption = 'Analyse Status'
-    ExplicitWidth = 76
-  end
-  object memoOutput: TMemo
-    AlignWithMargins = True
-    Left = 3
-    Top = 532
-    Width = 978
-    Height = 103
+    Height = 2
+    Cursor = crVSplit
     Align = alBottom
-    Constraints.MinHeight = 100
-    ScrollBars = ssVertical
-    TabOrder = 2
+    ExplicitLeft = 8
+    ExplicitTop = 452
   end
   object pnlHeader: TPanel
     AlignWithMargins = True
@@ -54,19 +42,19 @@ object fmMain: TfmMain
     AlignWithMargins = True
     Left = 0
     Top = 69
-    Width = 984
+    Width = 981
     Height = 40
     Margins.Left = 0
-    Margins.Right = 0
     Margins.Bottom = 0
     Align = alTop
     BevelOuter = bvNone
     Padding.Top = 5
     Padding.Bottom = 5
     TabOrder = 1
+    ExplicitWidth = 984
     object btnAnalyse: TBitBtn
       AlignWithMargins = True
-      Left = 806
+      Left = 804
       Top = 8
       Width = 85
       Height = 24
@@ -77,12 +65,13 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 3
       OnClick = btnAnalyseClick
+      ExplicitLeft = 806
     end
     object edSourcePath: TEdit
       AlignWithMargins = True
       Left = 3
       Top = 7
-      Width = 608
+      Width = 606
       Height = 25
       Margins.Top = 2
       Align = alClient
@@ -90,11 +79,12 @@ object fmMain: TfmMain
       ReadOnly = True
       TabOrder = 1
       Text = 'Source path...'
+      ExplicitWidth = 608
       ExplicitHeight = 23
     end
     object btnBrowse: TBitBtn
       AlignWithMargins = True
-      Left = 617
+      Left = 615
       Top = 8
       Width = 85
       Height = 24
@@ -104,10 +94,11 @@ object fmMain: TfmMain
       ImageName = 'folder_open'
       Images = svgBtns
       TabOrder = 0
+      ExplicitLeft = 617
     end
     object btnScan: TBitBtn
       AlignWithMargins = True
-      Left = 708
+      Left = 706
       Top = 8
       Width = 85
       Height = 24
@@ -119,20 +110,22 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 2
       OnClick = btnScanClick
+      ExplicitLeft = 708
     end
     object btnStop: TBitBtn
       AlignWithMargins = True
-      Left = 897
+      Left = 895
       Top = 8
       Width = 85
       Height = 24
-      Margins.Right = 2
+      Margins.Right = 1
       Align = alRight
       Caption = 'Stop'
       ImageIndex = 2
       ImageName = 'stop'
       Images = svgBtns
       TabOrder = 4
+      ExplicitLeft = 897
     end
   end
   object stbMain: TStatusBar
@@ -141,6 +134,7 @@ object fmMain: TfmMain
     Top = 641
     Width = 978
     Height = 19
+    Enabled = False
     Panels = <
       item
         Text = 'Files: 0'
@@ -150,15 +144,16 @@ object fmMain: TfmMain
         Text = 'Files for analyse: 0'
         Width = 100
       end>
+    ExplicitLeft = -2
+    ExplicitTop = 657
   end
   object lvwMain: TListView
     AlignWithMargins = True
     Left = 3
-    Top = 156
-    Width = 981
-    Height = 373
-    Margins.Top = 2
-    Margins.Right = 0
+    Top = 155
+    Width = 978
+    Height = 419
+    Margins.Top = 0
     Margins.Bottom = 0
     Align = alClient
     Columns = <
@@ -199,20 +194,108 @@ object fmMain: TfmMain
     ReadOnly = True
     RowSelect = True
     SmallImages = svgExts
-    TabOrder = 4
+    TabOrder = 3
     ViewStyle = vsReport
     OnSelectItem = lvwMainSelectItem
+    ExplicitTop = 288
+    ExplicitHeight = 286
   end
   object pbProgressStatus: TProgressBar
     AlignWithMargins = True
     Left = 3
     Top = 109
-    Width = 981
-    Height = 17
+    Width = 978
+    Height = 10
     Margins.Top = 0
-    Margins.Right = 0
     Align = alTop
+    TabOrder = 4
+    ExplicitWidth = 981
+  end
+  object memoOutput: TMemo
+    AlignWithMargins = True
+    Left = 3
+    Top = 585
+    Width = 978
+    Height = 50
+    Align = alBottom
+    ScrollBars = ssVertical
     TabOrder = 5
+    ExplicitTop = 576
+  end
+  object pnlFilters: TPanel
+    AlignWithMargins = True
+    Left = 3
+    Top = 122
+    Width = 978
+    Height = 30
+    Margins.Top = 0
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 6
+    ExplicitTop = 150
+    object chkDOCX: TCheckBox
+      AlignWithMargins = True
+      Left = 0
+      Top = 3
+      Width = 97
+      Height = 24
+      Margins.Left = 0
+      Align = alLeft
+      Caption = '.DOCX'
+      TabOrder = 0
+      ExplicitLeft = 104
+      ExplicitTop = 24
+      ExplicitHeight = 17
+    end
+    object chkPDF: TCheckBox
+      AlignWithMargins = True
+      Left = 103
+      Top = 3
+      Width = 97
+      Height = 24
+      Align = alLeft
+      Caption = '.PDF'
+      TabOrder = 1
+      ExplicitLeft = 136
+      ExplicitTop = 8
+      ExplicitHeight = 17
+    end
+    object chkODT: TCheckBox
+      AlignWithMargins = True
+      Left = 206
+      Top = 3
+      Width = 97
+      Height = 24
+      Align = alLeft
+      Caption = '.ODT'
+      TabOrder = 2
+      ExplicitLeft = 272
+      ExplicitTop = 8
+      ExplicitHeight = 17
+    end
+    object chkTXT: TCheckBox
+      AlignWithMargins = True
+      Left = 309
+      Top = 3
+      Width = 97
+      Height = 24
+      Align = alLeft
+      Caption = '.TXT'
+      TabOrder = 3
+      ExplicitLeft = 400
+      ExplicitTop = 8
+      ExplicitHeight = 17
+    end
+    object chkOTHERS: TCheckBox
+      AlignWithMargins = True
+      Left = 412
+      Top = 3
+      Width = 97
+      Height = 24
+      Align = alLeft
+      Caption = 'OTHERS'
+      TabOrder = 4
+    end
   end
   object svgBtns: TSVGIconImageList
     SVGIconItems = <
@@ -316,7 +399,7 @@ object fmMain: TfmMain
         FixedColor = clSilver
       end>
     Scaled = True
-    Left = 352
-    Top = 288
+    Left = 88
+    Top = 392
   end
 end
