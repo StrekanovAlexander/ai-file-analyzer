@@ -201,6 +201,7 @@ object fmMain: TfmMain
     SmallImages = svgExts
     TabOrder = 4
     ViewStyle = vsReport
+    OnSelectItem = lvwMainSelectItem
   end
   object pbProgressStatus: TProgressBar
     AlignWithMargins = True

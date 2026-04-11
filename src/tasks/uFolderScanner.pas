@@ -7,7 +7,7 @@ uses
   uFileSystemService;
 
 type
-  TOnScanDone = procedure(Sender: TObject; Files: TStringList) of object;
+  TOnScanDone = procedure(Sender: TObject; FileList: TStringList) of object;
   TFolderScanner = class
   private
     FThread: TThread;

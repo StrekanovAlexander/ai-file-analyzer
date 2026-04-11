@@ -5,8 +5,8 @@ interface
 uses
   System.Classes, System.SysUtils,
   Vcl.ComCtrls, Vcl.Forms, Vcl.StdCtrls, Vcl.Graphics,
-  uConsts, uFileItem, uFileExtractor, uFileSystemService,
-  uWait;
+  uConsts, uFileItem, uFileSystemService
+;
 
 type TFileListController = class
   private
@@ -19,9 +19,7 @@ type TFileListController = class
     procedure UpdateStatusBar;
     procedure OnDraw(Sender: TCustomListView; Item: TListItem;
       State: TCustomDrawState; Stage: TCustomDrawStage; var DefaultDraw: Boolean);
-    procedure OnSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
     function FileStatusToStr(FileStatus: TFileStatus): string;
-    function GetIconIndex(const Ext: string): Integer;
   public
     constructor Create(AListView: TListView; AMemoOutput: TMemo; AStatusBar: TStatusBar);
     destructor Destroy; override;
@@ -36,7 +34,6 @@ begin
   FListView := AListView;
   FMemoOutput := AMemoOutput;
   FListView.OnAdvancedCustomDrawItem := OnDraw;
-  FlistView.OnSelectItem := OnSelect;
   FStatusBar := AStatusBar;
   FFilesForAnalyseCount := 0;
 end;
@@ -125,20 +122,6 @@ begin
   end;
 end;
 
-function TFileListController.GetIconIndex(const Ext: string): Integer;
-begin
-  if Ext = '.docx' then
-    Result := 0
-  else if Ext = '.pdf' then
-    Result := 1
-  else if Ext = '.odt' then
-    Result := 2
-  else if Ext = '.txt' then
-    Result := 3
-  else
-    Result := 4;
-end;
-
 procedure TFileListController.UpdateStatusBar;
 begin
   FStatusBar.Panels[0].Text := Format('Files: %d', [FListView.Items.Count]);
@@ -160,39 +143,6 @@ begin
   else
     Sender.Canvas.Font.Color := clWindowText;
   DefaultDraw := True;
-end;
-
-procedure TFileListController.OnSelect(Sender: TObject; Item: TListItem;
-  Selected: Boolean);
-var
-  FileItem: TFileItem;
-  FileExtractor: TFileExtractor;
-  fmWait: TfmWait;
-begin
-  if not Selected then
-    Exit;
-  FileItem := TFileItem(Item.Data);
-  if not Assigned(FileItem) then
-    Exit;
-  if FileItem.Status = fsSkipped then
-  begin
-    FMemoOutput.Lines.Text := 'File not supported for preview';
-    Exit;
-  end;
-  fmWait := TfmWait.Create(nil);
-  try
-    fmWait.lblMsg.Caption := 'Extracting file content...';
-    fmWait.Show;
-    Application.ProcessMessages;
-    FileExtractor := TFileExtractor.Create(FileItem.Path);
-    try
-      FMemoOutput.Lines.Text := FileExtractor.GetFileContent;
-    finally
-      FileExtractor.Free;
-    end;
-  finally
-    fmWait.Free;
-  end;
 end;
 
 end.

@@ -19,7 +19,8 @@ uses
   uFileListController in 'src\controllers\uFileListController.pas',
   uStringUtils in 'src\common\uStringUtils.pas',
   uWait in 'src\ui\uWait.pas' {fmWait},
-  uFolderScanner in 'src\core\uFolderScanner.pas';
+  uFolderScanner in 'src\tasks\uFolderScanner.pas',
+  uFileReader in 'src\tasks\uFileReader.pas';
 
 var
   hMutex: THandle;

@@ -7,7 +7,8 @@ uses
   Controls, Vcl.Forms, Dialogs, StdCtrls, Vcl.Buttons,
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, Vcl.ComCtrls,
   SVGIconImageListBase, SVGIconImageList,
-  uGlobal, uAppServices, uFolderScanner,
+  uGlobal, uConsts, uAppServices,
+  uFolderScanner, uFileReader, uFileItem,
   uFileListController, uCLIRunner, uAIModel, uRecords, uStringUtils,
   uWait;
 
@@ -32,12 +33,18 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnScanClick(Sender: TObject);
+    procedure OnFileReadDone(Sender: TObject; FileContent: string);
+    procedure lvwMainSelectItem(Sender: TObject; Item: TListItem;
+      Selected: Boolean);
   private
     FAIModel: TAIModel;
     FFolderScanner: TFolderScanner;
+    FFileReader: TFileReader;
     FFileListController: TFileListController;
     FWaitForm: TfmWait;
     procedure OnScanDone(Sender: TObject; FileList: TStringList);
+    procedure ShowWait(const Msg: string);
+    procedure HideWait;
   public
   end;
 
@@ -82,19 +89,20 @@ end;
 procedure TfmMain.btnScanClick(Sender: TObject);
 begin
   btnScan.Enabled := False;
-  FWaitForm := TfmWait.Create(nil);
-  FWaitForm.lblMsg.Caption := 'Scanning folder...';
-  FWaitForm.Show;
-  FWaitForm.Update;
-  Application.ProcessMessages;
+  ShowWait('Scanning folder...');
   FFolderScanner.Start(edSourcePath.Text);
 end;
 
 procedure TfmMain.FormCreate(Sender: TObject);
 begin
   CLIRunner := TCLIRunner.Create;
+  { Folder scanning... }
   FFolderScanner := TFolderScanner.Create;
   FFolderScanner.OnScanDone := OnScanDone;
+  { File content reading... }
+  FFileReader := TFileReader.Create;
+  FFileReader.OnReadDone := OnFileReadDone;
+  {FileListController functional}
   FFileListController := TFileListController.Create(lvwMain, memoOutput, stbMain);
   edSourcePath.Text := 'D:\ai-organizer-examples';
 end;
@@ -102,8 +110,9 @@ end;
 procedure TfmMain.FormDestroy(Sender: TObject);
 begin
   FFileListController.Free;
-  FAIModel.Free;
+  FFileReader.Free;
   FFolderScanner.Free;
+  FAIModel.Free;
   CLIRunner.Free;
 end;
 
@@ -120,18 +129,57 @@ begin
   end;
 end;
 
+procedure TfmMain.lvwMainSelectItem(Sender: TObject; Item: TListItem;
+  Selected: Boolean);
+var
+  FileItem: TFileItem;
+begin
+  if not Selected then
+    Exit;
+  FileItem := TFileItem(Item.Data);
+  if not Assigned(FileItem) then
+    Exit;
+  if FileItem.Status = fsSkipped then
+  begin
+    memoOutput.Lines.Text := 'File not supported for preview';
+    Exit;
+  end;
+  ShowWait('Loading file content...');
+  FFileReader.Start(TFileItem(Item.Data).Path);
+end;
+
 procedure TfmMain.OnScanDone(Sender: TObject; FileList: TStringList);
 begin
   try
-    if Assigned(FWaitForm) then
-    begin
-      FWaitForm.Close;
-      FreeAndNil(FWaitForm);
-    end;
+    HideWait;
     FFileListController.Bind(FileList);
   finally
     FileList.Free;
     btnScan.Enabled := True;
+  end;
+end;
+
+procedure TfmMain.OnFileReadDone(Sender: TObject; FileContent: string);
+begin
+  HideWait;
+  memoOutput.Lines.Text := FileContent;
+end;
+
+procedure TfmMain.ShowWait(const Msg: string);
+begin
+  FWaitForm := TfmWait.Create(nil);
+  FWaitForm.lblMsg.Caption := Msg;
+  FWaitForm.Show;
+  FWaitForm.Update;
+  Application.ProcessMessages;
+end;
+
+procedure TfmMain.HideWait;
+begin
+  if Assigned(FWaitForm) then
+  begin
+    FWaitForm.Close;
+    FreeAndNil(FWaitForm);
   end;
 end;
 

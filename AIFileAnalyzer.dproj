@@ -149,7 +149,8 @@
             <Form>fmWait</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="src\core\uFolderScanner.pas"/>
+        <DCCReference Include="src\tasks\uFolderScanner.pas"/>
+        <DCCReference Include="src\tasks\uFileReader.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
