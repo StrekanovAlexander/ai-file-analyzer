@@ -7,9 +7,9 @@ uses
   Controls, Vcl.Forms, Dialogs, StdCtrls, Vcl.Buttons,
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, Vcl.ComCtrls,
   SVGIconImageListBase, SVGIconImageList,
-  uGlobal, uAppServices, uFileSystemService,
-  uFileListController, uCLIRunner, uAIModel, uRecords, uStringUtils
-  ;
+  uGlobal, uAppServices, uFolderScanner,
+  uFileListController, uCLIRunner, uAIModel, uRecords, uStringUtils,
+  uWait;
 
 type
   TfmMain = class(TForm)
@@ -34,7 +34,10 @@ type
     procedure btnScanClick(Sender: TObject);
   private
     FAIModel: TAIModel;
+    FFolderScanner: TFolderScanner;
     FFileListController: TFileListController;
+    FWaitForm: TfmWait;
+    procedure OnScanDone(Sender: TObject; FileList: TStringList);
   public
   end;
 
@@ -49,7 +52,6 @@ procedure TfmMain.btnAnalyseClick(Sender: TObject);
 var
   FilePath: string;
   AnalysisRecord: TAnalysisRecord;
-//  FileUnit: TFileUnit;
   FileContent: string;
 begin
   if not Assigned(FAIModel) then
@@ -57,15 +59,12 @@ begin
     ShowMessage('Model is not initialized.');
     Exit;
   end;
-
   FilePath := 'D:\ai-organizer-examples\sample7.odt';
-
   if not FileExists(FilePath) then
   begin
     ShowMessage('File not found: ' + FilePath);
     Exit;
   end;
-
   {
   FileUnit := TFileUnit.Create(FilePath);
   try
@@ -81,16 +80,21 @@ begin
 end;
 
 procedure TfmMain.btnScanClick(Sender: TObject);
-var
-  FileList: TStringList;
 begin
-  FileList := TFileSystemService.ScanFolder(edSourcePath.Text);
-  FFileListController.Bind(FileList);
+  btnScan.Enabled := False;
+  FWaitForm := TfmWait.Create(nil);
+  FWaitForm.lblMsg.Caption := 'Scanning folder...';
+  FWaitForm.Show;
+  FWaitForm.Update;
+  Application.ProcessMessages;
+  FFolderScanner.Start(edSourcePath.Text);
 end;
 
 procedure TfmMain.FormCreate(Sender: TObject);
 begin
   CLIRunner := TCLIRunner.Create;
+  FFolderScanner := TFolderScanner.Create;
+  FFolderScanner.OnScanDone := OnScanDone;
   FFileListController := TFileListController.Create(lvwMain, memoOutput, stbMain);
   edSourcePath.Text := 'D:\ai-organizer-examples';
 end;
@@ -99,6 +103,7 @@ procedure TfmMain.FormDestroy(Sender: TObject);
 begin
   FFileListController.Free;
   FAIModel.Free;
+  FFolderScanner.Free;
   CLIRunner.Free;
 end;
 
@@ -112,6 +117,21 @@ begin
       ShowMessage(E.Message);
       Close;
     end;
+  end;
+end;
+
+procedure TfmMain.OnScanDone(Sender: TObject; FileList: TStringList);
+begin
+  try
+    if Assigned(FWaitForm) then
+    begin
+      FWaitForm.Close;
+      FreeAndNil(FWaitForm);
+    end;
+    FFileListController.Bind(FileList);
+  finally
+    FileList.Free;
+    btnScan.Enabled := True;
   end;
 end;
 

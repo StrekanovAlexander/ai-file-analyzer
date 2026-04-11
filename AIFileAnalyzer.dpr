@@ -18,7 +18,8 @@ uses
   uFileItem in 'src\core\uFileItem.pas',
   uFileListController in 'src\controllers\uFileListController.pas',
   uStringUtils in 'src\common\uStringUtils.pas',
-  uWait in 'src\ui\uWait.pas' {fmWait};
+  uWait in 'src\ui\uWait.pas' {fmWait},
+  uFolderScanner in 'src\core\uFolderScanner.pas';
 
 var
   hMutex: THandle;
