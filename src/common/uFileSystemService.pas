@@ -4,12 +4,15 @@ interface
 
 uses
   System.SysUtils,
-  System.Classes;
+  System.Classes,
+  uConsts;
 
 type TFileSystemService = class
   public
     class function ScanFolder(Path: string): TStringList;
     class function FormatFileSize(Size: Int64): string;
+    class function IsSupportedExt(const Ext: string): Boolean;
+    class function GetExtIndex(const Ext: string): Integer;
 end;
 
 implementation
@@ -41,6 +44,26 @@ begin
     Result := Format('%.2f KB', [Size / KB])
   else
     Result := Format('%d B', [Size]);
+end;
+
+class function TFileSystemService.IsSupportedExt(const Ext: string): Boolean;
+var
+  S: string;
+begin
+  for S in SUPPORTED_EXTS do
+    if SameText(S, Ext) then
+      Exit(True);
+  Result := False;
+end;
+
+class function TFileSystemService.GetExtIndex(const Ext: string): Integer;
+var
+  I: Integer;
+begin
+  for I := Low(SUPPORTED_EXTS) to High(SUPPORTED_EXTS) do
+    if SameText(SUPPORTED_EXTS[I], Ext) then
+      Exit(I);
+  Result := Length(SUPPORTED_EXTS);
 end;
 
 end.

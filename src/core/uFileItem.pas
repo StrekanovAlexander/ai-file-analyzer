@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils,
   System.IOUtils,
-  uConsts;
+  uConsts,
+  uFileSystemService;
 
 type TFileItem = class
   private
@@ -35,10 +36,10 @@ constructor TFileItem.Create(const APath: string);
 begin
   inherited Create;
   FPath := APath;
-  FExt := ExtractFileExt(APath);
+  FExt := LowerCase(ExtractFileExt(APath));
   FSize := TFile.GetSize(APath);
   FLastModified := TFile.GetLastWriteTime(APath);
-  if (FExt = '.txt') or (FExt = '.pdf') or (FExt = '.docx') or (FExt = '.odt') then
+  if TFileSystemService.IsSupportedExt(FExt) then
     FStatus := fsPending
   else
     FStatus := fsSkipped;

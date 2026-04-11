@@ -2,28 +2,37 @@ program AIFileAnalyzer;
 
 uses
   Vcl.Forms,
-  uMain in 'src\uMain.pas' {fmMain},
-  Vcl.Themes,
   Vcl.Styles,
-  uAIModel in 'src\core\uAIModel.pas',
+  Vcl.Themes,
+  Winapi.Windows,
+  uMain in 'src\uMain.pas' {fmMain},
+  uGlobal in 'src\core\uGlobal.pas',
   uConsts in 'src\common\uConsts.pas',
   uRecords in 'src\common\uRecords.pas',
-  uStringUtils in 'src\common\uStringUtils.pas',
-  uFileUnit in 'src\core\uFileUnit.pas',
   uPaths in 'src\common\uPaths.pas',
+  uAIModel in 'src\core\uAIModel.pas',
   uCLIRunner in 'src\core\uCLIRunner.pas',
-  uGlobal in 'src\core\uGlobal.pas',
   uAppServices in 'src\common\uAppServices.pas',
   uFileSystemService in 'src\common\uFileSystemService.pas',
+  uFileExtractor in 'src\core\uFileExtractor.pas',
+  uFileItem in 'src\core\uFileItem.pas',
   uFileListController in 'src\controllers\uFileListController.pas',
-  uFileItem in 'src\core\uFileItem.pas';
+  uStringUtils in 'src\common\uStringUtils.pas',
+  uWait in 'src\ui\uWait.pas' {fmWait};
+
+var
+  hMutex: THandle;
 
 {$R *.res}
 
 begin
+  hMutex := CreateMutex(nil, True, 'MyUniqueAppNameMutex');
+  if (hMutex = 0) or (GetLastError = ERROR_ALREADY_EXISTS) then
+    Exit;
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   TStyleManager.TrySetStyle('Light');
   Application.CreateForm(TfmMain, fmMain);
+  Application.CreateForm(TfmWait, fmWait);
   Application.Run;
 end.

@@ -3,32 +3,42 @@ unit uFileListController;
 interface
 
 uses
-  System.Classes,
-  System.SysUtils,
-  Vcl.ComCtrls,
-  uConsts,
-  uFileItem,
-  uFileSystemService;
+  System.Classes, System.SysUtils,
+  Vcl.ComCtrls, Vcl.Forms, Vcl.StdCtrls, Vcl.Graphics,
+  uConsts, uFileItem, uFileExtractor, uFileSystemService,
+  uWait;
 
 type TFileListController = class
   private
     FListView: TListView;
+    FMemoOutput: TMemo;
+    FStatusBar: TStatusBar;
+    FFilesForAnalyseCount: Integer;
     procedure Clear;
-    function StatusToStr(Status: TFileStatus): string;
     procedure UpdateListItem(ListItem: TListItem);
+    procedure UpdateStatusBar;
+    procedure OnDraw(Sender: TCustomListView; Item: TListItem;
+      State: TCustomDrawState; Stage: TCustomDrawStage; var DefaultDraw: Boolean);
+    procedure OnSelect(Sender: TObject; Item: TListItem; Selected: Boolean);
+    function FileStatusToStr(FileStatus: TFileStatus): string;
     function GetIconIndex(const Ext: string): Integer;
   public
-    constructor Create(AListView: TListView);
+    constructor Create(AListView: TListView; AMemoOutput: TMemo; AStatusBar: TStatusBar);
     destructor Destroy; override;
     procedure Bind(const FileList: TStrings);
   end;
 
 implementation
 
-constructor TFileListController.Create(AListView: TListView);
+constructor TFileListController.Create(AListView: TListView; AMemoOutput: TMemo; AStatusBar: TStatusBar);
 begin
   inherited Create;
   FListView := AListView;
+  FMemoOutput := AMemoOutput;
+  FListView.OnAdvancedCustomDrawItem := OnDraw;
+  FlistView.OnSelectItem := OnSelect;
+  FStatusBar := AStatusBar;
+  FFilesForAnalyseCount := 0;
 end;
 
 destructor TFileListController.Destroy;
@@ -58,6 +68,7 @@ begin
   if not Assigned(FListView) then
     Exit;
   Clear;
+  FFilesForAnalyseCount := 0;
   FListView.Items.BeginUpdate;
   try
     for var I := 0 to FileList.Count - 1 do
@@ -66,7 +77,9 @@ begin
       FileItem := TFileItem.Create(FilePath);
       ListItem := FListView.Items.Add;
       ListItem.Data := FileItem;
-      ListItem.ImageIndex := GetIconIndex(FileItem.Ext);
+      if TFileSystemService.IsSupportedExt(FileItem.Ext) then
+        Inc(FFilesForAnalyseCount);
+      ListItem.ImageIndex := TFileSystemService.GetExtIndex(FileItem.Ext);
       for var J := 0 to SUBITEMS_COUNT do
         ListItem.SubItems.Add('');
       UpdateListItem(ListItem);
@@ -74,11 +87,12 @@ begin
   finally
     FListView.Items.EndUpdate;
   end;
+  UpdateStatusBar;
 end;
 
-function TFileListController.StatusToStr(Status: TFileStatus): string;
+function TFileListController.FileStatusToStr(FileStatus: TFileStatus): string;
 begin
-  case Status of
+  case FileStatus of
     fsPending: Result := 'Pending';
     fsProcessing: Result := 'Processing';
     fsDone: Result := 'Done';
@@ -104,7 +118,7 @@ begin
     SubItems[0] := TFileSystemService.FormatFileSize(FileItem.Size);
     SubItems[1] := FileItem.Ext;
     SubItems[2] := DateTimeToStr(FileItem.LastModified);
-    SubItems[3] := StatusToStr(FileItem.Status);
+    SubItems[3] := FileStatusToStr(FileItem.Status);
     SubItems[4] := FileItem.Topic;
     SubItems[5] := FileItem.Keywords;
     SubItems[6] := FileItem.Summary;
@@ -123,6 +137,62 @@ begin
     Result := 3
   else
     Result := 4;
+end;
+
+procedure TFileListController.UpdateStatusBar;
+begin
+  FStatusBar.Panels[0].Text := Format('Files: %d', [FListView.Items.Count]);
+  FStatusBar.Panels[1].Text := Format('Files for analyse: %d', [FFilesForAnalyseCount]);
+end;
+
+procedure TFileListController.OnDraw(Sender: TCustomListView; Item: TListItem;
+  State: TCustomDrawState; Stage: TCustomDrawStage; var DefaultDraw: Boolean);
+var
+  FileItem: TFileItem;
+begin
+  if Stage <> cdPrePaint then
+    Exit;
+  FileItem := TFileItem(Item.Data);
+  if not Assigned(FileItem) then
+    Exit;
+  if FileItem.Status = fsSkipped then
+    Sender.Canvas.Font.Color := clGrayText
+  else
+    Sender.Canvas.Font.Color := clWindowText;
+  DefaultDraw := True;
+end;
+
+procedure TFileListController.OnSelect(Sender: TObject; Item: TListItem;
+  Selected: Boolean);
+var
+  FileItem: TFileItem;
+  FileExtractor: TFileExtractor;
+  fmWait: TfmWait;
+begin
+  if not Selected then
+    Exit;
+  FileItem := TFileItem(Item.Data);
+  if not Assigned(FileItem) then
+    Exit;
+  if FileItem.Status = fsSkipped then
+  begin
+    FMemoOutput.Lines.Text := 'File not supported for preview';
+    Exit;
+  end;
+  fmWait := TfmWait.Create(nil);
+  try
+    fmWait.lblMsg.Caption := 'Extracting file content...';
+    fmWait.Show;
+    Application.ProcessMessages;
+    FileExtractor := TFileExtractor.Create(FileItem.Path);
+    try
+      FMemoOutput.Lines.Text := FileExtractor.GetFileContent;
+    finally
+      FileExtractor.Free;
+    end;
+  finally
+    fmWait.Free;
+  end;
 end;
 
 end.

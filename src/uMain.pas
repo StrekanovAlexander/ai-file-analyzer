@@ -5,20 +5,17 @@ interface
 uses
   Windows, Messages, System.SysUtils, Variants, Classes, Graphics,
   Controls, Vcl.Forms, Dialogs, StdCtrls, Vcl.Buttons,
+  Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, Vcl.ComCtrls,
+  SVGIconImageListBase, SVGIconImageList,
   uGlobal, uAppServices, uFileSystemService,
-  uFileListController,
-  uCLIRunner, uAIModel, uFileUnit, uRecords, uStringUtils, Vcl.ComCtrls,
-  Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, SVGIconImageListBase,
-  SVGIconImageList;
+  uFileListController, uCLIRunner, uAIModel, uRecords, uStringUtils
+  ;
 
 type
   TfmMain = class(TForm)
-    Memo1: TMemo;
+    memoOutput: TMemo;
     pnlHeader: TPanel;
     pnlControls: TPanel;
-    pnlProgress: TPanel;
-    pbProgressStatus: TProgressBar;
-    lblProgressStatus: TLabel;
     btnAnalyse: TBitBtn;
     stbMain: TStatusBar;
     lvwMain: TListView;
@@ -26,8 +23,10 @@ type
     svgBtns: TSVGIconImageList;
     btnBrowse: TBitBtn;
     btnScan: TBitBtn;
-    btnStopScan: TBitBtn;
     svgExts: TSVGIconImageList;
+    pbProgressStatus: TProgressBar;
+    btnStop: TBitBtn;
+    lblProgressStatus: TLabel;
     procedure btnAnalyseClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -50,7 +49,7 @@ procedure TfmMain.btnAnalyseClick(Sender: TObject);
 var
   FilePath: string;
   AnalysisRecord: TAnalysisRecord;
-  FileUnit: TFileUnit;
+//  FileUnit: TFileUnit;
   FileContent: string;
 begin
   if not Assigned(FAIModel) then
@@ -67,16 +66,18 @@ begin
     Exit;
   end;
 
+  {
   FileUnit := TFileUnit.Create(FilePath);
   try
     FileContent := FileUnit.GetFileContent;
     AnalysisRecord := FAIModel.AnalyzeContent(FileContent);
-    Memo1.Lines.Add('Topic: ' + AnalysisRecord.Topic);
-    Memo1.Lines.Add('Summary: ' + AnalysisRecord.Summary);
-    Memo1.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
+    MemoOutput.Lines.Add('Topic: ' + AnalysisRecord.Topic);
+    MemoOutput.Lines.Add('Summary: ' + AnalysisRecord.Summary);
+    MemoOutput.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
   finally
     FileUnit.Free;
   end;
+  }
 end;
 
 procedure TfmMain.btnScanClick(Sender: TObject);
@@ -90,7 +91,7 @@ end;
 procedure TfmMain.FormCreate(Sender: TObject);
 begin
   CLIRunner := TCLIRunner.Create;
-  FFileListController := TFileListController.Create(lvwMain);
+  FFileListController := TFileListController.Create(lvwMain, memoOutput, stbMain);
   edSourcePath.Text := 'D:\ai-organizer-examples';
 end;
 

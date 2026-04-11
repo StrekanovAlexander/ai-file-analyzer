@@ -1,4 +1,4 @@
-unit uFileUnit;
+unit uFileExtractor;
 
 interface
 
@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Classes, System.IOUtils, Windows, Vcl.Dialogs,
   uPaths, uGlobal;
 
-type TFileUnit = class
+type TFileExtractor = class
   private
     FFilePath: string;
     FFileExt: string;
@@ -22,7 +22,7 @@ end;
 
 implementation
 
-constructor TFileUnit.Create(AFilePath: string);
+constructor TFileExtractor.Create(AFilePath: string);
 begin
   if not FileExists(AFilePath) then
     raise Exception.Create('File not found: ' + AFilePath);
@@ -31,12 +31,12 @@ begin
   FFileExt := LowerCase(ExtractFileExt(AFilePath));
 end;
 
-destructor TFileUnit.Destroy;
+destructor TFileExtractor.Destroy;
 begin
   inherited;
 end;
 
-function TFileUnit.GetFileContent: string;
+function TFileExtractor.GetFileContent: string;
 begin
   Result := '';
   if FFileExt = '.txt' then
@@ -49,7 +49,7 @@ begin
     Result := 'File extension ' + FFileExt + ' not supports';
 end;
 
-function TFileUnit.GetFileTxtContent: string;
+function TFileExtractor.GetFileTxtContent: string;
 var
   SL: TStringList;
 begin
@@ -63,7 +63,7 @@ begin
   end;
 end;
 
-function TFileUnit.GetFilePdfContent: string;
+function TFileExtractor.GetFilePdfContent: string;
 var
   CmdLine: string;
   PdfToTextExe: string;
@@ -79,7 +79,7 @@ begin
   Result := CLIRunner.RunCommand(CmdLine);
 end;
 
-function TFileUnit.GetFileDocxContent: string;
+function TFileExtractor.GetFileDocxContent: string;
 var
   CmdLine: string;
   DocxToTextExe: string;

@@ -132,20 +132,23 @@
         </DelphiCompile>
         <DCCReference Include="src\uMain.pas">
             <Form>fmMain</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="src\core\uAIModel.pas"/>
+        <DCCReference Include="src\core\uGlobal.pas"/>
         <DCCReference Include="src\common\uConsts.pas"/>
         <DCCReference Include="src\common\uRecords.pas"/>
-        <DCCReference Include="src\common\uStringUtils.pas"/>
-        <DCCReference Include="src\core\uFileUnit.pas"/>
         <DCCReference Include="src\common\uPaths.pas"/>
+        <DCCReference Include="src\core\uAIModel.pas"/>
         <DCCReference Include="src\core\uCLIRunner.pas"/>
-        <DCCReference Include="src\core\uGlobal.pas"/>
         <DCCReference Include="src\common\uAppServices.pas"/>
         <DCCReference Include="src\common\uFileSystemService.pas"/>
-        <DCCReference Include="src\controllers\uFileListController.pas"/>
+        <DCCReference Include="src\core\uFileExtractor.pas"/>
         <DCCReference Include="src\core\uFileItem.pas"/>
+        <DCCReference Include="src\controllers\uFileListController.pas"/>
+        <DCCReference Include="src\common\uStringUtils.pas"/>
+        <DCCReference Include="src\ui\uWait.pas">
+            <Form>fmWait</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
