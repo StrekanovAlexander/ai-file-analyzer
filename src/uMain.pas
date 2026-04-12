@@ -11,7 +11,9 @@ uses
   SVGIconImageListBase, SVGIconImageList,
   uGlobal, uConsts, uAppServices,
   uFolderScanner, uFileReader, uFileItem, uFileFilter,
-  uFileListController, uCLIRunner, uAIModel, uRecords, uStringUtils,
+  uFileListController, uCLIRunner, uAIModel,
+//  uRecords,
+  uStringUtils,
   uWait;
 
 type
@@ -45,19 +47,18 @@ type
     procedure lvwMainSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
     procedure chkDOCXClick(Sender: TObject);
+    procedure chkOTHERSClick(Sender: TObject);
   private
     FAIModel: TAIModel;
     FFolderScanner: TFolderScanner;
     FFileReader: TFileReader;
     FFileListController: TFileListController;
     FWaitForm: TfmWait;
-    FExtFilterRecord: TExtFilterRecord;
     FFileItemList: TObjectList<TFileItem>;
     FFileFilter: TFileFilter;
     procedure OnScanDone(Sender: TObject; FileItemList: TObjectList<TFileItem>);
     procedure ShowWait(const Msg: string);
     procedure HideWait;
-    procedure BuildFilter;
   public
 
   end;
@@ -72,7 +73,7 @@ implementation
 procedure TfmMain.btnAnalyseClick(Sender: TObject);
 var
   FilePath: string;
-  AnalysisRecord: TAnalysisRecord;
+//  AnalysisRecord: TAnalysisRecord;
   FileContent: string;
 begin
   if not Assigned(FAIModel) then
@@ -200,23 +201,6 @@ begin
   end;
 end;
 
-procedure TfmMain.BuildFilter;
-var
-  Exts: TArray<string>;
-begin
-  SetLength(Exts, 0);
-  if chkDOCX.Checked then
-    Exts := Exts + ['.docx'];
-  if chkPDF.Checked then
-    Exts := Exts + ['.pdf'];
-  if chkODT.Checked then
-    Exts := Exts + ['.odt'];
-  if chkTXT.Checked then
-    Exts := Exts + ['.txt'];
-  FExtFilterRecord.Exts := Exts;
-  FExtFilterRecord.ShowOthers := chkOTHERS.Checked;
-end;
-
 procedure TfmMain.chkDOCXClick(Sender: TObject);
 var
   CheckBox: TCheckBox;
@@ -229,13 +213,13 @@ begin
     FFileFilter.Add(Ext)
   else
     FFileFilter.Remove(Ext);
-
   FFileListController.Bind(FFileItemList, FFileFilter);
+end;
 
-  memoOutput.Lines.Text := '';
-  for ListItem in FFileFilter.ExtList do
-    memoOutput.Lines.Add(ListItem);
-
+procedure TfmMain.chkOTHERSClick(Sender: TObject);
+begin
+  FFileFilter.ShowUnsupported := (Sender as TCheckBox).Checked;
+  FFileListController.Bind(FFileItemList, FFileFilter);
 end;
 
 end.

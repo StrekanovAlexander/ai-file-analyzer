@@ -9,11 +9,12 @@ uses
 type TFileFilter = class
   private
     FExtList: TList<string>;
+    FShowUnsupported: Boolean;
     function Contains(Ext: string): Boolean;
   public
     constructor Create;
     destructor Destroy; override;
-    property ExtList: TList<string> read FExtList;
+    property ShowUnsupported: Boolean read FShowUnsupported write FShowUnsupported;
     procedure Add(Ext: string);
     procedure Remove(Ext: string);
     function Accept(FileItem: TFileItem): Boolean;
@@ -25,6 +26,7 @@ constructor TFileFilter.Create;
 begin
   inherited Create;
   FExtList := TList<string>.Create;
+  FShowUnsupported := False;
 end;
 
 destructor TFileFilter.Destroy;
@@ -52,8 +54,12 @@ end;
 
 function TFileFilter.Accept(FileItem: TFileItem): Boolean;
 begin
-  if FExtList.Count = 0 then
+  if (FExtList.Count = 0) and (not FShowUnsupported) then
     Exit(True);
+  if not FileItem.IsSupported then
+    Exit(FShowUnsupported);
+  if FExtList.Count = 0 then
+    Exit(False);
   Result := Contains(FileItem.Ext);
 end;
 

@@ -279,6 +279,7 @@ object fmMain: TfmMain
       Align = alLeft
       Caption = 'OTHERS'
       TabOrder = 4
+      OnClick = chkOTHERSClick
     end
   end
   object svgBtns: TSVGIconImageList
