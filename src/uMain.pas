@@ -10,7 +10,7 @@ uses
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, Vcl.ComCtrls,
   SVGIconImageListBase, SVGIconImageList,
   uGlobal, uConsts, uAppServices,
-  uFolderScanner, uFileReader, uFileItem,
+  uFolderScanner, uFileReader, uFileItem, uFileFilter,
   uFileListController, uCLIRunner, uAIModel, uRecords, uStringUtils,
   uWait;
 
@@ -44,6 +44,7 @@ type
     procedure OnFileReadDone(Sender: TObject; FileContent: string);
     procedure lvwMainSelectItem(Sender: TObject; Item: TListItem;
       Selected: Boolean);
+    procedure chkDOCXClick(Sender: TObject);
   private
     FAIModel: TAIModel;
     FFolderScanner: TFolderScanner;
@@ -52,6 +53,7 @@ type
     FWaitForm: TfmWait;
     FExtFilterRecord: TExtFilterRecord;
     FFileItemList: TObjectList<TFileItem>;
+    FFileFilter: TFileFilter;
     procedure OnScanDone(Sender: TObject; FileItemList: TObjectList<TFileItem>);
     procedure ShowWait(const Msg: string);
     procedure HideWait;
@@ -117,10 +119,12 @@ begin
   {FileListController functional}
   FFileListController := TFileListController.Create(lvwMain, memoOutput, stbMain);
   edSourcePath.Text := 'D:\ai-organizer-examples';
+  FFileFilter := TFileFilter.Create;
 end;
 
 procedure TfmMain.FormDestroy(Sender: TObject);
 begin
+  FFileFilter.Free;
   FFileListController.Free;
   FFileReader.Free;
   FFolderScanner.Free;
@@ -166,7 +170,7 @@ begin
   try
     HideWait;
     FFileItemList := FileItemList;
-    FFileListController.Bind(FFileItemList);
+    FFileListController.Bind(FFileItemList, FFileFilter);
   finally
     btnScan.Enabled := True;
   end;
@@ -211,6 +215,27 @@ begin
     Exts := Exts + ['.txt'];
   FExtFilterRecord.Exts := Exts;
   FExtFilterRecord.ShowOthers := chkOTHERS.Checked;
+end;
+
+procedure TfmMain.chkDOCXClick(Sender: TObject);
+var
+  CheckBox: TCheckBox;
+  Ext: string;
+  ListItem: string;
+begin
+  CheckBox := (Sender as TCheckBox);
+  Ext := CheckBox.Hint;
+  if CheckBox.Checked then
+    FFileFilter.Add(Ext)
+  else
+    FFileFilter.Remove(Ext);
+
+  FFileListController.Bind(FFileItemList, FFileFilter);
+
+  memoOutput.Lines.Text := '';
+  for ListItem in FFileFilter.ExtList do
+    memoOutput.Lines.Add(ListItem);
+
 end;
 
 end.

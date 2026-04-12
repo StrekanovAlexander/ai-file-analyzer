@@ -189,7 +189,6 @@ object fmMain: TfmMain
     TabOrder = 3
     ViewStyle = vsReport
     OnSelectItem = lvwMainSelectItem
-    ExplicitHeight = 419
   end
   object pbProgressStatus: TProgressBar
     AlignWithMargins = True
@@ -210,7 +209,6 @@ object fmMain: TfmMain
     Align = alBottom
     ScrollBars = ssVertical
     TabOrder = 5
-    ExplicitTop = 585
   end
   object pnlFilters: TPanel
     AlignWithMargins = True
@@ -222,16 +220,19 @@ object fmMain: TfmMain
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 6
+    OnClick = chkDOCXClick
     object chkDOCX: TCheckBox
       AlignWithMargins = True
       Left = 0
       Top = 3
       Width = 97
       Height = 24
+      Hint = '.docx'
       Margins.Left = 0
       Align = alLeft
       Caption = '.DOCX'
       TabOrder = 0
+      OnClick = chkDOCXClick
     end
     object chkPDF: TCheckBox
       AlignWithMargins = True
@@ -239,9 +240,11 @@ object fmMain: TfmMain
       Top = 3
       Width = 97
       Height = 24
+      Hint = '.pdf'
       Align = alLeft
       Caption = '.PDF'
       TabOrder = 1
+      OnClick = chkDOCXClick
     end
     object chkODT: TCheckBox
       AlignWithMargins = True
@@ -249,9 +252,11 @@ object fmMain: TfmMain
       Top = 3
       Width = 97
       Height = 24
+      Hint = '.odt'
       Align = alLeft
       Caption = '.ODT'
       TabOrder = 2
+      OnClick = chkDOCXClick
     end
     object chkTXT: TCheckBox
       AlignWithMargins = True
@@ -259,9 +264,11 @@ object fmMain: TfmMain
       Top = 3
       Width = 97
       Height = 24
+      Hint = '.txt'
       Align = alLeft
       Caption = '.TXT'
       TabOrder = 3
+      OnClick = chkDOCXClick
     end
     object chkOTHERS: TCheckBox
       AlignWithMargins = True

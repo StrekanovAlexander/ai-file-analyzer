@@ -151,6 +151,7 @@
         </DCCReference>
         <DCCReference Include="src\tasks\uFolderScanner.pas"/>
         <DCCReference Include="src\tasks\uFileReader.pas"/>
+        <DCCReference Include="src\core\uFileFilter.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

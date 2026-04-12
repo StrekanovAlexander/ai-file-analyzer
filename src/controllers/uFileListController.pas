@@ -5,7 +5,7 @@ interface
 uses
   System.Classes, System.SysUtils, System.Generics.Collections,
   Vcl.ComCtrls, Vcl.Forms, Vcl.StdCtrls, Vcl.Graphics,
-  uConsts, uFileItem, uFileSystemService
+  uConsts, uFileItem, uFileSystemService, uFileFilter
 ;
 
 type TFileListController = class
@@ -23,7 +23,7 @@ type TFileListController = class
   public
     constructor Create(AListView: TListView; AMemoOutput: TMemo; AStatusBar: TStatusBar);
     destructor Destroy; override;
-    procedure Bind(const FileItemList: TObjectList<TFileItem>);
+    procedure Bind(const FileItemList: TObjectList<TFileItem>;  FileFilter: TFileFilter);
   end;
 
 implementation
@@ -51,7 +51,9 @@ begin
   FListView.Clear;
 end;
 
-procedure TFileListController.Bind(const FileItemList: TObjectList<TFileItem>);
+procedure TFileListController.Bind(
+  const FileItemList: TObjectList<TFileItem>; FileFilter: TFileFilter
+);
 const
   SUBITEMS_COUNT = 6;
 var
@@ -66,14 +68,17 @@ begin
   try
     for FileItem in FileItemList do
     begin
-      ListItem := FListView.Items.Add;
-      ListItem.Data := FileItem;
-      ListItem.ImageIndex := TFileSystemService.GetExtIndex(FileItem.Ext);
-      for var J := 0 to SUBITEMS_COUNT do
-        ListItem.SubItems.Add('');
-      UpdateListItem(ListItem);
-      if FileItem.IsSupported then
-        Inc(FFilesForAnalyseCount);
+      if FileFilter.Accept(FileItem) then
+      begin
+        ListItem := FListView.Items.Add;
+        ListItem.Data := FileItem;
+        ListItem.ImageIndex := TFileSystemService.GetExtIndex(FileItem.Ext);
+        for var J := 0 to SUBITEMS_COUNT do
+          ListItem.SubItems.Add('');
+        UpdateListItem(ListItem);
+        if FileItem.IsSupported then
+          Inc(FFilesForAnalyseCount);
+      end;
     end;
   finally
     FListView.Items.EndUpdate;

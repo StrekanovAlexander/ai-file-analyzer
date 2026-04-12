@@ -20,7 +20,8 @@ uses
   uStringUtils in 'src\common\uStringUtils.pas',
   uWait in 'src\ui\uWait.pas' {fmWait},
   uFolderScanner in 'src\tasks\uFolderScanner.pas',
-  uFileReader in 'src\tasks\uFileReader.pas';
+  uFileReader in 'src\tasks\uFileReader.pas',
+  uFileFilter in 'src\core\uFileFilter.pas';
 
 var
   hMutex: THandle;
