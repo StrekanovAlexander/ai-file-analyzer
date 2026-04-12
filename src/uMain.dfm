@@ -19,7 +19,7 @@ object fmMain: TfmMain
   object splMain: TSplitter
     AlignWithMargins = True
     Left = 3
-    Top = 577
+    Top = 552
     Width = 978
     Height = 2
     Cursor = crVSplit
@@ -51,7 +51,6 @@ object fmMain: TfmMain
     Padding.Top = 5
     Padding.Bottom = 5
     TabOrder = 1
-    ExplicitWidth = 984
     object btnAnalyse: TBitBtn
       AlignWithMargins = True
       Left = 804
@@ -65,7 +64,6 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 3
       OnClick = btnAnalyseClick
-      ExplicitLeft = 806
     end
     object edSourcePath: TEdit
       AlignWithMargins = True
@@ -79,7 +77,6 @@ object fmMain: TfmMain
       ReadOnly = True
       TabOrder = 1
       Text = 'Source path...'
-      ExplicitWidth = 608
       ExplicitHeight = 23
     end
     object btnBrowse: TBitBtn
@@ -94,7 +91,6 @@ object fmMain: TfmMain
       ImageName = 'folder_open'
       Images = svgBtns
       TabOrder = 0
-      ExplicitLeft = 617
     end
     object btnScan: TBitBtn
       AlignWithMargins = True
@@ -110,7 +106,6 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 2
       OnClick = btnScanClick
-      ExplicitLeft = 708
     end
     object btnStop: TBitBtn
       AlignWithMargins = True
@@ -125,7 +120,6 @@ object fmMain: TfmMain
       ImageName = 'stop'
       Images = svgBtns
       TabOrder = 4
-      ExplicitLeft = 897
     end
   end
   object stbMain: TStatusBar
@@ -144,15 +138,13 @@ object fmMain: TfmMain
         Text = 'Files for analyse: 0'
         Width = 100
       end>
-    ExplicitLeft = -2
-    ExplicitTop = 657
   end
   object lvwMain: TListView
     AlignWithMargins = True
     Left = 3
     Top = 155
     Width = 978
-    Height = 419
+    Height = 394
     Margins.Top = 0
     Margins.Bottom = 0
     Align = alClient
@@ -197,8 +189,7 @@ object fmMain: TfmMain
     TabOrder = 3
     ViewStyle = vsReport
     OnSelectItem = lvwMainSelectItem
-    ExplicitTop = 288
-    ExplicitHeight = 286
+    ExplicitHeight = 419
   end
   object pbProgressStatus: TProgressBar
     AlignWithMargins = True
@@ -209,18 +200,17 @@ object fmMain: TfmMain
     Margins.Top = 0
     Align = alTop
     TabOrder = 4
-    ExplicitWidth = 981
   end
   object memoOutput: TMemo
     AlignWithMargins = True
     Left = 3
-    Top = 585
+    Top = 560
     Width = 978
-    Height = 50
+    Height = 75
     Align = alBottom
     ScrollBars = ssVertical
     TabOrder = 5
-    ExplicitTop = 576
+    ExplicitTop = 585
   end
   object pnlFilters: TPanel
     AlignWithMargins = True
@@ -232,7 +222,6 @@ object fmMain: TfmMain
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 6
-    ExplicitTop = 150
     object chkDOCX: TCheckBox
       AlignWithMargins = True
       Left = 0
@@ -243,9 +232,6 @@ object fmMain: TfmMain
       Align = alLeft
       Caption = '.DOCX'
       TabOrder = 0
-      ExplicitLeft = 104
-      ExplicitTop = 24
-      ExplicitHeight = 17
     end
     object chkPDF: TCheckBox
       AlignWithMargins = True
@@ -256,9 +242,6 @@ object fmMain: TfmMain
       Align = alLeft
       Caption = '.PDF'
       TabOrder = 1
-      ExplicitLeft = 136
-      ExplicitTop = 8
-      ExplicitHeight = 17
     end
     object chkODT: TCheckBox
       AlignWithMargins = True
@@ -269,9 +252,6 @@ object fmMain: TfmMain
       Align = alLeft
       Caption = '.ODT'
       TabOrder = 2
-      ExplicitLeft = 272
-      ExplicitTop = 8
-      ExplicitHeight = 17
     end
     object chkTXT: TCheckBox
       AlignWithMargins = True
@@ -282,9 +262,6 @@ object fmMain: TfmMain
       Align = alLeft
       Caption = '.TXT'
       TabOrder = 3
-      ExplicitLeft = 400
-      ExplicitTop = 8
-      ExplicitHeight = 17
     end
     object chkOTHERS: TCheckBox
       AlignWithMargins = True
@@ -337,7 +314,7 @@ object fmMain: TfmMain
           '</g></svg>'
       end>
     Scaled = True
-    Left = 851
+    Left = 27
     Top = 13
   end
   object svgExts: TSVGIconImageList
@@ -399,7 +376,7 @@ object fmMain: TfmMain
         FixedColor = clSilver
       end>
     Scaled = True
-    Left = 88
-    Top = 392
+    Left = 32
+    Top = 208
   end
 end

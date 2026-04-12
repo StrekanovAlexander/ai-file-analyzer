@@ -3,7 +3,7 @@ unit uFileListController;
 interface
 
 uses
-  System.Classes, System.SysUtils,
+  System.Classes, System.SysUtils, System.Generics.Collections,
   Vcl.ComCtrls, Vcl.Forms, Vcl.StdCtrls, Vcl.Graphics,
   uConsts, uFileItem, uFileSystemService
 ;
@@ -14,7 +14,7 @@ type TFileListController = class
     FMemoOutput: TMemo;
     FStatusBar: TStatusBar;
     FFilesForAnalyseCount: Integer;
-    procedure Clear;
+    procedure ClearListView;
     procedure UpdateListItem(ListItem: TListItem);
     procedure UpdateStatusBar;
     procedure OnDraw(Sender: TCustomListView; Item: TListItem;
@@ -23,7 +23,7 @@ type TFileListController = class
   public
     constructor Create(AListView: TListView; AMemoOutput: TMemo; AStatusBar: TStatusBar);
     destructor Destroy; override;
-    procedure Bind(const FileList: TStrings);
+    procedure Bind(const FileItemList: TObjectList<TFileItem>);
   end;
 
 implementation
@@ -40,46 +40,40 @@ end;
 
 destructor TFileListController.Destroy;
 begin
-  Clear;
+  ClearListView;
   inherited;
 end;
 
-procedure TFileListController.Clear;
+procedure TFileListController.ClearListView;
 begin
   if not Assigned(FListView) then
     Exit;
-  for var I := 0 to FListView.Items.Count - 1 do
-    if Assigned(FListView.Items[I].Data) then
-      TObject(FListView.Items[I].Data).Free;
   FListView.Clear;
 end;
 
-procedure TFileListController.Bind(const FileList: TStrings);
+procedure TFileListController.Bind(const FileItemList: TObjectList<TFileItem>);
 const
   SUBITEMS_COUNT = 6;
 var
-  ListItem: TListItem;
-  FilePath: string;
   FileItem: TFileItem;
+  ListItem: TListItem;
 begin
   if not Assigned(FListView) then
     Exit;
-  Clear;
+  ClearListView;
   FFilesForAnalyseCount := 0;
   FListView.Items.BeginUpdate;
   try
-    for var I := 0 to FileList.Count - 1 do
+    for FileItem in FileItemList do
     begin
-      FilePath := FileList[I];
-      FileItem := TFileItem.Create(FilePath);
       ListItem := FListView.Items.Add;
       ListItem.Data := FileItem;
-      if TFileSystemService.IsSupportedExt(FileItem.Ext) then
-        Inc(FFilesForAnalyseCount);
       ListItem.ImageIndex := TFileSystemService.GetExtIndex(FileItem.Ext);
       for var J := 0 to SUBITEMS_COUNT do
         ListItem.SubItems.Add('');
       UpdateListItem(ListItem);
+      if FileItem.IsSupported then
+        Inc(FFilesForAnalyseCount);
     end;
   finally
     FListView.Items.EndUpdate;
@@ -138,10 +132,10 @@ begin
   FileItem := TFileItem(Item.Data);
   if not Assigned(FileItem) then
     Exit;
-  if FileItem.Status = fsSkipped then
-    Sender.Canvas.Font.Color := clGrayText
+  if FileItem.IsSupported then
+    Sender.Canvas.Font.Color := clWindowText
   else
-    Sender.Canvas.Font.Color := clWindowText;
+    Sender.Canvas.Font.Color := clGrayText;
   DefaultDraw := True;
 end;
 

@@ -3,34 +3,38 @@ unit uFileSystemService;
 interface
 
 uses
-  System.SysUtils,
-  System.Classes,
-  uConsts;
+  System.SysUtils, System.Classes, System.Generics.Collections,
+  uConsts, uFileItem;
 
 type TFileSystemService = class
   public
-    class function ScanFolder(Path: string): TStringList;
+    class function ScanFolder(Path: string): TObjectList<TFileItem>;
     class function FormatFileSize(Size: Int64): string;
-    class function IsSupportedExt(const Ext: string): Boolean;
     class function GetExtIndex(const Ext: string): Integer;
 end;
 
 implementation
 
-class function TFileSystemService.ScanFolder(Path: string): TStringList;
+class function TFileSystemService.ScanFolder(Path: string): TObjectList<TFileItem>;
 var
   SR: TSearchRec;
+  FileItem: TFileItem;
+  FileItemList: TObjectList<TFileItem>;
 begin
-  Result := TStringList.Create;
+  FileItemList := TObjectList<TFileItem>.Create;
   if FindFirst(Path + '\*.*', faAnyFile, SR) = 0 then
   try
     repeat
       if (SR.Attr and faDirectory) = 0 then
-        Result.Add(Path + '\' + SR.Name);
+      begin
+        FileItem := TFileItem.Create(Path + '\' + SR.Name);
+        FileItemList.Add(FileItem);
+      end;
     until FindNext(SR) <> 0;
   finally
     FindClose(SR);
   end;
+  Result := FileItemList;
 end;
 
 class function TFileSystemService.FormatFileSize(Size: Int64): string;
@@ -44,16 +48,6 @@ begin
     Result := Format('%.2f KB', [Size / KB])
   else
     Result := Format('%d B', [Size]);
-end;
-
-class function TFileSystemService.IsSupportedExt(const Ext: string): Boolean;
-var
-  S: string;
-begin
-  for S in SUPPORTED_EXTS do
-    if SameText(S, Ext) then
-      Exit(True);
-  Result := False;
 end;
 
 class function TFileSystemService.GetExtIndex(const Ext: string): Integer;

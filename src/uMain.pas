@@ -3,7 +3,9 @@ unit uMain;
 interface
 
 uses
-  Windows, Messages, System.SysUtils, Variants, Classes, Graphics,
+  Windows, Messages,
+  System.SysUtils, System.Generics.Collections, Variants,
+  Classes, Graphics,
   Controls, Vcl.Forms, Dialogs, StdCtrls, Vcl.Buttons,
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, Vcl.ComCtrls,
   SVGIconImageListBase, SVGIconImageList,
@@ -49,7 +51,8 @@ type
     FFileListController: TFileListController;
     FWaitForm: TfmWait;
     FExtFilterRecord: TExtFilterRecord;
-    procedure OnScanDone(Sender: TObject; FileList: TStringList);
+    FFileItemList: TObjectList<TFileItem>;
+    procedure OnScanDone(Sender: TObject; FileItemList: TObjectList<TFileItem>);
     procedure ShowWait(const Msg: string);
     procedure HideWait;
     procedure BuildFilter;
@@ -121,6 +124,7 @@ begin
   FFileListController.Free;
   FFileReader.Free;
   FFolderScanner.Free;
+  FFileItemList.Free;
   FAIModel.Free;
   CLIRunner.Free;
 end;
@@ -157,13 +161,13 @@ begin
   FFileReader.Start(TFileItem(Item.Data).Path);
 end;
 
-procedure TfmMain.OnScanDone(Sender: TObject; FileList: TStringList);
+procedure TfmMain.OnScanDone(Sender: TObject; FileItemList: TObjectList<TFileItem>);
 begin
   try
     HideWait;
-    FFileListController.Bind(FileList);
+    FFileItemList := FileItemList;
+    FFileListController.Bind(FFileItemList);
   finally
-    FileList.Free;
     btnScan.Enabled := True;
   end;
 end;

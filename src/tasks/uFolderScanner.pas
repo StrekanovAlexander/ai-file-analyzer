@@ -3,11 +3,11 @@ unit uFolderScanner;
 interface
 
 uses
-  System.Classes,
-  uFileSystemService;
+  System.Classes, System.Generics.Collections,
+  uFileItem, uFileSystemService;
 
 type
-  TOnScanDone = procedure(Sender: TObject; FileList: TStringList) of object;
+  TOnScanDone = procedure(Sender: TObject; FileItemList: TObjectList<TFileItem>) of object;
   TFolderScanner = class
   private
     FThread: TThread;
@@ -26,25 +26,25 @@ begin
   FThread := TThread.CreateAnonymousThread(
     procedure
     var
-      FileList: TStringList;
+      FileItemList: TObjectList<TFileItem>;
     begin
-      FileList := TFileSystemService.ScanFolder(APath);
+      FileItemList := TFileSystemService.ScanFolder(APath);
       try
         TThread.Synchronize(nil,
           procedure
           begin
             try
               if Assigned(FOnScanDone) then
-                FOnScanDone(Self, FileList)
+                FOnScanDone(Self, FileItemList)
               else
-                FileList.Free;
+                FileItemList.Free;
             finally
               FThread := nil;
             end;
           end
         );
       except
-        FileList.Free;
+        FileItemList.Free;
         TThread.Synchronize(nil,
           procedure
           begin
