@@ -21,7 +21,9 @@ uses
   uWait in 'src\ui\uWait.pas' {fmWait},
   uFolderScanner in 'src\tasks\uFolderScanner.pas',
   uFileReader in 'src\tasks\uFileReader.pas',
-  uFileFilter in 'src\core\uFileFilter.pas';
+  uFileFilter in 'src\core\uFileFilter.pas',
+  uViewer in 'src\ui\uViewer.pas' {fmViewer},
+  uAnalysisProgress in 'src\ui\uAnalysisProgress.pas' {fmAnalysisProgress};
 
 var
   hMutex: THandle;
@@ -37,5 +39,7 @@ begin
   TStyleManager.TrySetStyle('Light');
   Application.CreateForm(TfmMain, fmMain);
   Application.CreateForm(TfmWait, fmWait);
+  Application.CreateForm(TfmViewer, fmViewer);
+  Application.CreateForm(TfmAnalysisProgress, fmAnalysisProgress);
   Application.Run;
 end.

@@ -10,11 +10,11 @@ uses
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, Vcl.ComCtrls,
   SVGIconImageListBase, SVGIconImageList,
   uGlobal, uConsts, uAppServices,
-  uFolderScanner, uFileReader, uFileItem, uFileFilter,
+  uFolderScanner,
+  uFileItem, uFileFilter,
   uFileListController, uCLIRunner, uAIModel,
-//  uRecords,
   uStringUtils,
-  uWait;
+  uViewer, uAnalysisProgress, uWait;
 
 type
   TfmMain = class(TForm)
@@ -43,15 +43,12 @@ type
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnScanClick(Sender: TObject);
-    procedure OnFileReadDone(Sender: TObject; FileContent: string);
-    procedure lvwMainSelectItem(Sender: TObject; Item: TListItem;
-      Selected: Boolean);
     procedure chkDOCXClick(Sender: TObject);
     procedure chkOTHERSClick(Sender: TObject);
+    procedure lvwMainDblClick(Sender: TObject);
   private
     FAIModel: TAIModel;
     FFolderScanner: TFolderScanner;
-    FFileReader: TFileReader;
     FFileListController: TFileListController;
     FWaitForm: TfmWait;
     FFileItemList: TObjectList<TFileItem>;
@@ -71,34 +68,14 @@ implementation
 {$R *.dfm}
 
 procedure TfmMain.btnAnalyseClick(Sender: TObject);
-var
-  FilePath: string;
-//  AnalysisRecord: TAnalysisRecord;
-  FileContent: string;
 begin
-  if not Assigned(FAIModel) then
-  begin
-    ShowMessage('Model is not initialized.');
-    Exit;
-  end;
-  FilePath := 'D:\ai-organizer-examples\sample7.odt';
-  if not FileExists(FilePath) then
-  begin
-    ShowMessage('File not found: ' + FilePath);
-    Exit;
-  end;
-  {
-  FileUnit := TFileUnit.Create(FilePath);
+  if lvwMain.Items.Count = 0 then Exit;
+  fmAnalysisProgress := TfmAnalysisProgress.Create(nil);
   try
-    FileContent := FileUnit.GetFileContent;
-    AnalysisRecord := FAIModel.AnalyzeContent(FileContent);
-    MemoOutput.Lines.Add('Topic: ' + AnalysisRecord.Topic);
-    MemoOutput.Lines.Add('Summary: ' + AnalysisRecord.Summary);
-    MemoOutput.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
+    fmAnalysisProgress.ShowModal;
   finally
-    FileUnit.Free;
+    fmAnalysisProgress.Free;
   end;
-  }
 end;
 
 procedure TfmMain.btnScanClick(Sender: TObject);
@@ -114,9 +91,6 @@ begin
   { Folder scanning... }
   FFolderScanner := TFolderScanner.Create;
   FFolderScanner.OnScanDone := OnScanDone;
-  { File content reading... }
-  FFileReader := TFileReader.Create;
-  FFileReader.OnReadDone := OnFileReadDone;
   {FileListController functional}
   FFileListController := TFileListController.Create(lvwMain, memoOutput, stbMain);
   edSourcePath.Text := 'D:\ai-organizer-examples';
@@ -127,7 +101,6 @@ procedure TfmMain.FormDestroy(Sender: TObject);
 begin
   FFileFilter.Free;
   FFileListController.Free;
-  FFileReader.Free;
   FFolderScanner.Free;
   FFileItemList.Free;
   FAIModel.Free;
@@ -147,23 +120,22 @@ begin
   end;
 end;
 
-procedure TfmMain.lvwMainSelectItem(Sender: TObject; Item: TListItem;
-  Selected: Boolean);
+procedure TfmMain.lvwMainDblClick(Sender: TObject);
 var
+  Item: TListItem;
   FileItem: TFileItem;
 begin
-  if not Selected then
-    Exit;
+  Item := lvwMain.Selected;
+  if not Assigned(Item) then Exit;
   FileItem := TFileItem(Item.Data);
-  if not Assigned(FileItem) then
-    Exit;
-  if FileItem.Status = fsSkipped then
-  begin
-    memoOutput.Lines.Text := 'File not supported for preview';
-    Exit;
+  if not Assigned(FileItem) then Exit;
+  if FileItem.Status = fsSkipped then Exit;
+  fmViewer := TfmViewer.Create(nil, FileItem);
+  try
+    fmViewer.ShowModal;
+  finally
+    fmViewer.Free;
   end;
-  ShowWait('Loading file content...');
-  FFileReader.Start(TFileItem(Item.Data).Path);
 end;
 
 procedure TfmMain.OnScanDone(Sender: TObject; FileItemList: TObjectList<TFileItem>);
@@ -175,12 +147,6 @@ begin
   finally
     btnScan.Enabled := True;
   end;
-end;
-
-procedure TfmMain.OnFileReadDone(Sender: TObject; FileContent: string);
-begin
-  HideWait;
-  memoOutput.Lines.Text := FileContent;
 end;
 
 procedure TfmMain.ShowWait(const Msg: string);
@@ -221,5 +187,37 @@ begin
   FFileFilter.ShowUnsupported := (Sender as TCheckBox).Checked;
   FFileListController.Bind(FFileItemList, FFileFilter);
 end;
+
+{
+procedure TfmMain.btnAnalyseClick(Sender: TObject);
+var
+  FilePath: string;
+  //AnalysisRecord: TAnalysisRecord;
+  FileContent: string;
+begin
+  if not Assigned(FAIModel) then
+  begin
+    ShowMessage('Model is not initialized.');
+    Exit;
+  end;
+  FilePath := 'D:\ai-organizer-examples\sample7.odt';
+  if not FileExists(FilePath) then
+  begin
+    ShowMessage('File not found: ' + FilePath);
+    Exit;
+  end;
+  FileUnit := TFileUnit.Create(FilePath);
+  try
+    FileContent := FileUnit.GetFileContent;
+    AnalysisRecord := FAIModel.AnalyzeContent(FileContent);
+    MemoOutput.Lines.Add('Topic: ' + AnalysisRecord.Topic);
+    MemoOutput.Lines.Add('Summary: ' + AnalysisRecord.Summary);
+    MemoOutput.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
+  finally
+    FileUnit.Free;
+  end;
+
+end;
+}
 
 end.
