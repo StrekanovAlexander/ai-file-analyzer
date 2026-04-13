@@ -61,4 +61,18 @@ begin
   Result := CLIRunner.RunCommand(CmdLine);
 end;
 
+{
+  EXAMPLE
+  FileUnit := TFileUnit.Create(FilePath);
+  try
+    FileContent := FileUnit.GetFileContent;
+    AnalysisRecord := FAIModel.AnalyzeContent(FileContent);
+    MemoOutput.Lines.Add('Topic: ' + AnalysisRecord.Topic);
+    MemoOutput.Lines.Add('Summary: ' + AnalysisRecord.Summary);
+    MemoOutput.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
+  finally
+    FileUnit.Free;
+  end;
+}
+
 end.

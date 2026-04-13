@@ -156,8 +156,8 @@
             <Form>fmViewer</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="src\ui\uAnalysisProgress.pas">
-            <Form>fmAnalysisProgress</Form>
+        <DCCReference Include="src\ui\uAnalysis.pas">
+            <Form>fmAnalysis</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

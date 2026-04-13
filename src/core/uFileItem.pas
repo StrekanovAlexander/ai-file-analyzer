@@ -10,6 +10,7 @@ uses
 type TFileItem = class
   private
     FPath: string;
+    FFileName: string;
     FIsSupported: Boolean;
     FExt: string;
     FSize: Int64;
@@ -22,10 +23,11 @@ type TFileItem = class
   public
     constructor Create(const APath: string);
     property Path: string read FPath;
-    property IsSupported: Boolean read FIsSupported;
+    property FileName: string read FFileName;
     property Ext: string read FExt;
     property Size: Int64 read FSize;
     property LastModified: TDateTime read FLastModified;
+    property IsSupported: Boolean read FIsSupported;
     property Status: TFileStatus read FStatus;
     property Topic: string read FTopic;
     property Summary: string read FSummary;
@@ -38,6 +40,7 @@ constructor TFileItem.Create(const APath: string);
 begin
   inherited Create;
   FPath := APath;
+  FFileName := ExtractFileName(APath);
   FExt := LowerCase(ExtractFileExt(APath));
   FSize := TFile.GetSize(APath);
   FLastModified := TFile.GetLastWriteTime(APath);

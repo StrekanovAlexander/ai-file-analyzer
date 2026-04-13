@@ -9,12 +9,11 @@ uses
   Controls, Vcl.Forms, Dialogs, StdCtrls, Vcl.Buttons,
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, Vcl.ComCtrls,
   SVGIconImageListBase, SVGIconImageList,
-  uGlobal, uConsts, uAppServices,
-  uFolderScanner,
-  uFileItem, uFileFilter,
-  uFileListController, uCLIRunner, uAIModel,
+  uGlobal, uConsts, uCLIRunner, uAIModel, uAppServices,
+  uFolderScanner, uFileItem, uFileFilter,
+  uFileListController,
   uStringUtils,
-  uViewer, uAnalysisProgress, uWait;
+  uViewer, uAnalysis, uWait;
 
 type
   TfmMain = class(TForm)
@@ -29,7 +28,6 @@ type
     btnScan: TBitBtn;
     svgExts: TSVGIconImageList;
     pbProgressStatus: TProgressBar;
-    btnStop: TBitBtn;
     splMain: TSplitter;
     memoOutput: TMemo;
     pnlFilters: TPanel;
@@ -56,6 +54,7 @@ type
     procedure OnScanDone(Sender: TObject; FileItemList: TObjectList<TFileItem>);
     procedure ShowWait(const Msg: string);
     procedure HideWait;
+    function GetFilteredFileItemList: TObjectList<TFileItem>;
   public
 
   end;
@@ -68,14 +67,23 @@ implementation
 {$R *.dfm}
 
 procedure TfmMain.btnAnalyseClick(Sender: TObject);
+var FilteredFileItemList: TObjectList<TFileItem>;
 begin
-  if lvwMain.Items.Count = 0 then Exit;
-  fmAnalysisProgress := TfmAnalysisProgress.Create(nil);
-  try
-    fmAnalysisProgress.ShowModal;
-  finally
-    fmAnalysisProgress.Free;
+  FilteredFileItemList := GetFilteredFileItemList;
+  if FilteredFileItemList.Count = 0 then
+  begin
+    ShowMessage('There are not files for analysis');
+    Exit;
   end;
+
+  fmAnalysis := TfmAnalysis.Create(nil, FilteredFileItemList);
+  try
+    fmAnalysis.ShowModal;
+  finally
+    FilteredFileItemList.Free;
+    fmAnalysis.Free;
+  end;
+
 end;
 
 procedure TfmMain.btnScanClick(Sender: TObject);
@@ -188,36 +196,21 @@ begin
   FFileListController.Bind(FFileItemList, FFileFilter);
 end;
 
-{
-procedure TfmMain.btnAnalyseClick(Sender: TObject);
+function TfmMain.GetFilteredFileItemList: TObjectList<TFileItem>;
 var
-  FilePath: string;
-  //AnalysisRecord: TAnalysisRecord;
-  FileContent: string;
+  ListItem: TListItem;
+  FileItem: TFileItem;
 begin
-  if not Assigned(FAIModel) then
+  Result := TObjectList<TFileItem>.Create(False);
+  for var I := 0 to lvwMain.Items.Count - 1 do
   begin
-    ShowMessage('Model is not initialized.');
-    Exit;
+    ListItem := lvwMain.Items[I];
+    if not Assigned(ListItem.Data) then
+      Continue;
+    FileItem := TFileItem(ListItem.Data);
+    if FileItem.IsSupported then
+      Result.Add(FileItem);
   end;
-  FilePath := 'D:\ai-organizer-examples\sample7.odt';
-  if not FileExists(FilePath) then
-  begin
-    ShowMessage('File not found: ' + FilePath);
-    Exit;
-  end;
-  FileUnit := TFileUnit.Create(FilePath);
-  try
-    FileContent := FileUnit.GetFileContent;
-    AnalysisRecord := FAIModel.AnalyzeContent(FileContent);
-    MemoOutput.Lines.Add('Topic: ' + AnalysisRecord.Topic);
-    MemoOutput.Lines.Add('Summary: ' + AnalysisRecord.Summary);
-    MemoOutput.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
-  finally
-    FileUnit.Free;
-  end;
-
 end;
-}
 
 end.

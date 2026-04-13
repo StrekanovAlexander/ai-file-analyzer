@@ -110,7 +110,7 @@ begin
 
   with ListItem do
   begin
-    Caption := ExtractFileName(FileItem.Path);
+    Caption := FileItem.FileName;
     SubItems[0] := TFileSystemService.FormatFileSize(FileItem.Size);
     SubItems[1] := FileItem.Ext;
     SubItems[2] := DateTimeToStr(FileItem.LastModified);

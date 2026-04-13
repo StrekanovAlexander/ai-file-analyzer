@@ -53,10 +53,11 @@ object fmMain: TfmMain
     TabOrder = 1
     object btnAnalyse: TBitBtn
       AlignWithMargins = True
-      Left = 804
+      Left = 896
       Top = 8
       Width = 85
       Height = 24
+      Margins.Right = 0
       Align = alRight
       Caption = 'Analyse'
       ImageIndex = 3
@@ -64,12 +65,13 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 3
       OnClick = btnAnalyseClick
+      ExplicitLeft = 804
     end
     object edSourcePath: TEdit
       AlignWithMargins = True
       Left = 3
       Top = 7
-      Width = 606
+      Width = 705
       Height = 25
       Margins.Top = 2
       Align = alClient
@@ -77,11 +79,12 @@ object fmMain: TfmMain
       ReadOnly = True
       TabOrder = 1
       Text = 'Source path...'
+      ExplicitWidth = 606
       ExplicitHeight = 23
     end
     object btnBrowse: TBitBtn
       AlignWithMargins = True
-      Left = 615
+      Left = 714
       Top = 8
       Width = 85
       Height = 24
@@ -91,14 +94,14 @@ object fmMain: TfmMain
       ImageName = 'folder_open'
       Images = svgBtns
       TabOrder = 0
+      ExplicitLeft = 615
     end
     object btnScan: TBitBtn
       AlignWithMargins = True
-      Left = 706
+      Left = 805
       Top = 8
       Width = 85
       Height = 24
-      Margins.Right = 10
       Align = alRight
       Caption = 'Scan'
       ImageIndex = 1
@@ -106,20 +109,7 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 2
       OnClick = btnScanClick
-    end
-    object btnStop: TBitBtn
-      AlignWithMargins = True
-      Left = 895
-      Top = 8
-      Width = 85
-      Height = 24
-      Margins.Right = 1
-      Align = alRight
-      Caption = 'Stop'
-      ImageIndex = 2
-      ImageName = 'stop'
-      Images = svgBtns
-      TabOrder = 4
+      ExplicitLeft = 706
     end
   end
   object stbMain: TStatusBar
