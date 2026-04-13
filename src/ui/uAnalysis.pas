@@ -5,10 +5,11 @@ interface
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes, System.Generics.Collections,
-  Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  uFileItem, Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls, System.ImageList,
+  System.Threading,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls, System.ImageList,
   Vcl.ImgList, SVGIconImageListBase, SVGIconImageList,
+  uFileItem,
   uFileSystemService
 ;
 
@@ -66,6 +67,7 @@ end;
 
 procedure TfmAnalysis.FormShow(Sender: TObject);
 begin
+  pgbMain.Max := FFilesCount;
   Start;
 end;
 
@@ -82,12 +84,32 @@ end;
 
 procedure TfmAnalysis.Start;
 begin
-//for var I := 0 to FFilesCount - 1 do
-//  begin
-//    UpdateControls;
-//    Sleep(3000);
-//    Int(FIndex);
-//  end;
+  TTask.Run(
+    procedure
+    begin
+      for var I := 0 to FFilesCount - 1 do
+      begin
+        if not FIsProcess then
+          Break;
+        FIndex := I;
+        TThread.Queue(nil,
+          procedure
+          begin
+            UpdateControls;
+            pgbMain.Position := FIndex + 1;
+          end);
+        Sleep(1000);
+      end;
+      TThread.Queue(nil,
+        procedure
+        begin
+          lblStatus.Caption := 'Status: Done';
+          FIsProcess := False;
+          btnBtn.Caption := 'Close';
+          btnBtn.ImageIndex := 1;
+        end);
+    end
+  );
 end;
 
 end.
