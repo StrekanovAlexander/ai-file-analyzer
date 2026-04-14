@@ -5,7 +5,7 @@ object fmAnalysis: TfmAnalysis
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'AI FileAnalyzer v1.0 - Analysis'
-  ClientHeight = 161
+  ClientHeight = 311
   ClientWidth = 444
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -16,6 +16,7 @@ object fmAnalysis: TfmAnalysis
   Padding.Left = 5
   Padding.Right = 5
   Position = poScreenCenter
+  OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   TextHeight = 15
   object lblFileName: TLabel
@@ -46,7 +47,6 @@ object fmAnalysis: TfmAnalysis
     Height = 15
     Align = alTop
     Caption = 'Status:'
-    ExplicitTop = 52
     ExplicitWidth = 35
   end
   object lblProgress: TLabel
@@ -58,8 +58,14 @@ object fmAnalysis: TfmAnalysis
     Margins.Top = 15
     Align = alTop
     Caption = 'Progress:'
-    ExplicitTop = 80
     ExplicitWidth = 48
+  end
+  object Label1: TLabel
+    Left = 8
+    Top = 132
+    Width = 60
+    Height = 15
+    Caption = 'Height: 200'
   end
   object pgbMain: TProgressBar
     AlignWithMargins = True
@@ -71,9 +77,6 @@ object fmAnalysis: TfmAnalysis
     Margins.Right = 1
     Align = alTop
     TabOrder = 0
-    ExplicitLeft = 40
-    ExplicitTop = 120
-    ExplicitWidth = 150
   end
   object btnBtn: TBitBtn
     Left = 184
@@ -86,6 +89,16 @@ object fmAnalysis: TfmAnalysis
     Images = svgBtns
     TabOrder = 1
     OnClick = btnBtnClick
+  end
+  object memoLog: TMemo
+    Left = 5
+    Top = 168
+    Width = 434
+    Height = 143
+    Align = alBottom
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 2
   end
   object svgBtns: TSVGIconImageList
     SVGIconItems = <

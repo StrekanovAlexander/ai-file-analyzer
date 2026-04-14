@@ -14,19 +14,7 @@ object fmMain: TfmMain
   StyleName = 'Aqua Graphite'
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  OnShow = FormShow
   TextHeight = 15
-  object splMain: TSplitter
-    AlignWithMargins = True
-    Left = 3
-    Top = 552
-    Width = 978
-    Height = 2
-    Cursor = crVSplit
-    Align = alBottom
-    ExplicitLeft = 8
-    ExplicitTop = 452
-  end
   object pnlHeader: TPanel
     AlignWithMargins = True
     Left = 3
@@ -65,7 +53,6 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 3
       OnClick = btnAnalyseClick
-      ExplicitLeft = 804
     end
     object edSourcePath: TEdit
       AlignWithMargins = True
@@ -79,7 +66,6 @@ object fmMain: TfmMain
       ReadOnly = True
       TabOrder = 1
       Text = 'Source path...'
-      ExplicitWidth = 606
       ExplicitHeight = 23
     end
     object btnBrowse: TBitBtn
@@ -94,7 +80,6 @@ object fmMain: TfmMain
       ImageName = 'folder_open'
       Images = svgBtns
       TabOrder = 0
-      ExplicitLeft = 615
     end
     object btnScan: TBitBtn
       AlignWithMargins = True
@@ -109,7 +94,6 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 2
       OnClick = btnScanClick
-      ExplicitLeft = 706
     end
   end
   object stbMain: TStatusBar
@@ -134,7 +118,7 @@ object fmMain: TfmMain
     Left = 3
     Top = 155
     Width = 978
-    Height = 394
+    Height = 483
     Margins.Top = 0
     Margins.Bottom = 0
     Align = alClient
@@ -190,16 +174,6 @@ object fmMain: TfmMain
     Align = alTop
     TabOrder = 4
   end
-  object memoOutput: TMemo
-    AlignWithMargins = True
-    Left = 3
-    Top = 560
-    Width = 978
-    Height = 75
-    Align = alBottom
-    ScrollBars = ssVertical
-    TabOrder = 5
-  end
   object pnlFilters: TPanel
     AlignWithMargins = True
     Left = 3
@@ -209,7 +183,7 @@ object fmMain: TfmMain
     Margins.Top = 0
     Align = alTop
     BevelOuter = bvNone
-    TabOrder = 6
+    TabOrder = 5
     OnClick = chkDOCXClick
     object chkDOCX: TCheckBox
       AlignWithMargins = True

@@ -11,7 +11,6 @@ uses
 type TFileListController = class
   private
     FListView: TListView;
-    FMemoOutput: TMemo;
     FStatusBar: TStatusBar;
     FFilesForAnalyseCount: Integer;
     procedure ClearListView;
@@ -21,18 +20,17 @@ type TFileListController = class
       State: TCustomDrawState; Stage: TCustomDrawStage; var DefaultDraw: Boolean);
     function FileStatusToStr(FileStatus: TFileStatus): string;
   public
-    constructor Create(AListView: TListView; AMemoOutput: TMemo; AStatusBar: TStatusBar);
+    constructor Create(AListView: TListView; AStatusBar: TStatusBar);
     destructor Destroy; override;
     procedure Bind(const FileItemList: TObjectList<TFileItem>;  FileFilter: TFileFilter);
   end;
 
 implementation
 
-constructor TFileListController.Create(AListView: TListView; AMemoOutput: TMemo; AStatusBar: TStatusBar);
+constructor TFileListController.Create(AListView: TListView; AStatusBar: TStatusBar);
 begin
   inherited Create;
   FListView := AListView;
-  FMemoOutput := AMemoOutput;
   FListView.OnAdvancedCustomDrawItem := OnDraw;
   FStatusBar := AStatusBar;
   FFilesForAnalyseCount := 0;

@@ -9,10 +9,9 @@ uses
   Controls, Vcl.Forms, Dialogs, StdCtrls, Vcl.Buttons,
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, Vcl.ComCtrls,
   SVGIconImageListBase, SVGIconImageList,
-  uGlobal, uConsts, uCLIRunner, uAIModel, uAppServices,
+  uGlobal, uConsts, uCLIRunner,
   uFolderScanner, uFileItem, uFileFilter,
   uFileListController,
-  uStringUtils,
   uViewer, uAnalysis, uWait;
 
 type
@@ -28,8 +27,6 @@ type
     btnScan: TBitBtn;
     svgExts: TSVGIconImageList;
     pbProgressStatus: TProgressBar;
-    splMain: TSplitter;
-    memoOutput: TMemo;
     pnlFilters: TPanel;
     chkDOCX: TCheckBox;
     chkPDF: TCheckBox;
@@ -38,14 +35,12 @@ type
     chkOTHERS: TCheckBox;
     procedure btnAnalyseClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnScanClick(Sender: TObject);
     procedure chkDOCXClick(Sender: TObject);
     procedure chkOTHERSClick(Sender: TObject);
     procedure lvwMainDblClick(Sender: TObject);
   private
-    FAIModel: TAIModel;
     FFolderScanner: TFolderScanner;
     FFileListController: TFileListController;
     FWaitForm: TfmWait;
@@ -96,11 +91,9 @@ end;
 procedure TfmMain.FormCreate(Sender: TObject);
 begin
   CLIRunner := TCLIRunner.Create;
-  { Folder scanning... }
   FFolderScanner := TFolderScanner.Create;
   FFolderScanner.OnScanDone := OnScanDone;
-  {FileListController functional}
-  FFileListController := TFileListController.Create(lvwMain, memoOutput, stbMain);
+  FFileListController := TFileListController.Create(lvwMain, stbMain);
   edSourcePath.Text := 'D:\ai-organizer-examples';
   FFileFilter := TFileFilter.Create;
 end;
@@ -111,21 +104,7 @@ begin
   FFileListController.Free;
   FFolderScanner.Free;
   FFileItemList.Free;
-  FAIModel.Free;
   CLIRunner.Free;
-end;
-
-procedure TfmMain.FormShow(Sender: TObject);
-begin
-  try
-    FAIModel := TAppServices.InitAIModel;
-  except
-    on E: Exception do
-    begin
-      ShowMessage(E.Message);
-      Close;
-    end;
-  end;
 end;
 
 procedure TfmMain.lvwMainDblClick(Sender: TObject);
@@ -179,7 +158,6 @@ procedure TfmMain.chkDOCXClick(Sender: TObject);
 var
   CheckBox: TCheckBox;
   Ext: string;
-  ListItem: string;
 begin
   CheckBox := (Sender as TCheckBox);
   Ext := CheckBox.Hint;
