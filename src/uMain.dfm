@@ -1,7 +1,7 @@
 object fmMain: TfmMain
   Left = 0
   Top = 0
-  Caption = 'AI FileAnalyzer v1.0'
+  Caption = 'AI File Analyzer v1.0'
   ClientHeight = 663
   ClientWidth = 984
   Color = clBtnFace
@@ -20,16 +20,94 @@ object fmMain: TfmMain
     Left = 3
     Top = 3
     Width = 978
-    Height = 60
+    Height = 36
     Align = alTop
     BevelOuter = bvNone
-    Caption = 'pnlHeader'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clGrayText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
     TabOrder = 0
+    object SVGIconImage1: TSVGIconImage
+      AlignWithMargins = True
+      Left = 0
+      Top = 3
+      Width = 20
+      Height = 30
+      Margins.Left = 0
+      AutoSize = False
+      SVGText = 
+        '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0' +
+        ' -960 960 960" width="24px" fill="#1f1f1f"><path d="M155-75q-35-' +
+        '35-35-85t35-85q35-35 85-35 14 0 26 3t23 8l57-71q-28-31-39-70t-5-' +
+        '78l-81-27q-17 25-43 40t-58 15q-50 0-85-35T0-580q0-50 35-85t85-35' +
+        'q50 0 85 35t35 85v8l81 28q20-36 53.5-61t75.5-32v-87q-39-11-64.5-' +
+        '42.5T360-840q0-50 35-85t85-35q50 0 85 35t35 85q0 42-26 73.5T510-' +
+        '724v87q42 7 75.5 32t53.5 61l81-28v-8q0-50 35-85t85-35q50 0 85 35' +
+        't35 85q0 50-35 85t-85 35q-32 0-58.5-15T739-515l-81 27q6 39-5 77.' +
+        '5T614-340l57 70q11-5 23-7.5t26-2.5q50 0 85 35t35 85q0 50-35 85t-' +
+        '85 35q-50 0-85-35t-35-85q0-20 6.5-38.5T624-232l-57-71q-41 23-87.' +
+        '5 23T392-303l-56 71q11 15 17.5 33.5T360-160q0 50-35 85t-85 35q-5' +
+        '0 0-85-35Zm-35-465q17 0 28.5-11.5T160-580q0-17-11.5-28.5T120-620' +
+        'q-17 0-28.5 11.5T80-580q0 17 11.5 28.5T120-540Zm148.5 408.5Q280-' +
+        '143 280-160t-11.5-28.5Q257-200 240-200t-28.5 11.5Q200-177 200-16' +
+        '0t11.5 28.5Q223-120 240-120t28.5-11.5Zm240-680Q520-823 520-840t-' +
+        '11.5-28.5Q497-880 480-880t-28.5 11.5Q440-857 440-840t11.5 28.5Q4' +
+        '63-800 480-800t28.5-11.5ZM480-360q42 0 71-29t29-71q0-42-29-71t-7' +
+        '1-29q-42 0-71 29t-29 71q0 42 29 71t71 29Zm268.5 228.5Q760-143 76' +
+        '0-160t-11.5-28.5Q737-200 720-200t-28.5 11.5Q680-177 680-160t11.5' +
+        ' 28.5Q703-120 720-120t28.5-11.5Zm120-420Q880-563 880-580t-11.5-2' +
+        '8.5Q857-620 840-620t-28.5 11.5Q800-597 800-580t11.5 28.5Q823-540' +
+        ' 840-540t28.5-11.5ZM480-840ZM120-580Zm360 120Zm360-120ZM240-160Z' +
+        'm480 0Z"/></svg>'
+      FixedColor = clDodgerblue
+      Align = alLeft
+    end
+    object lblLogo: TLabel
+      AlignWithMargins = True
+      Left = 26
+      Top = 10
+      Width = 93
+      Height = 16
+      Margins.Top = 10
+      Margins.Bottom = 10
+      Align = alLeft
+      Caption = 'AI File Analyzer'
+      Font.Charset = RUSSIAN_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Segoe UI Semibold'
+      Font.Style = [fsBold]
+      ParentFont = False
+      ExplicitHeight = 17
+    end
+    object btnAbout: TBitBtn
+      AlignWithMargins = True
+      Left = 893
+      Top = 6
+      Width = 85
+      Height = 24
+      Margins.Top = 6
+      Margins.Right = 0
+      Margins.Bottom = 6
+      Align = alRight
+      Caption = 'About...'
+      ImageIndex = 4
+      ImageName = 'info'
+      Images = svgBtns
+      TabOrder = 0
+      TabStop = False
+      ExplicitLeft = 903
+      ExplicitTop = 3
+      ExplicitHeight = 30
+    end
   end
   object pnlControls: TPanel
     AlignWithMargins = True
     Left = 0
-    Top = 69
+    Top = 45
     Width = 981
     Height = 40
     Margins.Left = 0
@@ -116,10 +194,9 @@ object fmMain: TfmMain
   object lvwMain: TListView
     AlignWithMargins = True
     Left = 3
-    Top = 155
+    Top = 129
     Width = 978
-    Height = 483
-    Margins.Top = 0
+    Height = 509
     Margins.Bottom = 0
     Align = alClient
     Columns = <
@@ -170,87 +247,93 @@ object fmMain: TfmMain
     OnColumnClick = lvwMainColumnClick
     OnCompare = lvwMainCompare
     OnDblClick = lvwMainDblClick
-  end
-  object pbProgressStatus: TProgressBar
-    AlignWithMargins = True
-    Left = 3
-    Top = 109
-    Width = 978
-    Height = 10
-    Margins.Top = 0
-    Align = alTop
-    TabOrder = 4
+    ExplicitLeft = 8
+    ExplicitTop = 127
+    ExplicitHeight = 511
   end
   object pnlFilters: TPanel
     AlignWithMargins = True
     Left = 3
-    Top = 122
+    Top = 88
     Width = 978
-    Height = 30
-    Margins.Top = 0
+    Height = 35
     Align = alTop
-    BevelOuter = bvNone
-    TabOrder = 5
+    TabOrder = 4
     OnClick = chkDOCXClick
     object chkDOCX: TCheckBox
       AlignWithMargins = True
-      Left = 0
-      Top = 3
+      Left = 10
+      Top = 4
       Width = 97
-      Height = 24
+      Height = 27
       Hint = '.docx'
-      Margins.Left = 0
+      Margins.Left = 9
       Align = alLeft
       Caption = '.DOCX'
       TabOrder = 0
       OnClick = chkDOCXClick
+      ExplicitLeft = 0
+      ExplicitTop = 3
+      ExplicitHeight = 24
     end
     object chkPDF: TCheckBox
       AlignWithMargins = True
-      Left = 103
-      Top = 3
+      Left = 113
+      Top = 4
       Width = 97
-      Height = 24
+      Height = 27
       Hint = '.pdf'
       Align = alLeft
       Caption = '.PDF'
       TabOrder = 1
       OnClick = chkDOCXClick
+      ExplicitLeft = 103
+      ExplicitTop = 3
+      ExplicitHeight = 24
     end
     object chkODT: TCheckBox
       AlignWithMargins = True
-      Left = 206
-      Top = 3
+      Left = 216
+      Top = 4
       Width = 97
-      Height = 24
+      Height = 27
       Hint = '.odt'
       Align = alLeft
       Caption = '.ODT'
       TabOrder = 2
       OnClick = chkDOCXClick
+      ExplicitLeft = 206
+      ExplicitTop = 3
+      ExplicitHeight = 24
     end
     object chkTXT: TCheckBox
       AlignWithMargins = True
-      Left = 309
-      Top = 3
+      Left = 319
+      Top = 4
       Width = 97
-      Height = 24
+      Height = 27
       Hint = '.txt'
       Align = alLeft
       Caption = '.TXT'
       TabOrder = 3
       OnClick = chkDOCXClick
+      ExplicitLeft = 309
+      ExplicitTop = 3
+      ExplicitHeight = 24
     end
     object chkOTHERS: TCheckBox
       AlignWithMargins = True
-      Left = 412
-      Top = 3
+      Left = 422
+      Top = 4
       Width = 97
-      Height = 24
+      Height = 27
       Align = alLeft
       Caption = 'OTHERS'
       TabOrder = 4
       OnClick = chkOTHERSClick
+      ExplicitLeft = 412
+      ExplicitTop = 3
+      ExplicitHeight = 24
     end
   end
   object svgBtns: TSVGIconImageList
@@ -291,10 +374,19 @@ object fmMain: TfmMain
           'rect height="11" width="4" x="4" y="9"/><rect height="7" width="' +
           '4" x="16" y="13"/><rect height="16" width="4" x="10" y="4"/></g>' +
           '</g></svg>'
+      end
+      item
+        IconName = 'info'
+        SVGText = 
+          '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0' +
+          ' -960 960 960" width="24px" fill="#1f1f1f"><path d="M423.5-703.5' +
+          'Q400-727 400-760t23.5-56.5Q447-840 480-840t56.5 23.5Q560-793 560' +
+          '-760t-23.5 56.5Q513-680 480-680t-56.5-23.5ZM420-120v-480h120v480' +
+          'H420Z"/></svg>'
       end>
     Scaled = True
-    Left = 27
-    Top = 13
+    Left = 755
+    Top = 253
   end
   object svgExts: TSVGIconImageList
     Size = 20

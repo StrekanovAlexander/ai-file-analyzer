@@ -12,7 +12,7 @@ uses
   uGlobal, uConsts, uCLIRunner,
   uFolderScanner, uFileItem, uFileFilter,
   uFileListController, uStringUtils,
-  uViewer, uAnalysis, uWait;
+  uViewer, uAnalysis, uWait, SVGIconImage;
 
 type
   TfmMain = class(TForm)
@@ -26,13 +26,15 @@ type
     btnBrowse: TBitBtn;
     btnScan: TBitBtn;
     svgExts: TSVGIconImageList;
-    pbProgressStatus: TProgressBar;
     pnlFilters: TPanel;
     chkDOCX: TCheckBox;
     chkPDF: TCheckBox;
     chkODT: TCheckBox;
     chkTXT: TCheckBox;
     chkOTHERS: TCheckBox;
+    SVGIconImage1: TSVGIconImage;
+    lblLogo: TLabel;
+    btnAbout: TBitBtn;
     procedure btnAnalyseClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -196,6 +198,8 @@ var
   CheckBox: TCheckBox;
   Ext: string;
 begin
+  if lvwMain.Items.Count = 0 then
+    Exit;
   CheckBox := (Sender as TCheckBox);
   Ext := CheckBox.Hint;
   if CheckBox.Checked then

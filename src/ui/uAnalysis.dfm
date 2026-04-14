@@ -4,7 +4,7 @@ object fmAnalysis: TfmAnalysis
   Margins.Right = 2
   BorderIcons = []
   BorderStyle = bsDialog
-  Caption = 'AI FileAnalyzer v1.0 - Analysis'
+  Caption = 'AI File Analyzer v1.0 - Analysis'
   ClientHeight = 561
   ClientWidth = 784
   Color = clBtnFace
@@ -28,8 +28,6 @@ object fmAnalysis: TfmAnalysis
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
-    ExplicitWidth = 434
-    ExplicitHeight = 274
   end
   object pnlTop: TPanel
     Left = 5
@@ -39,7 +37,6 @@ object fmAnalysis: TfmAnalysis
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 434
     object lblFileName: TLabel
       AlignWithMargins = True
       Left = 3
@@ -79,7 +76,6 @@ object fmAnalysis: TfmAnalysis
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 434
     object lblProgress: TLabel
       AlignWithMargins = True
       Left = 3
@@ -101,7 +97,6 @@ object fmAnalysis: TfmAnalysis
       Margins.Right = 0
       Align = alTop
       TabOrder = 0
-      ExplicitWidth = 434
     end
   end
   object pnlBottom: TPanel
@@ -113,8 +108,6 @@ object fmAnalysis: TfmAnalysis
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 3
-    ExplicitTop = 417
-    ExplicitWidth = 428
     object btnBtn: TBitBtn
       Left = 347
       Top = 8

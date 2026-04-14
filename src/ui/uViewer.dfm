@@ -3,7 +3,7 @@ object fmViewer: TfmViewer
   Top = 0
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
-  Caption = 'AI FileAnalyzer v1.0 - Content Viewer'
+  Caption = 'AI File Analyzer v1.0 - Content Viewer'
   ClientHeight = 601
   ClientWidth = 464
   Color = clBtnFace
