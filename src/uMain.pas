@@ -94,7 +94,7 @@ begin
   FFolderScanner := TFolderScanner.Create;
   FFolderScanner.OnScanDone := OnScanDone;
   FFileListController := TFileListController.Create(lvwMain, stbMain);
-  edSourcePath.Text := 'D:\ai-organizer-examples';
+  edSourcePath.Text := 'D:\ai-alanysis-examples';
   FFileFilter := TFileFilter.Create;
 end;
 

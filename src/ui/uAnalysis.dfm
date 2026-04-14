@@ -5,7 +5,7 @@ object fmAnalysis: TfmAnalysis
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'AI FileAnalyzer v1.0 - Analysis'
-  ClientHeight = 311
+  ClientHeight = 461
   ClientWidth = 444
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,86 +19,123 @@ object fmAnalysis: TfmAnalysis
   OnCloseQuery = FormCloseQuery
   OnShow = FormShow
   TextHeight = 15
-  object lblFileName: TLabel
-    AlignWithMargins = True
-    Left = 8
-    Top = 3
-    Width = 428
-    Height = 15
-    Align = alTop
-    Caption = 'Analysing:'
-    ExplicitWidth = 55
-  end
-  object lblFileSize: TLabel
-    AlignWithMargins = True
-    Left = 8
-    Top = 24
-    Width = 428
-    Height = 15
-    Align = alTop
-    Caption = 'Size:'
-    ExplicitWidth = 23
-  end
-  object lblStatus: TLabel
-    AlignWithMargins = True
-    Left = 8
-    Top = 45
-    Width = 428
-    Height = 15
-    Align = alTop
-    Caption = 'Status:'
-    ExplicitWidth = 35
-  end
-  object lblProgress: TLabel
-    AlignWithMargins = True
-    Left = 8
-    Top = 78
-    Width = 428
-    Height = 15
-    Margins.Top = 15
-    Align = alTop
-    Caption = 'Progress:'
-    ExplicitWidth = 48
-  end
-  object Label1: TLabel
-    Left = 8
-    Top = 132
-    Width = 60
-    Height = 15
-    Caption = 'Height: 200'
-  end
-  object pgbMain: TProgressBar
-    AlignWithMargins = True
-    Left = 6
-    Top = 99
-    Width = 432
-    Height = 17
-    Margins.Left = 1
-    Margins.Right = 1
-    Align = alTop
-    TabOrder = 0
-  end
-  object btnBtn: TBitBtn
-    Left = 184
-    Top = 128
-    Width = 85
-    Height = 25
-    Caption = 'Stop'
-    ImageIndex = 0
-    ImageName = 'stop'
-    Images = svgBtns
-    TabOrder = 1
-    OnClick = btnBtnClick
-  end
   object memoLog: TMemo
     Left = 5
-    Top = 168
+    Top = 140
     Width = 434
-    Height = 143
-    Align = alBottom
+    Height = 274
+    Align = alClient
     ReadOnly = True
     ScrollBars = ssVertical
+    TabOrder = 0
+    ExplicitLeft = 8
+    ExplicitTop = 208
+    ExplicitHeight = 212
+  end
+  object pnlTop: TPanel
+    Left = 5
+    Top = 0
+    Width = 434
+    Height = 80
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 1
+    ExplicitLeft = 8
+    ExplicitTop = 3
+    ExplicitWidth = 428
+    object lblFileName: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 428
+      Height = 15
+      Align = alTop
+      Caption = 'Analysing:'
+      ExplicitWidth = 55
+    end
+    object lblFileSize: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 24
+      Width = 428
+      Height = 15
+      Align = alTop
+      Caption = 'Size:'
+      ExplicitLeft = 24
+      ExplicitTop = 65
+      ExplicitWidth = 23
+    end
+    object lblStatus: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 45
+      Width = 428
+      Height = 15
+      Align = alTop
+      Caption = 'Status:'
+      ExplicitLeft = 8
+      ExplicitTop = 65
+      ExplicitWidth = 35
+    end
+  end
+  object pnlProgress: TPanel
+    Left = 5
+    Top = 80
+    Width = 434
+    Height = 60
+    Align = alTop
+    BevelOuter = bvNone
     TabOrder = 2
+    object lblProgress: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 26
+      Width = 428
+      Height = 15
+      Align = alTop
+      Alignment = taCenter
+      Caption = 'Progress:'
+      ExplicitWidth = 48
+    end
+    object pgbMain: TProgressBar
+      AlignWithMargins = True
+      Left = 0
+      Top = 3
+      Width = 434
+      Height = 17
+      Margins.Left = 0
+      Margins.Right = 0
+      Align = alTop
+      TabOrder = 0
+      ExplicitLeft = 6
+      ExplicitTop = 11
+      ExplicitWidth = 428
+    end
+  end
+  object pnlBottom: TPanel
+    AlignWithMargins = True
+    Left = 8
+    Top = 417
+    Width = 428
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 3
+    ExplicitLeft = 32
+    ExplicitTop = 400
+    ExplicitWidth = 377
+    object btnBtn: TBitBtn
+      Left = 152
+      Top = 16
+      Width = 85
+      Height = 25
+      Caption = 'Stop'
+      ImageIndex = 0
+      ImageName = 'stop'
+      Images = svgBtns
+      TabOrder = 0
+      OnClick = btnBtnClick
+    end
   end
   object svgBtns: TSVGIconImageList
     SVGIconItems = <

@@ -1,4 +1,4 @@
-unit uAnalysis;
+﻿unit uAnalysis;
 
 interface
 
@@ -10,19 +10,21 @@ uses
   Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls, System.ImageList,
   Vcl.ImgList, SVGIconImageListBase, SVGIconImageList,
   uAppServices, uRecords,
-  uFileItem, uFileExtractor, uFileSystemService, uStringUtils;
+  uFileItem, uFileExtractor, uFileSystemService, uStringUtils, Vcl.ExtCtrls;
 
 type
   TfmAnalysis = class(TForm)
+    svgBtns: TSVGIconImageList;
+    memoLog: TMemo;
+    pnlTop: TPanel;
     lblFileName: TLabel;
     lblFileSize: TLabel;
     lblStatus: TLabel;
-    lblProgress: TLabel;
+    pnlProgress: TPanel;
     pgbMain: TProgressBar;
+    lblProgress: TLabel;
+    pnlBottom: TPanel;
     btnBtn: TBitBtn;
-    svgBtns: TSVGIconImageList;
-    Label1: TLabel;
-    memoLog: TMemo;
     procedure btnBtnClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
@@ -33,7 +35,6 @@ type
     FIndex: Integer;
     FFilesCount: Integer;
     procedure Start;
-    procedure UpdateControls;
     procedure ChangeBtnToClose;
   public
     constructor Create(AOwner: TComponent;
@@ -94,84 +95,70 @@ begin
   Start;
 end;
 
-procedure TfmAnalysis.UpdateControls;
-var
-  FormattedFileSize: string;
-begin
-  lblFileName.Caption := Format( 'Analysing: %s', [FFileItemList[FIndex].FileName]);
-  FormattedFileSize := TFileSystemService.FormatFileSize(FFileItemList[FIndex].Size);
-  lblFileSize.Caption := Format( 'Size: %s', [FormattedFileSize]);
-  lblStatus.Caption := 'Status: Extracting content...';
-  lblProgress.Caption := Format( 'Progress: %d / %d', [FIndex + 1, FFilesCount]);
-end;
-
 procedure TfmAnalysis.Start;
-var
-  FileItem: TFileItem;
-  FileContent: string;
-  FileExtractor: TFileExtractor;
-  AnalysisRecord: TAnalysisRecord;
 begin
   TTask.Run(
     procedure
+    var
+      I: Integer;
+      FileItem: TFileItem;
+      FileExtractor: TFileExtractor;
+      FileContent: string;
+      AnalysisRecord: TAnalysisRecord;
+      LogText: string;
     begin
-      for var I := 0 to FFilesCount - 1 do
+      for I := 0 to FFilesCount - 1 do
       begin
         if FIsProcess = 0 then
-          Break;
-        // ===== SNAPSHOT 1 =====
-        var LocalIndex := I;
+          Exit;
         FileItem := FFileItemList[I];
-        TThread.Queue(nil,
+        // 1. UI: mark processing (SYNC, not queue)
+        TThread.Synchronize(nil,
           procedure
           begin
             if FClosing then Exit;
-
-            FIndex := LocalIndex;
-            UpdateControls;
-            pgbMain.Position := LocalIndex + 1;
+            FIndex := I;
+            lblStatus.Caption := 'Processing...';
+            lblFileName.Caption := FileItem.FileName;
+            lblProgress.Caption := Format('%d / %d', [I + 1, FFilesCount]);
+            pgbMain.Position := I + 1;
+            memoLog.Lines.Add(Format('File %d: %s - Processing...',
+              [I + 1, FileItem.FileName]));
           end);
-        // ===== Working with Files =====
+        // 2. Work
         FileExtractor := TFileExtractor.Create(FileItem.Path);
         try
           FileContent := FileExtractor.GetFileContent;
           AnalysisRecord := TAppServices.InitAIModel.AnalyzeContent(FileContent);
-          // ===== SNAPSHOT 2 (UI) =====
-          var LocalFileName := FileItem.FileName;
-          var LocalTopic := AnalysisRecord.Topic;
-          var LocalSummary := AnalysisRecord.Summary;
-          var LocalKeywords := JoinString(AnalysisRecord.Keywords, ', ');
-          TThread.Queue(nil,
-            procedure
-            begin
-              if FClosing then Exit;
-              memoLog.Lines.Add(Format('File: %d. %s', [LocalIndex + 1, LocalFileName]));
-              memoLog.Lines.Add('Topic: ' + LocalTopic);
-              memoLog.Lines.Add('Summary: ' + LocalSummary);
-              memoLog.Lines.Add('Keywords: ' + LocalKeywords);
-              memoLog.Lines.Add('');
-            end);
         finally
           FileExtractor.Free;
         end;
+        // 3. Prepare full result BEFORE UI
+        LogText :=
+          'Topic: ' + AnalysisRecord.Topic + sLineBreak +
+          'Summary: ' + AnalysisRecord.Summary + sLineBreak +
+          'Keywords: ' + JoinString(AnalysisRecord.Keywords, ', ') + sLineBreak;
+        // 4. UI: final result (SYNC, atomic)
+        TThread.Synchronize(nil,
+          procedure
+          begin
+            if FClosing then Exit;
+            memoLog.Lines.Add(Format('File %d: %s - Done',
+              [I + 1, FileItem.FileName]));
+            memoLog.Lines.Add(LogText);
+            memoLog.Lines.Add('');
+          end);
       end;
-      TThread.Queue(nil,
+      // final state
+      TThread.Synchronize(nil,
         procedure
         begin
-          if FIsProcess = 0 then
-          begin
-            lblStatus.Caption := 'Status: Stopped';
-          end
-          else
-          begin
-            lblStatus.Caption := 'Status: Done';
-            TInterlocked.Exchange(FIsProcess, 0);
-          end;
-          ChangeBtnToClose;
+          lblStatus.Caption := 'Done';
           btnBtn.Enabled := True;
+          FIsProcess := 0;
+          ChangeBtnToClose;
         end);
-    end
-  );
+    end);
 end;
 
 procedure TfmAnalysis.ChangeBtnToClose;
