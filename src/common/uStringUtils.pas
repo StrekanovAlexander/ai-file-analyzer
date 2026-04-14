@@ -3,7 +3,8 @@ unit uStringUtils;
 interface
 
 uses
-  System.SysUtils, System.Classes;
+  System.SysUtils, System.Classes,
+  uConsts;
 
 const FIELD_TOPIC = 'TOPIC:';
 const FIELD_SUMMARY = 'SUMMARY:';
@@ -12,6 +13,7 @@ const FIELD_KEYWORDS = 'KEYWORDS:';
 function ExtractField(const Source: string; const Field: string): string;
 function JoinString(const Arr: TArray<string>; const Delimiter: string): string;
 function SplitString(const S, Delimiter: string): TArray<string>;
+function FileStatusToStr(FileStatus: TFileStatus): string;
 
 function GetAnalysisPrompt: string;
 
@@ -94,6 +96,17 @@ begin
     '- Keep summary short and simple' + sLineBreak +
     '- Do not write anything else' + sLineBreak +
     sLineBreak;
+end;
+
+function FileStatusToStr(FileStatus: TFileStatus): string;
+begin
+  case FileStatus of
+    fsPending: Result := 'Pending';
+    fsProcessing: Result := 'Processing';
+    fsDone: Result := 'Done';
+    fsError: Result := 'Error';
+    fsSkipped: Result := 'Skipped';
+  end;
 end;
 
 end.

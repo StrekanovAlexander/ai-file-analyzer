@@ -9,10 +9,12 @@ uses
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls, System.ImageList,
   Vcl.ImgList, SVGIconImageListBase, SVGIconImageList,
-  uAppServices, uRecords,
+  uConsts, uAppServices, uRecords,
   uFileItem, uFileExtractor, uFileSystemService, uStringUtils, Vcl.ExtCtrls;
 
 type
+  TOnUpdateItem = procedure(AFileItem: TFileItem) of object;
+
   TfmAnalysis = class(TForm)
     svgBtns: TSVGIconImageList;
     memoLog: TMemo;
@@ -34,11 +36,13 @@ type
     FClosing: Boolean;
     FIndex: Integer;
     FFilesCount: Integer;
+    FOnUpdateItem: TOnUpdateItem;
     procedure Start;
     procedure ChangeBtnToClose;
   public
     constructor Create(AOwner: TComponent;
-      AFileItemList: TObjectList<TFileItem>); reintroduce;
+      AFileItemList: TObjectList<TFileItem>;
+      AOnUpdateItem: TOnUpdateItem); reintroduce;
     destructor Destroy; override;
   end;
 
@@ -50,9 +54,11 @@ implementation
 {$R *.dfm}
 
 constructor TfmAnalysis.Create(AOwner: TComponent;
-  AFileItemList: TObjectList<TFileItem>);
+  AFileItemList: TObjectList<TFileItem>;
+  AOnUpdateItem: TOnUpdateItem);
 begin
   inherited  Create(AOwner);
+  FOnUpdateItem := AOnUpdateItem;
   FFileItemList := AFileItemList;
   FIsProcess := 1;
   FIndex := 0;
@@ -130,14 +136,25 @@ begin
         try
           FileContent := FileExtractor.GetFileContent;
           AnalysisRecord := TAppServices.InitAIModel.AnalyzeContent(FileContent);
+          FileItem.Status := fsDone;
+          FileItem.Topic := AnalysisRecord.Topic;
+          FileItem.Summary := AnalysisRecord.Summary;
+          FileItem.Keywords := JoinString(AnalysisRecord.Keywords, ', ');
+          TThread.Synchronize(nil,
+            procedure
+            begin
+              if FClosing then Exit;
+              if Assigned(FOnUpdateItem) then
+                FOnUpdateItem(FileItem);
+            end);
         finally
           FileExtractor.Free;
         end;
         // 3. Prepare full result BEFORE UI
         LogText :=
-          'Topic: ' + AnalysisRecord.Topic + sLineBreak +
-          'Summary: ' + AnalysisRecord.Summary + sLineBreak +
-          'Keywords: ' + JoinString(AnalysisRecord.Keywords, ', ') + sLineBreak;
+          'Topic: ' + FileItem.Topic + sLineBreak +
+          'Summary: ' + FileItem.Summary + sLineBreak +
+          'Keywords: ' + FileItem.Keywords + sLineBreak;
         // 4. UI: final result (SYNC, atomic)
         TThread.Synchronize(nil,
           procedure

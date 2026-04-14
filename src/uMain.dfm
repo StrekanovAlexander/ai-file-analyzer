@@ -160,8 +160,11 @@ object fmMain: TfmMain
     ReadOnly = True
     RowSelect = True
     SmallImages = svgExts
+    SortType = stData
     TabOrder = 3
     ViewStyle = vsReport
+    OnColumnClick = lvwMainColumnClick
+    OnCompare = lvwMainCompare
     OnDblClick = lvwMainDblClick
   end
   object pbProgressStatus: TProgressBar

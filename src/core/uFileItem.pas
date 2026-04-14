@@ -28,10 +28,10 @@ type TFileItem = class
     property Size: Int64 read FSize;
     property LastModified: TDateTime read FLastModified;
     property IsSupported: Boolean read FIsSupported;
-    property Status: TFileStatus read FStatus;
-    property Topic: string read FTopic;
-    property Summary: string read FSummary;
-    property Keywords: string read FKeywords;
+    property Status: TFileStatus read FStatus write FStatus;
+    property Topic: string read FTopic write FTopic;
+    property Summary: string read FSummary write FSummary;
+    property Keywords: string read FKeywords write FKeywords;
 end;
 
 implementation

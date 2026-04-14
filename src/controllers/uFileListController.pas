@@ -5,7 +5,8 @@ interface
 uses
   System.Classes, System.SysUtils, System.Generics.Collections,
   Vcl.ComCtrls, Vcl.Forms, Vcl.StdCtrls, Vcl.Graphics,
-  uConsts, uFileItem, uFileSystemService, uFileFilter
+  uConsts, uFileItem, uFileFilter, uFileSystemService,
+  uStringUtils
 ;
 
 type TFileListController = class
@@ -18,7 +19,6 @@ type TFileListController = class
     procedure UpdateStatusBar;
     procedure OnDraw(Sender: TCustomListView; Item: TListItem;
       State: TCustomDrawState; Stage: TCustomDrawStage; var DefaultDraw: Boolean);
-    function FileStatusToStr(FileStatus: TFileStatus): string;
   public
     constructor Create(AListView: TListView; AStatusBar: TStatusBar);
     destructor Destroy; override;
@@ -82,17 +82,6 @@ begin
     FListView.Items.EndUpdate;
   end;
   UpdateStatusBar;
-end;
-
-function TFileListController.FileStatusToStr(FileStatus: TFileStatus): string;
-begin
-  case FileStatus of
-    fsPending: Result := 'Pending';
-    fsProcessing: Result := 'Processing';
-    fsDone: Result := 'Done';
-    fsError: Result := 'Error';
-    fsSkipped: Result := 'Skipped';
-  end;
 end;
 
 procedure TFileListController.UpdateListItem(ListItem: TListItem);

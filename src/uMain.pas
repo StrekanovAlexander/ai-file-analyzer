@@ -11,7 +11,7 @@ uses
   SVGIconImageListBase, SVGIconImageList,
   uGlobal, uConsts, uCLIRunner,
   uFolderScanner, uFileItem, uFileFilter,
-  uFileListController,
+  uFileListController, uStringUtils,
   uViewer, uAnalysis, uWait;
 
 type
@@ -40,18 +40,23 @@ type
     procedure chkDOCXClick(Sender: TObject);
     procedure chkOTHERSClick(Sender: TObject);
     procedure lvwMainDblClick(Sender: TObject);
+    procedure lvwMainCompare(Sender: TObject; Item1, Item2: TListItem;
+      Data: Integer; var Compare: Integer);
+    procedure lvwMainColumnClick(Sender: TObject; Column: TListColumn);
   private
     FFolderScanner: TFolderScanner;
     FFileListController: TFileListController;
     FWaitForm: TfmWait;
     FFileItemList: TObjectList<TFileItem>;
     FFileFilter: TFileFilter;
+    FSortColumn: Integer;
+    FSortAsc: Boolean;
     procedure OnScanDone(Sender: TObject; FileItemList: TObjectList<TFileItem>);
     procedure ShowWait(const Msg: string);
     procedure HideWait;
+    procedure UpdateListViewItem(AFileItem: TFileItem);
     function GetFilteredFileItemList: TObjectList<TFileItem>;
   public
-
   end;
 
 var
@@ -71,14 +76,14 @@ begin
     Exit;
   end;
 
-  fmAnalysis := TfmAnalysis.Create(nil, FilteredFileItemList);
+  fmAnalysis := TfmAnalysis.Create(nil, FilteredFileItemList, UpdateListViewItem);
   try
     fmAnalysis.ShowModal;
   finally
     FilteredFileItemList.Free;
     fmAnalysis.Free;
+    lvwMain.Invalidate;
   end;
-
 end;
 
 procedure TfmMain.btnScanClick(Sender: TObject);
@@ -105,6 +110,38 @@ begin
   FFolderScanner.Free;
   FFileItemList.Free;
   CLIRunner.Free;
+end;
+
+procedure TfmMain.lvwMainColumnClick(Sender: TObject; Column: TListColumn);
+begin
+ if FSortColumn = Column.Index then
+    FSortAsc := not FSortAsc
+  else
+  begin
+    FSortColumn := Column.Index;
+    FSortAsc := True;
+  end;
+  lvwMain.AlphaSort;
+end;
+
+procedure TfmMain.lvwMainCompare(Sender: TObject; Item1, Item2: TListItem;
+  Data: Integer; var Compare: Integer);
+var
+  S1, S2: string;
+begin
+  if FSortColumn = 0 then
+  begin
+    S1 := Item1.Caption;
+    S2 := Item2.Caption;
+  end
+  else
+  begin
+    S1 := Item1.SubItems[FSortColumn - 1];
+    S2 := Item2.SubItems[FSortColumn - 1];
+  end;
+  Compare := CompareText(S1, S2);
+  if not FSortAsc then
+    Compare := -Compare;
 end;
 
 procedure TfmMain.lvwMainDblClick(Sender: TObject);
@@ -188,6 +225,25 @@ begin
     FileItem := TFileItem(ListItem.Data);
     if FileItem.IsSupported then
       Result.Add(FileItem);
+  end;
+end;
+
+procedure TfmMain.UpdateListViewItem(AFileItem: TFileItem);
+var
+  I: Integer;
+  Item: TListItem;
+begin
+  for I := 0 to lvwMain.Items.Count - 1 do
+  begin
+    Item := lvwMain.Items[I];
+    if Item.Data <> AFileItem then
+      Continue;
+    Item.SubItems[3] := FileStatusToStr(AFileItem.Status);
+    Item.SubItems[4] := AFileItem.Topic;
+    Item.SubItems[5] := AFileItem.Keywords;
+    Item.SubItems[6] := AFileItem.Summary;
+    Item.Update;
+    Exit;
   end;
 end;
 
