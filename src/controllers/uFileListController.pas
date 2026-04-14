@@ -53,7 +53,7 @@ procedure TFileListController.Bind(
   const FileItemList: TObjectList<TFileItem>; FileFilter: TFileFilter
 );
 const
-  SUBITEMS_COUNT = 6;
+  SUBITEMS_COUNT = 7;
 var
   FileItem: TFileItem;
   ListItem: TListItem;
@@ -105,6 +105,7 @@ begin
     SubItems[4] := FileItem.Topic;
     SubItems[5] := FileItem.Keywords;
     SubItems[6] := FileItem.Summary;
+    SubItems[7] := FileItem.Folder;
   end;
 end;
 

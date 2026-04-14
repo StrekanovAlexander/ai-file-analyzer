@@ -5,8 +5,8 @@ object fmAnalysis: TfmAnalysis
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'AI FileAnalyzer v1.0 - Analysis'
-  ClientHeight = 461
-  ClientWidth = 444
+  ClientHeight = 561
+  ClientWidth = 784
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,32 +22,29 @@ object fmAnalysis: TfmAnalysis
   object memoLog: TMemo
     Left = 5
     Top = 140
-    Width = 434
-    Height = 274
+    Width = 774
+    Height = 374
     Align = alClient
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
-    ExplicitLeft = 8
-    ExplicitTop = 208
-    ExplicitHeight = 212
+    ExplicitWidth = 434
+    ExplicitHeight = 274
   end
   object pnlTop: TPanel
     Left = 5
     Top = 0
-    Width = 434
+    Width = 774
     Height = 80
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitLeft = 8
-    ExplicitTop = 3
-    ExplicitWidth = 428
+    ExplicitWidth = 434
     object lblFileName: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 428
+      Width = 768
       Height = 15
       Align = alTop
       Caption = 'Analysing:'
@@ -57,40 +54,37 @@ object fmAnalysis: TfmAnalysis
       AlignWithMargins = True
       Left = 3
       Top = 24
-      Width = 428
+      Width = 768
       Height = 15
       Align = alTop
       Caption = 'Size:'
-      ExplicitLeft = 24
-      ExplicitTop = 65
       ExplicitWidth = 23
     end
     object lblStatus: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 45
-      Width = 428
+      Width = 768
       Height = 15
       Align = alTop
       Caption = 'Status:'
-      ExplicitLeft = 8
-      ExplicitTop = 65
       ExplicitWidth = 35
     end
   end
   object pnlProgress: TPanel
     Left = 5
     Top = 80
-    Width = 434
+    Width = 774
     Height = 60
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitWidth = 434
     object lblProgress: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 26
-      Width = 428
+      Width = 768
       Height = 15
       Align = alTop
       Alignment = taCenter
@@ -101,32 +95,29 @@ object fmAnalysis: TfmAnalysis
       AlignWithMargins = True
       Left = 0
       Top = 3
-      Width = 434
+      Width = 774
       Height = 17
       Margins.Left = 0
       Margins.Right = 0
       Align = alTop
       TabOrder = 0
-      ExplicitLeft = 6
-      ExplicitTop = 11
-      ExplicitWidth = 428
+      ExplicitWidth = 434
     end
   end
   object pnlBottom: TPanel
     AlignWithMargins = True
     Left = 8
-    Top = 417
-    Width = 428
+    Top = 517
+    Width = 768
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 3
-    ExplicitLeft = 32
-    ExplicitTop = 400
-    ExplicitWidth = 377
+    ExplicitTop = 417
+    ExplicitWidth = 428
     object btnBtn: TBitBtn
-      Left = 152
-      Top = 16
+      Left = 347
+      Top = 8
       Width = 85
       Height = 25
       Caption = 'Stop'

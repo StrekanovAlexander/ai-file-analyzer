@@ -32,7 +32,7 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     FFileItemList: TObjectList<TFileItem>;
-    FIsProcess: Integer; // 1 = running, 0 = stopped
+    FAnalysisState: TAnalysisState;
     FClosing: Boolean;
     FIndex: Integer;
     FFilesCount: Integer;
@@ -60,7 +60,7 @@ begin
   inherited  Create(AOwner);
   FOnUpdateItem := AOnUpdateItem;
   FFileItemList := AFileItemList;
-  FIsProcess := 1;
+  FAnalysisState := asRunning;
   FIndex := 0;
   FFilesCount := FFileItemList.Count;
 end;
@@ -73,11 +73,12 @@ end;
 
 procedure TfmAnalysis.btnBtnClick(Sender: TObject);
 begin
- if FIsProcess = 1 then
+  if FAnalysisState = asRunning then
   begin
-    TInterlocked.Exchange(FIsProcess, 0);
-    lblStatus.Caption := 'Status: Stopping...';
-    btnBtn.Enabled := False;
+    FAnalysisState := asStopped;
+    lblStatus.Caption := 'Status: Interrupted...';
+    btnBtn.Enabled := True;
+    ChangeBtnToClose;
   end
   else
     Close;
@@ -85,9 +86,9 @@ end;
 
 procedure TfmAnalysis.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
-  if FIsProcess = 1 then
+  if FAnalysisState = asRunning then
   begin
-    TInterlocked.Exchange(FIsProcess, 0);
+    FAnalysisState := asStopped;
     lblStatus.Caption := 'Status: Stopping...';
     btnBtn.Enabled := False;
     CanClose := False;
@@ -115,7 +116,7 @@ begin
     begin
       for I := 0 to FFilesCount - 1 do
       begin
-        if FIsProcess = 0 then
+        if FAnalysisState = asStopped then
           Exit;
         FileItem := FFileItemList[I];
         // 1. UI: mark processing (SYNC, not queue)
@@ -124,12 +125,15 @@ begin
           begin
             if FClosing then Exit;
             FIndex := I;
-            lblStatus.Caption := 'Processing...';
-            lblFileName.Caption := FileItem.FileName;
+            lblFileName.Caption := Format('Analysing: %s', [FileItem.Path]);
+            lblFileSize.Caption := Format('Size: %s',
+              [TFileSystemService.FormatFileSize(FileItem.Size)]
+            );
+            lblStatus.Caption := 'Status: Processing...';
             lblProgress.Caption := Format('%d / %d', [I + 1, FFilesCount]);
             pgbMain.Position := I + 1;
             memoLog.Lines.Add(Format('File %d: %s - Processing...',
-              [I + 1, FileItem.FileName]));
+              [I + 1, FileItem.Path]));
           end);
         // 2. Work
         FileExtractor := TFileExtractor.Create(FileItem.Path);
@@ -161,7 +165,7 @@ begin
           begin
             if FClosing then Exit;
             memoLog.Lines.Add(Format('File %d: %s - Done',
-              [I + 1, FileItem.FileName]));
+              [I + 1, FileItem.Path]));
             memoLog.Lines.Add(LogText);
             memoLog.Lines.Add('');
           end);
@@ -170,9 +174,10 @@ begin
       TThread.Synchronize(nil,
         procedure
         begin
-          lblStatus.Caption := 'Done';
+          lblStatus.Caption := 'Status: Done';
+          memoLog.Lines.Add('Done');
           btnBtn.Enabled := True;
-          FIsProcess := 0;
+          FAnalysisState := asDone;
           ChangeBtnToClose;
         end);
     end);

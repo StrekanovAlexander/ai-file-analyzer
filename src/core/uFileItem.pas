@@ -11,10 +11,11 @@ type TFileItem = class
   private
     FPath: string;
     FFileName: string;
-    FIsSupported: Boolean;
+    FFolder: string;
     FExt: string;
     FSize: Int64;
     FLastModified: TDateTime;
+    FIsSupported: Boolean;
     FStatus: TFileStatus;
     FTopic: string;
     FSummary: string;
@@ -24,6 +25,7 @@ type TFileItem = class
     constructor Create(const APath: string);
     property Path: string read FPath;
     property FileName: string read FFileName;
+    property Folder: string read FFolder;
     property Ext: string read FExt;
     property Size: Int64 read FSize;
     property LastModified: TDateTime read FLastModified;
@@ -41,6 +43,7 @@ begin
   inherited Create;
   FPath := APath;
   FFileName := ExtractFileName(APath);
+  FFolder := IncludeTrailingPathDelimiter(ExtractFilePath(APath));
   FExt := LowerCase(ExtractFileExt(APath));
   FSize := TFile.GetSize(APath);
   FLastModified := TFile.GetLastWriteTime(APath);

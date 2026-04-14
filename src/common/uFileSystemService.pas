@@ -18,6 +18,39 @@ implementation
 class function TFileSystemService.ScanFolder(Path: string): TObjectList<TFileItem>;
 var
   SR: TSearchRec;
+  procedure Scan(const APath: string);
+  var
+    LocalSR: TSearchRec;
+    FileItem: TFileItem;
+  begin
+    if FindFirst(APath + '\*.*', faAnyFile, LocalSR) = 0 then
+    try
+      repeat
+        if (LocalSR.Name = '.') or (LocalSR.Name = '..') then
+          Continue;
+        if (LocalSR.Attr and faDirectory) <> 0 then
+        begin
+          Scan(APath + '\' + LocalSR.Name);
+        end
+        else
+        begin
+          FileItem := TFileItem.Create(APath + '\' + LocalSR.Name);
+          Result.Add(FileItem);
+        end;
+      until FindNext(LocalSR) <> 0;
+    finally
+      FindClose(LocalSR);
+    end;
+  end;
+begin
+  Result := TObjectList<TFileItem>.Create(True);
+  Scan(Path);
+end;
+
+{
+class function TFileSystemService.ScanFolder(Path: string): TObjectList<TFileItem>;
+var
+  SR: TSearchRec;
   FileItem: TFileItem;
   FileItemList: TObjectList<TFileItem>;
 begin
@@ -36,6 +69,7 @@ begin
   end;
   Result := FileItemList;
 end;
+}
 
 class function TFileSystemService.FormatFileSize(Size: Int64): string;
 const

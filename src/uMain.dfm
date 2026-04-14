@@ -153,8 +153,12 @@ object fmMain: TfmMain
         Width = 150
       end
       item
-        AutoSize = True
         Caption = 'Summary'
+        Width = 100
+      end
+      item
+        AutoSize = True
+        Caption = 'Folder'
       end>
     GridLines = True
     ReadOnly = True
