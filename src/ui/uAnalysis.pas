@@ -77,6 +77,7 @@ begin
   begin
     FAnalysisState := asStopped;
     lblStatus.Caption := 'Status: Interrupted...';
+    memoLog.Lines.Add('Iterrupted...');
     btnBtn.Enabled := True;
     ChangeBtnToClose;
   end
@@ -175,7 +176,7 @@ begin
         procedure
         begin
           lblStatus.Caption := 'Status: Done';
-          memoLog.Lines.Add('Done');
+          memoLog.Lines.Add('Done.');
           btnBtn.Enabled := True;
           FAnalysisState := asDone;
           ChangeBtnToClose;
