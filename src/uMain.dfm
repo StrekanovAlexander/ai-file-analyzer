@@ -18,9 +18,10 @@ object fmMain: TfmMain
   object bvlMain: TBevel
     AlignWithMargins = True
     Left = 3
-    Top = 45
+    Top = 53
     Width = 978
     Height = 2
+    Margins.Top = 0
     Align = alTop
   end
   object pnlHeader: TPanel
@@ -28,23 +29,26 @@ object fmMain: TfmMain
     Left = 3
     Top = 3
     Width = 978
-    Height = 36
+    Height = 50
+    Margins.Bottom = 0
     Align = alTop
     BevelOuter = bvNone
+    Color = clWhitesmoke
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clGrayText
     Font.Height = -12
     Font.Name = 'Segoe UI'
     Font.Style = []
+    ParentBackground = False
     ParentFont = False
     TabOrder = 0
-    ExplicitLeft = -2
+    StyleName = 'Light'
     object svgLogo: TSVGIconImage
       AlignWithMargins = True
       Left = 0
       Top = 3
       Width = 20
-      Height = 30
+      Height = 44
       Margins.Left = 0
       AutoSize = False
       SVGText = 
@@ -77,27 +81,30 @@ object fmMain: TfmMain
     object lblLogo: TLabel
       AlignWithMargins = True
       Left = 26
-      Top = 8
+      Top = 15
       Width = 106
       Height = 20
-      Margins.Top = 8
-      Margins.Bottom = 8
+      Margins.Top = 15
+      Margins.Bottom = 15
       Align = alLeft
       Caption = 'AI File Analyzer'
       Font.Charset = RUSSIAN_CHARSET
-      Font.Color = clGrayText
+      Font.Color = clWindowText
       Font.Height = -15
       Font.Name = 'Segoe UI Semibold'
       Font.Style = [fsBold]
       ParentFont = False
+      ExplicitTop = 8
     end
     object btnAbout: TBitBtn
       AlignWithMargins = True
       Left = 893
-      Top = 3
+      Top = 10
       Width = 85
       Height = 30
+      Margins.Top = 10
       Margins.Right = 0
+      Margins.Bottom = 10
       Align = alRight
       Caption = 'About...'
       ImageIndex = 4
@@ -105,14 +112,14 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 0
       TabStop = False
-      ExplicitTop = 6
-      ExplicitHeight = 24
+      StyleName = 'Light'
+      ExplicitLeft = 883
     end
   end
   object pnlControls: TPanel
     AlignWithMargins = True
     Left = 0
-    Top = 59
+    Top = 67
     Width = 981
     Height = 36
     Margins.Left = 0
@@ -121,7 +128,7 @@ object fmMain: TfmMain
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 56
+    ExplicitTop = 59
     object btnAnalyse: TBitBtn
       AlignWithMargins = True
       Left = 896
@@ -136,8 +143,6 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 2
       OnClick = btnAnalyseClick
-      ExplicitTop = 8
-      ExplicitHeight = 24
     end
     object btnBrowse: TBitBtn
       AlignWithMargins = True
@@ -151,8 +156,6 @@ object fmMain: TfmMain
       ImageName = 'folder_open'
       Images = svgBtns
       TabOrder = 0
-      ExplicitTop = 8
-      ExplicitHeight = 24
     end
     object btnScan: TBitBtn
       AlignWithMargins = True
@@ -167,8 +170,6 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 1
       OnClick = btnScanClick
-      ExplicitTop = 8
-      ExplicitHeight = 24
     end
     object pnlPath: TPanel
       AlignWithMargins = True
@@ -178,8 +179,6 @@ object fmMain: TfmMain
       Height = 30
       Align = alClient
       TabOrder = 3
-      ExplicitLeft = 231
-      ExplicitWidth = 477
       object edSourcePath: TEdit
         AlignWithMargins = True
         Left = 4
@@ -201,8 +200,6 @@ object fmMain: TfmMain
         ReadOnly = True
         TabOrder = 0
         Text = 'Source path...'
-        ExplicitTop = 3
-        ExplicitHeight = 24
       end
     end
   end
@@ -226,9 +223,9 @@ object fmMain: TfmMain
   object lvwMain: TListView
     AlignWithMargins = True
     Left = 3
-    Top = 130
+    Top = 138
     Width = 978
-    Height = 505
+    Height = 497
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -270,7 +267,6 @@ object fmMain: TfmMain
         AutoSize = True
         Caption = 'Folder'
       end>
-    Ctl3D = True
     GridLines = True
     ReadOnly = True
     RowSelect = True
@@ -281,12 +277,14 @@ object fmMain: TfmMain
     OnColumnClick = lvwMainColumnClick
     OnCompare = lvwMainCompare
     OnDblClick = lvwMainDblClick
-    ExplicitLeft = -2
+    ExplicitLeft = 8
+    ExplicitTop = 137
+    ExplicitHeight = 498
   end
   object pnlFilters: TPanel
     AlignWithMargins = True
     Left = 3
-    Top = 98
+    Top = 106
     Width = 978
     Height = 26
     Align = alTop
@@ -296,6 +294,7 @@ object fmMain: TfmMain
     TabOrder = 4
     StyleName = 'Windows'
     OnClick = chkDocxClick
+    ExplicitTop = 98
     object bvlPdf: TBevel
       AlignWithMargins = True
       Left = 177
@@ -362,7 +361,6 @@ object fmMain: TfmMain
       Caption = '.docx'
       TabOrder = 0
       OnClick = chkDocxClick
-      ExplicitHeight = 22
     end
     object chkPdf: TCheckBox
       AlignWithMargins = True
@@ -376,7 +374,6 @@ object fmMain: TfmMain
       Caption = '.pdf'
       TabOrder = 1
       OnClick = chkDocxClick
-      ExplicitHeight = 22
     end
     object chkOdt: TCheckBox
       AlignWithMargins = True
@@ -390,7 +387,6 @@ object fmMain: TfmMain
       Caption = '.odt'
       TabOrder = 2
       OnClick = chkDocxClick
-      ExplicitHeight = 22
     end
     object chkTxt: TCheckBox
       AlignWithMargins = True
@@ -404,7 +400,6 @@ object fmMain: TfmMain
       Caption = '.txt'
       TabOrder = 3
       OnClick = chkDocxClick
-      ExplicitHeight = 22
     end
     object chkUnsupported: TCheckBox
       AlignWithMargins = True
@@ -417,7 +412,6 @@ object fmMain: TfmMain
       Caption = 'other'
       TabOrder = 4
       OnClick = chkUnsupportedClick
-      ExplicitHeight = 22
     end
   end
   object svgBtns: TSVGIconImageList
