@@ -15,6 +15,14 @@ object fmMain: TfmMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   TextHeight = 15
+  object bvlMain: TBevel
+    AlignWithMargins = True
+    Left = 3
+    Top = 45
+    Width = 978
+    Height = 2
+    Align = alTop
+  end
   object pnlHeader: TPanel
     AlignWithMargins = True
     Left = 3
@@ -30,7 +38,8 @@ object fmMain: TfmMain
     Font.Style = []
     ParentFont = False
     TabOrder = 0
-    object SVGIconImage1: TSVGIconImage
+    ExplicitLeft = -2
+    object svgLogo: TSVGIconImage
       AlignWithMargins = True
       Left = 0
       Top = 3
@@ -62,36 +71,33 @@ object fmMain: TfmMain
         '8.5Q857-620 840-620t-28.5 11.5Q800-597 800-580t11.5 28.5Q823-540' +
         ' 840-540t28.5-11.5ZM480-840ZM120-580Zm360 120Zm360-120ZM240-160Z' +
         'm480 0Z"/></svg>'
-      FixedColor = clDodgerblue
+      FixedColor = clCadetblue
       Align = alLeft
     end
     object lblLogo: TLabel
       AlignWithMargins = True
       Left = 26
-      Top = 10
-      Width = 93
-      Height = 16
-      Margins.Top = 10
-      Margins.Bottom = 10
+      Top = 8
+      Width = 106
+      Height = 20
+      Margins.Top = 8
+      Margins.Bottom = 8
       Align = alLeft
       Caption = 'AI File Analyzer'
       Font.Charset = RUSSIAN_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
+      Font.Color = clGrayText
+      Font.Height = -15
       Font.Name = 'Segoe UI Semibold'
       Font.Style = [fsBold]
       ParentFont = False
-      ExplicitHeight = 17
     end
     object btnAbout: TBitBtn
       AlignWithMargins = True
       Left = 893
-      Top = 6
+      Top = 3
       Width = 85
-      Height = 24
-      Margins.Top = 6
+      Height = 30
       Margins.Right = 0
-      Margins.Bottom = 6
       Align = alRight
       Caption = 'About...'
       ImageIndex = 4
@@ -99,79 +105,105 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 0
       TabStop = False
-      ExplicitLeft = 903
-      ExplicitTop = 3
-      ExplicitHeight = 30
+      ExplicitTop = 6
+      ExplicitHeight = 24
     end
   end
   object pnlControls: TPanel
     AlignWithMargins = True
     Left = 0
-    Top = 45
+    Top = 59
     Width = 981
-    Height = 40
+    Height = 36
     Margins.Left = 0
+    Margins.Top = 9
     Margins.Bottom = 0
     Align = alTop
     BevelOuter = bvNone
-    Padding.Top = 5
-    Padding.Bottom = 5
     TabOrder = 1
+    ExplicitTop = 56
     object btnAnalyse: TBitBtn
       AlignWithMargins = True
       Left = 896
-      Top = 8
+      Top = 3
       Width = 85
-      Height = 24
+      Height = 30
       Margins.Right = 0
       Align = alRight
       Caption = 'Analyse'
       ImageIndex = 3
       ImageName = 'bar_chart'
       Images = svgBtns
-      TabOrder = 3
+      TabOrder = 2
       OnClick = btnAnalyseClick
-    end
-    object edSourcePath: TEdit
-      AlignWithMargins = True
-      Left = 3
-      Top = 7
-      Width = 705
-      Height = 25
-      Margins.Top = 2
-      Align = alClient
-      AutoSelect = False
-      ReadOnly = True
-      TabOrder = 1
-      Text = 'Source path...'
-      ExplicitHeight = 23
+      ExplicitTop = 8
+      ExplicitHeight = 24
     end
     object btnBrowse: TBitBtn
       AlignWithMargins = True
       Left = 714
-      Top = 8
+      Top = 3
       Width = 85
-      Height = 24
+      Height = 30
       Align = alRight
       Caption = 'Browse...'
       ImageIndex = 0
       ImageName = 'folder_open'
       Images = svgBtns
       TabOrder = 0
+      ExplicitTop = 8
+      ExplicitHeight = 24
     end
     object btnScan: TBitBtn
       AlignWithMargins = True
       Left = 805
-      Top = 8
+      Top = 3
       Width = 85
-      Height = 24
+      Height = 30
       Align = alRight
       Caption = 'Scan'
       ImageIndex = 1
       ImageName = 'search'
       Images = svgBtns
-      TabOrder = 2
+      TabOrder = 1
       OnClick = btnScanClick
+      ExplicitTop = 8
+      ExplicitHeight = 24
+    end
+    object pnlPath: TPanel
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 705
+      Height = 30
+      Align = alClient
+      TabOrder = 3
+      ExplicitLeft = 231
+      ExplicitWidth = 477
+      object edSourcePath: TEdit
+        AlignWithMargins = True
+        Left = 4
+        Top = 7
+        Width = 697
+        Height = 19
+        Margins.Top = 6
+        Align = alClient
+        AutoSelect = False
+        BorderStyle = bsNone
+        Ctl3D = True
+        Font.Charset = RUSSIAN_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        ParentCtl3D = False
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 0
+        Text = 'Source path...'
+        ExplicitTop = 3
+        ExplicitHeight = 24
+      end
     end
   end
   object stbMain: TStatusBar
@@ -194,11 +226,12 @@ object fmMain: TfmMain
   object lvwMain: TListView
     AlignWithMargins = True
     Left = 3
-    Top = 129
+    Top = 130
     Width = 978
-    Height = 509
-    Margins.Bottom = 0
+    Height = 505
     Align = alClient
+    BevelInner = bvNone
+    BevelOuter = bvNone
     Columns = <
       item
         Caption = 'File'
@@ -237,6 +270,7 @@ object fmMain: TfmMain
         AutoSize = True
         Caption = 'Folder'
       end>
+    Ctl3D = True
     GridLines = True
     ReadOnly = True
     RowSelect = True
@@ -247,93 +281,143 @@ object fmMain: TfmMain
     OnColumnClick = lvwMainColumnClick
     OnCompare = lvwMainCompare
     OnDblClick = lvwMainDblClick
-    ExplicitLeft = 8
-    ExplicitTop = 127
-    ExplicitHeight = 511
+    ExplicitLeft = -2
   end
   object pnlFilters: TPanel
     AlignWithMargins = True
     Left = 3
-    Top = 88
+    Top = 98
     Width = 978
-    Height = 35
+    Height = 26
     Align = alTop
+    BevelOuter = bvNone
+    Color = clWhitesmoke
+    ParentBackground = False
     TabOrder = 4
-    OnClick = chkDOCXClick
-    object chkDOCX: TCheckBox
+    StyleName = 'Windows'
+    OnClick = chkDocxClick
+    object bvlPdf: TBevel
       AlignWithMargins = True
-      Left = 10
-      Top = 4
-      Width = 97
-      Height = 27
+      Left = 177
+      Top = 6
+      Width = 2
+      Height = 14
+      Margins.Top = 6
+      Margins.Bottom = 6
+      Align = alLeft
+      ExplicitHeight = 16
+    end
+    object bvlDocx: TBevel
+      AlignWithMargins = True
+      Left = 86
+      Top = 6
+      Width = 2
+      Height = 14
+      Margins.Top = 6
+      Margins.Bottom = 6
+      Align = alLeft
+    end
+    object bvlTxt: TBevel
+      AlignWithMargins = True
+      Left = 359
+      Top = 6
+      Width = 2
+      Height = 14
+      Margins.Top = 6
+      Margins.Bottom = 6
+      Align = alLeft
+      ExplicitHeight = 16
+    end
+    object bvlOdt: TBevel
+      AlignWithMargins = True
+      Left = 268
+      Top = 6
+      Width = 2
+      Height = 14
+      Margins.Top = 6
+      Margins.Bottom = 6
+      Align = alLeft
+      ExplicitHeight = 16
+    end
+    object bvlOther: TBevel
+      AlignWithMargins = True
+      Left = 450
+      Top = 6
+      Width = 2
+      Height = 14
+      Margins.Top = 6
+      Margins.Bottom = 6
+      Align = alLeft
+      ExplicitHeight = 16
+    end
+    object chkDocx: TCheckBox
+      AlignWithMargins = True
+      Left = 20
+      Top = 3
+      Width = 60
+      Height = 20
       Hint = '.docx'
-      Margins.Left = 9
+      Margins.Left = 20
       Align = alLeft
-      Caption = '.DOCX'
+      Caption = '.docx'
       TabOrder = 0
-      OnClick = chkDOCXClick
-      ExplicitLeft = 0
-      ExplicitTop = 3
-      ExplicitHeight = 24
+      OnClick = chkDocxClick
+      ExplicitHeight = 22
     end
-    object chkPDF: TCheckBox
+    object chkPdf: TCheckBox
       AlignWithMargins = True
-      Left = 113
-      Top = 4
-      Width = 97
-      Height = 27
+      Left = 111
+      Top = 3
+      Width = 60
+      Height = 20
       Hint = '.pdf'
+      Margins.Left = 20
       Align = alLeft
-      Caption = '.PDF'
+      Caption = '.pdf'
       TabOrder = 1
-      OnClick = chkDOCXClick
-      ExplicitLeft = 103
-      ExplicitTop = 3
-      ExplicitHeight = 24
+      OnClick = chkDocxClick
+      ExplicitHeight = 22
     end
-    object chkODT: TCheckBox
+    object chkOdt: TCheckBox
       AlignWithMargins = True
-      Left = 216
-      Top = 4
-      Width = 97
-      Height = 27
+      Left = 202
+      Top = 3
+      Width = 60
+      Height = 20
       Hint = '.odt'
+      Margins.Left = 20
       Align = alLeft
-      Caption = '.ODT'
+      Caption = '.odt'
       TabOrder = 2
-      OnClick = chkDOCXClick
-      ExplicitLeft = 206
-      ExplicitTop = 3
-      ExplicitHeight = 24
+      OnClick = chkDocxClick
+      ExplicitHeight = 22
     end
-    object chkTXT: TCheckBox
+    object chkTxt: TCheckBox
       AlignWithMargins = True
-      Left = 319
-      Top = 4
-      Width = 97
-      Height = 27
+      Left = 293
+      Top = 3
+      Width = 60
+      Height = 20
       Hint = '.txt'
+      Margins.Left = 20
       Align = alLeft
-      Caption = '.TXT'
+      Caption = '.txt'
       TabOrder = 3
-      OnClick = chkDOCXClick
-      ExplicitLeft = 309
-      ExplicitTop = 3
-      ExplicitHeight = 24
+      OnClick = chkDocxClick
+      ExplicitHeight = 22
     end
-    object chkOTHERS: TCheckBox
+    object chkUnsupported: TCheckBox
       AlignWithMargins = True
-      Left = 422
-      Top = 4
-      Width = 97
-      Height = 27
+      Left = 384
+      Top = 3
+      Width = 60
+      Height = 20
+      Margins.Left = 20
       Align = alLeft
-      Caption = 'OTHERS'
+      Caption = 'other'
       TabOrder = 4
-      OnClick = chkOTHERSClick
-      ExplicitLeft = 412
-      ExplicitTop = 3
-      ExplicitHeight = 24
+      OnClick = chkUnsupportedClick
+      ExplicitHeight = 22
     end
   end
   object svgBtns: TSVGIconImageList

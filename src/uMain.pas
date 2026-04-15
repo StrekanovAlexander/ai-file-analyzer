@@ -21,26 +21,33 @@ type
     btnAnalyse: TBitBtn;
     stbMain: TStatusBar;
     lvwMain: TListView;
-    edSourcePath: TEdit;
     svgBtns: TSVGIconImageList;
     btnBrowse: TBitBtn;
     btnScan: TBitBtn;
     svgExts: TSVGIconImageList;
     pnlFilters: TPanel;
-    chkDOCX: TCheckBox;
-    chkPDF: TCheckBox;
-    chkODT: TCheckBox;
-    chkTXT: TCheckBox;
-    chkOTHERS: TCheckBox;
-    SVGIconImage1: TSVGIconImage;
+    chkDocx: TCheckBox;
+    chkPdf: TCheckBox;
+    chkOdt: TCheckBox;
+    chkTxt: TCheckBox;
+    chkUnsupported: TCheckBox;
+    svgLogo: TSVGIconImage;
     lblLogo: TLabel;
     btnAbout: TBitBtn;
+    bvlMain: TBevel;
+    pnlPath: TPanel;
+    edSourcePath: TEdit;
+    bvlPdf: TBevel;
+    bvlDocx: TBevel;
+    bvlTxt: TBevel;
+    bvlOdt: TBevel;
+    bvlOther: TBevel;
     procedure btnAnalyseClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnScanClick(Sender: TObject);
-    procedure chkDOCXClick(Sender: TObject);
-    procedure chkOTHERSClick(Sender: TObject);
+    procedure chkDocxClick(Sender: TObject);
+    procedure chkUnsupportedClick(Sender: TObject);
     procedure lvwMainDblClick(Sender: TObject);
     procedure lvwMainCompare(Sender: TObject; Item1, Item2: TListItem;
       Data: Integer; var Compare: Integer);
@@ -193,7 +200,7 @@ begin
   end;
 end;
 
-procedure TfmMain.chkDOCXClick(Sender: TObject);
+procedure TfmMain.chkDocxClick(Sender: TObject);
 var
   CheckBox: TCheckBox;
   Ext: string;
@@ -209,7 +216,7 @@ begin
   FFileListController.Bind(FFileItemList, FFileFilter);
 end;
 
-procedure TfmMain.chkOTHERSClick(Sender: TObject);
+procedure TfmMain.chkUnsupportedClick(Sender: TObject);
 begin
   FFileFilter.ShowUnsupported := (Sender as TCheckBox).Checked;
   FFileListController.Bind(FFileItemList, FFileFilter);
