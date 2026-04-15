@@ -98,22 +98,23 @@ object fmMain: TfmMain
     end
     object btnAbout: TBitBtn
       AlignWithMargins = True
-      Left = 893
+      Left = 878
       Top = 10
-      Width = 85
+      Width = 100
       Height = 30
       Margins.Top = 10
       Margins.Right = 0
       Margins.Bottom = 10
       Align = alRight
       Caption = 'About...'
-      ImageIndex = 4
+      ImageIndex = 3
       ImageName = 'info'
       Images = svgBtns
       TabOrder = 0
       TabStop = False
       StyleName = 'Light'
       OnClick = btnAboutClick
+      ExplicitLeft = 893
     end
   end
   object pnlControls: TPanel
@@ -130,24 +131,25 @@ object fmMain: TfmMain
     TabOrder = 1
     object btnAnalyse: TBitBtn
       AlignWithMargins = True
-      Left = 896
+      Left = 778
       Top = 3
-      Width = 85
+      Width = 100
       Height = 30
       Margins.Right = 0
       Align = alRight
       Caption = 'Analyse'
-      ImageIndex = 3
+      ImageIndex = 2
       ImageName = 'bar_chart'
       Images = svgBtns
       TabOrder = 1
       OnClick = btnAnalyseClick
+      ExplicitLeft = 790
     end
     object btnBrowse: TBitBtn
       AlignWithMargins = True
-      Left = 805
+      Left = 672
       Top = 3
-      Width = 85
+      Width = 100
       Height = 30
       Align = alRight
       Caption = 'Browse...'
@@ -156,22 +158,22 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 0
       OnClick = btnBrowseClick
-      ExplicitLeft = 714
+      ExplicitLeft = 699
     end
     object pnlPath: TPanel
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 796
+      Width = 663
       Height = 30
       Align = alClient
       TabOrder = 2
-      ExplicitWidth = 598
+      ExplicitWidth = 550
       object edSourcePath: TEdit
         AlignWithMargins = True
         Left = 4
         Top = 7
-        Width = 788
+        Width = 655
         Height = 19
         Margins.Top = 6
         Align = alClient
@@ -188,8 +190,24 @@ object fmMain: TfmMain
         ReadOnly = True
         TabOrder = 0
         Text = 'Choose a folder to analyze files'
-        ExplicitWidth = 565
+        ExplicitWidth = 788
       end
+    end
+    object btnToCsv: TBitBtn
+      AlignWithMargins = True
+      Left = 881
+      Top = 3
+      Width = 100
+      Height = 30
+      Margins.Right = 0
+      Align = alRight
+      Caption = 'Save to CSV'
+      ImageIndex = 4
+      ImageName = 'file-download'
+      Images = svgBtns
+      TabOrder = 3
+      OnClick = btnToCsvClick
+      ExplicitLeft = 907
     end
   end
   object stbMain: TStatusBar
@@ -211,10 +229,12 @@ object fmMain: TfmMain
   end
   object lvwMain: TListView
     AlignWithMargins = True
-    Left = 3
+    Left = 1
     Top = 138
-    Width = 978
+    Width = 982
     Height = 497
+    Margins.Left = 1
+    Margins.Right = 1
     Align = alClient
     BevelInner = bvNone
     BevelOuter = bvNone
@@ -266,13 +286,17 @@ object fmMain: TfmMain
     OnColumnClick = lvwMainColumnClick
     OnCompare = lvwMainCompare
     OnDblClick = lvwMainDblClick
+    ExplicitLeft = 8
+    ExplicitWidth = 978
   end
   object pnlFilters: TPanel
     AlignWithMargins = True
-    Left = 3
+    Left = 1
     Top = 106
-    Width = 978
+    Width = 982
     Height = 26
+    Margins.Left = 1
+    Margins.Right = 1
     Align = alTop
     BevelOuter = bvNone
     Color = clWhitesmoke
@@ -280,6 +304,8 @@ object fmMain: TfmMain
     TabOrder = 4
     StyleName = 'Windows'
     OnClick = chkDocxClick
+    ExplicitLeft = 3
+    ExplicitWidth = 978
     object bvlPdf: TBevel
       AlignWithMargins = True
       Left = 177
@@ -411,17 +437,6 @@ object fmMain: TfmMain
           'z"/></svg>'
       end
       item
-        IconName = 'search'
-        SVGText = 
-          '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0' +
-          ' 0 24 24" width="24px" fill="#1f1f1f"><path d="M0 0h24v24H0V0z" ' +
-          'fill="none"/><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.1' +
-          '1 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 ' +
-          '0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.' +
-          '01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z' +
-          '"/></svg>'
-      end
-      item
         IconName = 'stop'
         SVGText = 
           '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0' +
@@ -447,6 +462,16 @@ object fmMain: TfmMain
           'Q400-727 400-760t23.5-56.5Q447-840 480-840t56.5 23.5Q560-793 560' +
           '-760t-23.5 56.5Q513-680 480-680t-56.5-23.5ZM420-120v-480h120v480' +
           'H420Z"/></svg>'
+      end
+      item
+        IconName = 'file-download'
+        SVGText = 
+          '<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0' +
+          ' 0 24 24" height="48px" viewBox="0 0 24 24" width="48px" fill="#' +
+          '1f1f1f"><g><rect fill="none" height="24" width="24"/></g><g><pat' +
+          'h d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z' +
+          ' M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z' +
+          '"/></g></svg>'
       end>
     Scaled = True
     Left = 755

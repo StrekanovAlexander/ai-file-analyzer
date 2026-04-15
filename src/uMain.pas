@@ -41,6 +41,7 @@ type
     bvlTxt: TBevel;
     bvlOdt: TBevel;
     bvlOther: TBevel;
+    btnToCsv: TBitBtn;
     procedure btnAnalyseClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -52,6 +53,7 @@ type
     procedure lvwMainColumnClick(Sender: TObject; Column: TListColumn);
     procedure btnAboutClick(Sender: TObject);
     procedure btnBrowseClick(Sender: TObject);
+    procedure btnToCsvClick(Sender: TObject);
   private
     FFolderScanner: TFolderScanner;
     FFileListController: TFileListController;
@@ -126,6 +128,52 @@ begin
       end;
   finally
     OpenDialog.Free;
+  end;
+end;
+
+procedure TfmMain.btnToCsvClick(Sender: TObject);
+var
+  SaveDialog: TFileSaveDialog;
+  StringList: TStringList;
+  ListItem: TListItem;
+  Line: string;
+begin
+  if IsListViewEmpty then
+    Exit;
+  SaveDialog := TFileSaveDialog.Create(Self);
+  StringList := TStringList.Create;
+  try
+    SaveDialog.Title := 'Save results to CSV';
+    SaveDialog.DefaultExtension := 'csv';
+    SaveDialog.FileName := 'analysis_results.csv';
+    SaveDialog.Options := SaveDialog.Options + [fdoOverWritePrompt];
+    SaveDialog.FileTypes.Clear;
+    SaveDialog.FileTypes.Add.FileMask := '*.csv';
+    SaveDialog.FileTypes.Add.DisplayName := 'CSV files';
+    if not SaveDialog.Execute then
+      Exit;
+    // Header
+    StringList.Add('File,Size,Extension,Modified,Status,Topic,Keywords,Summary,Folder');
+    // Data from ListView
+    for var I := 0 to lvwMain.Items.Count - 1 do
+    begin
+      ListItem := lvwMain.Items[I];
+      Line :=
+        '"' + ListItem.Caption + '",' +
+        '"' + ListItem.SubItems[0] + '",' +
+        '"' + ListItem.SubItems[1] + '",' +
+        '"' + ListItem.SubItems[2] + '",' +
+        '"' + ListItem.SubItems[3] + '",' +
+        '"' + ListItem.SubItems[4] + '",' +
+        '"' + ListItem.SubItems[5] + '",' +
+        '"' + ListItem.SubItems[6] + '",' +
+        '"' + ListItem.SubItems[7] + '"';
+      StringList.Add(Line);
+    end;
+    StringList.SaveToFile(SaveDialog.FileName, TEncoding.UTF8);
+  finally
+    StringList.Free;
+    SaveDialog.Free;
   end;
 end;
 
