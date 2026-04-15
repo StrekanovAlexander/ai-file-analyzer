@@ -5,10 +5,10 @@ interface
 uses
   System.SysUtils, Vcl.Forms;
 
-const DOCX_TO_TEXT_EXE = 'libs\docx\docxtotext.exe';
-const PDF_TO_TEXT_EXE  = 'libs\pdf\pdftotext.exe';
-const LLAMA_CLI_EXE    = 'libs\llama\llama-cli.exe';
-const MODEL_GGUF       = 'libs\llama\models\qwen2.5-3b-instruct-q4_k_m.gguf';
+const DOCX_TO_EXE     = 'libs\common\docxto.exe';
+const PDF_TO_EXE      = 'libs\common\pdfto.exe';
+const LLAMA_CLI_EXE   = 'libs\llama\llama-cli.exe';
+const MODEL_GGUF      = 'libs\llama\models\qwen2.5-3b-instruct-q4_k_m.gguf';
 
 function GetBasePath: string;
 
@@ -31,12 +31,12 @@ end;
 
 function GetDocxToTextExe: string;
 begin
-  Result := GetBasePath + DOCX_TO_TEXT_EXE;
+  Result := GetBasePath + DOCX_TO_EXE;
 end;
 
 function GetPdfToTextExe: string;
 begin
-  Result := GetBasePath + PDF_TO_TEXT_EXE;
+  Result := GetBasePath + PDF_TO_EXE;
 end;
 
 function GetLlamaCliExe: string;
