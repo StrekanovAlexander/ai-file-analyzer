@@ -13,6 +13,7 @@ const FIELD_KEYWORDS = 'KEYWORDS:';
 function ExtractField(const Source: string; const Field: string): string;
 function JoinString(const Arr: TArray<string>; const Delimiter: string): string;
 function SplitString(const S, Delimiter: string): TArray<string>;
+function CleanQuotes(const S: string): string;
 function FileStatusToStr(FileStatus: TFileStatus): string;
 
 function GetAnalysisPrompt: string;
@@ -52,6 +53,12 @@ begin
   finally
     SL.Free;
   end;
+end;
+
+function CleanQuotes(const S: string): string;
+begin
+  Result := Trim(S);
+  Result := Result.Replace('"', '');
 end;
 
 function ExtractField(const Source: string; const Field: string): string;

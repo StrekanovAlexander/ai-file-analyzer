@@ -21,12 +21,12 @@ type
     pnlTop: TPanel;
     lblFileName: TLabel;
     lblFileSize: TLabel;
-    lblStatus: TLabel;
-    pnlProgress: TPanel;
-    pgbMain: TProgressBar;
-    lblProgress: TLabel;
     pnlBottom: TPanel;
     btnBtn: TBitBtn;
+    pnlStatus: TPanel;
+    lblStatus: TLabel;
+    lblProgress: TLabel;
+    pgbMain: TProgressBar;
     procedure btnBtnClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);

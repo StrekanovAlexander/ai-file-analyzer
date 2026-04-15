@@ -114,7 +114,6 @@ object fmMain: TfmMain
       TabStop = False
       StyleName = 'Light'
       OnClick = btnAboutClick
-      ExplicitLeft = 893
     end
   end
   object pnlControls: TPanel
@@ -131,7 +130,7 @@ object fmMain: TfmMain
     TabOrder = 1
     object btnAnalyse: TBitBtn
       AlignWithMargins = True
-      Left = 778
+      Left = 881
       Top = 3
       Width = 100
       Height = 30
@@ -143,11 +142,10 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 1
       OnClick = btnAnalyseClick
-      ExplicitLeft = 790
     end
     object btnBrowse: TBitBtn
       AlignWithMargins = True
-      Left = 672
+      Left = 775
       Top = 3
       Width = 100
       Height = 30
@@ -158,22 +156,20 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 0
       OnClick = btnBrowseClick
-      ExplicitLeft = 699
     end
     object pnlPath: TPanel
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 663
+      Width = 766
       Height = 30
       Align = alClient
       TabOrder = 2
-      ExplicitWidth = 550
       object edSourcePath: TEdit
         AlignWithMargins = True
         Left = 4
         Top = 7
-        Width = 655
+        Width = 758
         Height = 19
         Margins.Top = 6
         Align = alClient
@@ -190,24 +186,7 @@ object fmMain: TfmMain
         ReadOnly = True
         TabOrder = 0
         Text = 'Choose a folder to analyze files'
-        ExplicitWidth = 788
       end
-    end
-    object btnToCsv: TBitBtn
-      AlignWithMargins = True
-      Left = 881
-      Top = 3
-      Width = 100
-      Height = 30
-      Margins.Right = 0
-      Align = alRight
-      Caption = 'Save to CSV'
-      ImageIndex = 4
-      ImageName = 'file-download'
-      Images = svgBtns
-      TabOrder = 3
-      OnClick = btnToCsvClick
-      ExplicitLeft = 907
     end
   end
   object stbMain: TStatusBar
@@ -230,9 +209,9 @@ object fmMain: TfmMain
   object lvwMain: TListView
     AlignWithMargins = True
     Left = 1
-    Top = 138
+    Top = 141
     Width = 982
-    Height = 497
+    Height = 494
     Margins.Left = 1
     Margins.Right = 1
     Align = alClient
@@ -286,142 +265,200 @@ object fmMain: TfmMain
     OnColumnClick = lvwMainColumnClick
     OnCompare = lvwMainCompare
     OnDblClick = lvwMainDblClick
-    ExplicitLeft = 8
-    ExplicitWidth = 978
+    ExplicitLeft = -4
   end
-  object pnlFilters: TPanel
-    AlignWithMargins = True
-    Left = 1
-    Top = 106
-    Width = 982
-    Height = 26
-    Margins.Left = 1
-    Margins.Right = 1
+  object pnlTools: TPanel
+    Left = 0
+    Top = 103
+    Width = 984
+    Height = 35
     Align = alTop
     BevelOuter = bvNone
-    Color = clWhitesmoke
-    ParentBackground = False
     TabOrder = 4
-    StyleName = 'Windows'
-    OnClick = chkDocxClick
-    ExplicitLeft = 3
-    ExplicitWidth = 978
-    object bvlPdf: TBevel
+    ExplicitTop = 142
+    object Shape2: TShape
       AlignWithMargins = True
-      Left = 177
-      Top = 6
-      Width = 2
-      Height = 14
-      Margins.Top = 6
-      Margins.Bottom = 6
-      Align = alLeft
-      ExplicitHeight = 16
-    end
-    object bvlDocx: TBevel
-      AlignWithMargins = True
-      Left = 86
-      Top = 6
-      Width = 2
-      Height = 14
-      Margins.Top = 6
-      Margins.Bottom = 6
-      Align = alLeft
-    end
-    object bvlTxt: TBevel
-      AlignWithMargins = True
-      Left = 359
-      Top = 6
-      Width = 2
-      Height = 14
-      Margins.Top = 6
-      Margins.Bottom = 6
-      Align = alLeft
-      ExplicitHeight = 16
-    end
-    object bvlOdt: TBevel
-      AlignWithMargins = True
-      Left = 268
-      Top = 6
-      Width = 2
-      Height = 14
-      Margins.Top = 6
-      Margins.Bottom = 6
-      Align = alLeft
-      ExplicitHeight = 16
-    end
-    object bvlOther: TBevel
-      AlignWithMargins = True
-      Left = 450
-      Top = 6
-      Width = 2
-      Height = 14
-      Margins.Top = 6
-      Margins.Bottom = 6
-      Align = alLeft
-      ExplicitHeight = 16
-    end
-    object chkDocx: TCheckBox
-      AlignWithMargins = True
-      Left = 20
+      Left = 775
       Top = 3
-      Width = 60
-      Height = 20
-      Hint = '.docx'
-      Margins.Left = 20
+      Width = 100
+      Height = 29
+      Align = alRight
+      Pen.Color = clSilver
+      Shape = stRoundRect
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitHeight = 36
+    end
+    object Shape3: TShape
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 100
+      Height = 29
       Align = alLeft
-      Caption = '.docx'
+      Pen.Color = clBtnFace
+      Shape = stRoundRect
+      ExplicitLeft = 11
+      ExplicitTop = 6
+      ExplicitHeight = 30
+    end
+    object Shape4: TShape
+      AlignWithMargins = True
+      Left = 427
+      Top = 3
+      Width = 100
+      Height = 29
+      Align = alLeft
+      Pen.Color = clBtnFace
+      Shape = stRoundRect
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitHeight = 36
+    end
+    object Shape5: TShape
+      AlignWithMargins = True
+      Left = 321
+      Top = 3
+      Width = 100
+      Height = 29
+      Align = alLeft
+      Pen.Color = clBtnFace
+      Shape = stRoundRect
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitHeight = 36
+    end
+    object Shape6: TShape
+      AlignWithMargins = True
+      Left = 215
+      Top = 3
+      Width = 100
+      Height = 29
+      Align = alLeft
+      Pen.Color = clBtnFace
+      Shape = stRoundRect
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitHeight = 36
+    end
+    object Shape7: TShape
+      AlignWithMargins = True
+      Left = 109
+      Top = 3
+      Width = 100
+      Height = 29
+      Align = alLeft
+      Pen.Color = clBtnFace
+      Shape = stRoundRect
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitHeight = 36
+    end
+    object Shape1: TShape
+      AlignWithMargins = True
+      Left = 533
+      Top = 3
+      Width = 100
+      Height = 29
+      Align = alLeft
+      Pen.Color = clBtnFace
+      Shape = stRoundRect
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitHeight = 36
+    end
+    object chkTxt: TCheckBox
+      Left = 12
+      Top = 12
+      Width = 92
+      Height = 13
+      Hint = '.txt'
+      Caption = '.txt'
       TabOrder = 0
       OnClick = chkDocxClick
     end
-    object chkPdf: TCheckBox
+    object btnSave: TBitBtn
       AlignWithMargins = True
-      Left = 111
+      Left = 881
       Top = 3
-      Width = 60
-      Height = 20
-      Hint = '.pdf'
-      Margins.Left = 20
-      Align = alLeft
-      Caption = '.pdf'
+      Width = 100
+      Height = 29
+      Align = alRight
+      Caption = 'Save'
+      ImageIndex = 4
+      ImageName = 'file-download'
+      Images = svgBtns
       TabOrder = 1
+      OnClick = btnSaveClick
+      ExplicitLeft = 884
+      ExplicitTop = 6
+      ExplicitHeight = 30
+    end
+    object cbExport: TComboBox
+      Left = 779
+      Top = 6
+      Width = 92
+      Height = 23
+      Margins.Top = 6
+      Style = csDropDownList
+      Ctl3D = True
+      ItemIndex = 0
+      ParentCtl3D = False
+      TabOrder = 2
+      Text = 'Export CSV'
+      Items.Strings = (
+        'Export CSV'
+        'Export JSON')
+    end
+    object chkPdf: TCheckBox
+      Left = 118
+      Top = 12
+      Width = 60
+      Height = 13
+      Hint = '.pdf'
+      Caption = '.pdf'
+      TabOrder = 3
+      OnClick = chkDocxClick
+    end
+    object chkDocx: TCheckBox
+      Left = 223
+      Top = 12
+      Width = 60
+      Height = 13
+      Hint = '.docx'
+      Caption = '.docx'
+      TabOrder = 4
+      OnClick = chkDocxClick
+    end
+    object chkJson: TCheckBox
+      AlignWithMargins = True
+      Left = 330
+      Top = 12
+      Width = 60
+      Height = 13
+      Hint = '.json'
+      Caption = '.json'
+      TabOrder = 5
       OnClick = chkDocxClick
     end
     object chkOdt: TCheckBox
-      AlignWithMargins = True
-      Left = 202
-      Top = 3
+      Left = 436
+      Top = 12
       Width = 60
-      Height = 20
+      Height = 13
       Hint = '.odt'
-      Margins.Left = 20
-      Align = alLeft
       Caption = '.odt'
-      TabOrder = 2
-      OnClick = chkDocxClick
-    end
-    object chkTxt: TCheckBox
-      AlignWithMargins = True
-      Left = 293
-      Top = 3
-      Width = 60
-      Height = 20
-      Hint = '.txt'
-      Margins.Left = 20
-      Align = alLeft
-      Caption = '.txt'
-      TabOrder = 3
+      TabOrder = 6
       OnClick = chkDocxClick
     end
     object chkUnsupported: TCheckBox
       AlignWithMargins = True
-      Left = 384
-      Top = 3
+      Left = 541
+      Top = 12
       Width = 60
-      Height = 20
-      Margins.Left = 20
-      Align = alLeft
+      Height = 13
       Caption = 'other'
-      TabOrder = 4
+      TabOrder = 7
       OnClick = chkUnsupportedClick
     end
   end
@@ -474,8 +511,8 @@ object fmMain: TfmMain
           '"/></g></svg>'
       end>
     Scaled = True
-    Left = 755
-    Top = 253
+    Left = 675
+    Top = 501
   end
   object svgExts: TSVGIconImageList
     Size = 20
@@ -524,6 +561,16 @@ object fmMain: TfmMain
           'v2h8v-2zm0 4v2h5v-2z"/></svg>'
       end
       item
+        IconName = 'file-arrow-left-right'
+        SVGText = 
+          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" v' +
+          'iewBox="0 0 24 24"><path fill="currentColor" d="M19 13c.34 0 .67' +
+          '.04 1 .09V8l-6-6H6c-1.11 0-2 .89-2 2v16c0 1.11.89 2 2 2h7.81c-.5' +
+          '1-.88-.81-1.9-.81-3c0-3.31 2.69-6 6-6m-6-9.5L18.5 9H13zm7 16V18h' +
+          '-4v-2h4v-1.5l3 2.5zm-2 .5h4v2h-4v1.5L15 21l3-2.5z"/></svg>'
+        FixedColor = clDarkseagreen
+      end
+      item
         IconName = 'file-hidden'
         SVGText = 
           '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" v' +
@@ -536,7 +583,7 @@ object fmMain: TfmMain
         FixedColor = clSilver
       end>
     Scaled = True
-    Left = 32
-    Top = 208
+    Left = 128
+    Top = 528
   end
 end

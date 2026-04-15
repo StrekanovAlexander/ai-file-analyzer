@@ -47,30 +47,6 @@ begin
   Scan(Path);
 end;
 
-{
-class function TFileSystemService.ScanFolder(Path: string): TObjectList<TFileItem>;
-var
-  SR: TSearchRec;
-  FileItem: TFileItem;
-  FileItemList: TObjectList<TFileItem>;
-begin
-  FileItemList := TObjectList<TFileItem>.Create;
-  if FindFirst(Path + '\*.*', faAnyFile, SR) = 0 then
-  try
-    repeat
-      if (SR.Attr and faDirectory) = 0 then
-      begin
-        FileItem := TFileItem.Create(Path + '\' + SR.Name);
-        FileItemList.Add(FileItem);
-      end;
-    until FindNext(SR) <> 0;
-  finally
-    FindClose(SR);
-  end;
-  Result := FileItemList;
-end;
-}
-
 class function TFileSystemService.FormatFileSize(Size: Int64): string;
 const
   KB = 1024;

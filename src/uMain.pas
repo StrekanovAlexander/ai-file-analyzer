@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages,
   System.SysUtils, System.Generics.Collections, Variants,
-  Classes, Graphics,
+  Classes, Graphics, System.JSON, System.IOUtils,
   Controls, Vcl.Forms, Dialogs, StdCtrls, Vcl.Buttons,
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, Vcl.ComCtrls,
   SVGIconImageListBase, SVGIconImageList, SVGIconImage,
@@ -24,24 +24,28 @@ type
     svgBtns: TSVGIconImageList;
     btnBrowse: TBitBtn;
     svgExts: TSVGIconImageList;
-    pnlFilters: TPanel;
-    chkDocx: TCheckBox;
-    chkPdf: TCheckBox;
-    chkOdt: TCheckBox;
-    chkTxt: TCheckBox;
-    chkUnsupported: TCheckBox;
     svgLogo: TSVGIconImage;
     lblLogo: TLabel;
     btnAbout: TBitBtn;
     bvlMain: TBevel;
     pnlPath: TPanel;
     edSourcePath: TEdit;
-    bvlPdf: TBevel;
-    bvlDocx: TBevel;
-    bvlTxt: TBevel;
-    bvlOdt: TBevel;
-    bvlOther: TBevel;
-    btnToCsv: TBitBtn;
+    pnlTools: TPanel;
+    Shape2: TShape;
+    chkTxt: TCheckBox;
+    Shape3: TShape;
+    Shape4: TShape;
+    Shape5: TShape;
+    Shape6: TShape;
+    Shape7: TShape;
+    Shape1: TShape;
+    btnSave: TBitBtn;
+    cbExport: TComboBox;
+    chkPdf: TCheckBox;
+    chkDocx: TCheckBox;
+    chkJson: TCheckBox;
+    chkOdt: TCheckBox;
+    chkUnsupported: TCheckBox;
     procedure btnAnalyseClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -53,7 +57,7 @@ type
     procedure lvwMainColumnClick(Sender: TObject; Column: TListColumn);
     procedure btnAboutClick(Sender: TObject);
     procedure btnBrowseClick(Sender: TObject);
-    procedure btnToCsvClick(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
   private
     FFolderScanner: TFolderScanner;
     FFileListController: TFileListController;
@@ -69,6 +73,8 @@ type
     function GetFilteredFileItemList: TObjectList<TFileItem>;
     function IsListViewEmpty: Boolean;
     procedure ClearData;
+    procedure ExportToCsv;
+    procedure ExportToJson;
   public
   end;
 
@@ -131,50 +137,14 @@ begin
   end;
 end;
 
-procedure TfmMain.btnToCsvClick(Sender: TObject);
-var
-  SaveDialog: TFileSaveDialog;
-  StringList: TStringList;
-  ListItem: TListItem;
-  Line: string;
+procedure TfmMain.btnSaveClick(Sender: TObject);
 begin
   if IsListViewEmpty then
     Exit;
-  SaveDialog := TFileSaveDialog.Create(Self);
-  StringList := TStringList.Create;
-  try
-    SaveDialog.Title := 'Save results to CSV';
-    SaveDialog.DefaultExtension := 'csv';
-    SaveDialog.FileName := 'analysis_results.csv';
-    SaveDialog.Options := SaveDialog.Options + [fdoOverWritePrompt];
-    SaveDialog.FileTypes.Clear;
-    SaveDialog.FileTypes.Add.FileMask := '*.csv';
-    SaveDialog.FileTypes.Add.DisplayName := 'CSV files';
-    if not SaveDialog.Execute then
-      Exit;
-    // Header
-    StringList.Add('File,Size,Extension,Modified,Status,Topic,Keywords,Summary,Folder');
-    // Data from ListView
-    for var I := 0 to lvwMain.Items.Count - 1 do
-    begin
-      ListItem := lvwMain.Items[I];
-      Line :=
-        '"' + ListItem.Caption + '",' +
-        '"' + ListItem.SubItems[0] + '",' +
-        '"' + ListItem.SubItems[1] + '",' +
-        '"' + ListItem.SubItems[2] + '",' +
-        '"' + ListItem.SubItems[3] + '",' +
-        '"' + ListItem.SubItems[4] + '",' +
-        '"' + ListItem.SubItems[5] + '",' +
-        '"' + ListItem.SubItems[6] + '",' +
-        '"' + ListItem.SubItems[7] + '"';
-      StringList.Add(Line);
-    end;
-    StringList.SaveToFile(SaveDialog.FileName, TEncoding.UTF8);
-  finally
-    StringList.Free;
-    SaveDialog.Free;
-  end;
+  if cbExport.ItemIndex = 0 then
+    ExportToCsv
+  else
+    ExportToJson;
 end;
 
 procedure TfmMain.FormCreate(Sender: TObject);
@@ -184,6 +154,7 @@ begin
   FFolderScanner.OnScanDone := OnScanDone;
   FFileListController := TFileListController.Create(lvwMain, stbMain);
   FFileFilter := TFileFilter.Create;
+  FSortAsc := True;
 end;
 
 procedure TfmMain.FormDestroy(Sender: TObject);
@@ -352,6 +323,102 @@ begin
     lvwMain.Items.EndUpdate;
   end;
   FreeAndNil(FFileItemList);
+end;
+
+procedure TfmMain.ExportToCsv;
+var
+  SaveDialog: TFileSaveDialog;
+  StringList: TStringList;
+  ListItem: TListItem;
+  Line: string;
+begin
+  SaveDialog := TFileSaveDialog.Create(Self);
+  StringList := TStringList.Create;
+  try
+    SaveDialog.Title := 'Save results to CSV';
+    SaveDialog.DefaultExtension := 'csv';
+    SaveDialog.FileName := 'analysis_results.csv';
+    SaveDialog.Options := SaveDialog.Options + [fdoOverWritePrompt];
+    SaveDialog.FileTypes.Clear;
+    SaveDialog.FileTypes.Add.FileMask := '*.csv';
+    SaveDialog.FileTypes.Add.DisplayName := 'CSV files';
+    if not SaveDialog.Execute then
+      Exit;
+    StringList.Add('File,Size,Extension,Modified,Status,Topic,Keywords,Summary,Folder');
+    for var I := 0 to lvwMain.Items.Count - 1 do
+    begin
+      ListItem := lvwMain.Items[I];
+      Line :=
+        '"' + ListItem.Caption + '",' +
+        '"' + ListItem.SubItems[0] + '",' +
+        '"' + ListItem.SubItems[1] + '",' +
+        '"' + ListItem.SubItems[2] + '",' +
+        '"' + ListItem.SubItems[3] + '",' +
+        '"' + ListItem.SubItems[4] + '",' +
+        '"' + ListItem.SubItems[5] + '",' +
+        '"' + ListItem.SubItems[6] + '",' +
+        '"' + ListItem.SubItems[7] + '"';
+      StringList.Add(Line);
+    end;
+    StringList.SaveToFile(SaveDialog.FileName, TEncoding.UTF8);
+  finally
+    StringList.Free;
+    SaveDialog.Free;
+  end;
+end;
+
+procedure TfmMain.ExportToJson;
+var
+  SaveDialog: TFileSaveDialog;
+  JsonArray: TJSONArray;
+  JsonObject: TJSONObject;
+  ListItem: TListItem;
+  KeywordsArray: TJSONArray;
+  Keywords: TArray<string>;
+  K: string;
+begin
+  if IsListViewEmpty then
+    Exit;
+  SaveDialog := TFileSaveDialog.Create(Self);
+  JsonArray := TJSONArray.Create;
+  try
+    SaveDialog.Title := 'Save results to JSON';
+    SaveDialog.DefaultExtension := 'json';
+    SaveDialog.FileName := 'analysis_results.json';
+    SaveDialog.Options := SaveDialog.Options + [fdoOverWritePrompt];
+    SaveDialog.FileTypes.Clear;
+    SaveDialog.FileTypes.Add.FileMask := '*.json';
+    SaveDialog.FileTypes.Add.DisplayName := 'JSON files';
+    if not SaveDialog.Execute then
+      Exit;
+    for var I := 0 to lvwMain.Items.Count - 1 do
+    begin
+      ListItem := lvwMain.Items[I];
+      JsonObject := TJSONObject.Create;
+      JsonObject.AddPair('file', ListItem.Caption);
+      JsonObject.AddPair('size', ListItem.SubItems[0]);
+      JsonObject.AddPair('extension', ListItem.SubItems[1]);
+      JsonObject.AddPair('modified', ListItem.SubItems[2]);
+      JsonObject.AddPair('status', ListItem.SubItems[3]);
+      JsonObject.AddPair('topic', ListItem.SubItems[4]);
+      KeywordsArray := TJSONArray.Create;
+      Keywords := SplitString(ListItem.SubItems[5], ',');
+      for K in Keywords do
+        KeywordsArray.Add(CleanQuotes(K));
+      JsonObject.AddPair('keywords', KeywordsArray);
+      JsonObject.AddPair('summary', ListItem.SubItems[6]);
+      JsonObject.AddPair('folder', ListItem.SubItems[7]);
+      JsonArray.AddElement(JsonObject);
+    end;
+    TFile.WriteAllText(
+      SaveDialog.FileName,
+      JsonArray.Format(2).Replace('\/', '/'),
+      TEncoding.UTF8
+    );
+  finally
+    JsonArray.Free;
+    SaveDialog.Free;
+  end;
 end;
 
 end.

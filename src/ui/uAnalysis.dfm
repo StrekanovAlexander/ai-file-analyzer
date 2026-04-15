@@ -21,20 +21,21 @@ object fmAnalysis: TfmAnalysis
   TextHeight = 15
   object memoLog: TMemo
     Left = 5
-    Top = 140
+    Top = 87
     Width = 774
-    Height = 274
+    Height = 327
     Align = alClient
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
-    ExplicitHeight = 374
+    ExplicitTop = 224
+    ExplicitHeight = 190
   end
   object pnlTop: TPanel
     Left = 5
     Top = 0
     Width = 774
-    Height = 80
+    Height = 43
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
@@ -58,47 +59,6 @@ object fmAnalysis: TfmAnalysis
       Caption = 'Size:'
       ExplicitWidth = 23
     end
-    object lblStatus: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 45
-      Width = 768
-      Height = 15
-      Align = alTop
-      Caption = 'Status:'
-      ExplicitWidth = 35
-    end
-  end
-  object pnlProgress: TPanel
-    Left = 5
-    Top = 80
-    Width = 774
-    Height = 60
-    Align = alTop
-    BevelOuter = bvNone
-    TabOrder = 2
-    object lblProgress: TLabel
-      AlignWithMargins = True
-      Left = 3
-      Top = 26
-      Width = 768
-      Height = 15
-      Align = alTop
-      Alignment = taCenter
-      Caption = 'Progress:'
-      ExplicitWidth = 48
-    end
-    object pgbMain: TProgressBar
-      AlignWithMargins = True
-      Left = 0
-      Top = 3
-      Width = 774
-      Height = 17
-      Margins.Left = 0
-      Margins.Right = 0
-      Align = alTop
-      TabOrder = 0
-    end
   end
   object pnlBottom: TPanel
     AlignWithMargins = True
@@ -108,8 +68,7 @@ object fmAnalysis: TfmAnalysis
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 3
-    ExplicitTop = 517
+    TabOrder = 2
     object btnBtn: TBitBtn
       Left = 347
       Top = 8
@@ -122,6 +81,50 @@ object fmAnalysis: TfmAnalysis
       TabOrder = 0
       OnClick = btnBtnClick
     end
+  end
+  object pnlStatus: TPanel
+    Left = 5
+    Top = 43
+    Width = 774
+    Height = 21
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 3
+    ExplicitTop = 49
+    object lblStatus: TLabel
+      AlignWithMargins = True
+      Left = 3
+      Top = 3
+      Width = 45
+      Height = 15
+      Align = alLeft
+      Caption = 'Status:'
+      ExplicitLeft = 4
+      ExplicitTop = 4
+      ExplicitHeight = 33
+    end
+    object lblProgress: TLabel
+      AlignWithMargins = True
+      Left = 704
+      Top = 3
+      Width = 67
+      Height = 15
+      Align = alRight
+      Alignment = taRightJustify
+      Caption = 'Progress:'
+    end
+  end
+  object pgbMain: TProgressBar
+    AlignWithMargins = True
+    Left = 5
+    Top = 67
+    Width = 774
+    Height = 17
+    Margins.Left = 0
+    Margins.Right = 0
+    Align = alTop
+    TabOrder = 4
+    ExplicitTop = 99
   end
   object svgBtns: TSVGIconImageList
     SVGIconItems = <
@@ -143,7 +146,7 @@ object fmAnalysis: TfmAnalysis
           '41z"/></svg>'
       end>
     Scaled = True
-    Left = 400
+    Left = 312
     Top = 8
   end
 end
