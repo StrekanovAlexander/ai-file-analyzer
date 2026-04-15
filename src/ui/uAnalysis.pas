@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages,
   System.SysUtils, System.Variants, System.Classes, System.Generics.Collections,
-  System.Threading, System.SyncObjs,
+  System.Threading,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.StdCtrls, Vcl.Buttons, Vcl.ComCtrls, System.ImageList,
   Vcl.ImgList, SVGIconImageListBase, SVGIconImageList,
@@ -37,6 +37,7 @@ type
     FIndex: Integer;
     FFilesCount: Integer;
     FOnUpdateItem: TOnUpdateItem;
+    FTask: ITask;
     procedure Start;
     procedure ChangeBtnToClose;
   public
@@ -57,17 +58,20 @@ constructor TfmAnalysis.Create(AOwner: TComponent;
   AFileItemList: TObjectList<TFileItem>;
   AOnUpdateItem: TOnUpdateItem);
 begin
-  inherited  Create(AOwner);
+  inherited Create(AOwner);
   FOnUpdateItem := AOnUpdateItem;
   FFileItemList := AFileItemList;
   FAnalysisState := asRunning;
   FIndex := 0;
   FFilesCount := FFileItemList.Count;
+  FClosing := False;
 end;
 
 destructor TfmAnalysis.Destroy;
 begin
   FClosing := True;
+  if Assigned(FTask) then
+    FTask.Cancel;
   inherited;
 end;
 
@@ -76,10 +80,8 @@ begin
   if FAnalysisState = asRunning then
   begin
     FAnalysisState := asStopped;
-    lblStatus.Caption := 'Status: Interrupted...';
-    memoLog.Lines.Add('Iterrupted...');
-    btnBtn.Enabled := True;
-    ChangeBtnToClose;
+    lblStatus.Caption := 'Status: Stopping...';
+    btnBtn.Enabled := False;
   end
   else
     Close;
@@ -87,13 +89,7 @@ end;
 
 procedure TfmAnalysis.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
-  if FAnalysisState = asRunning then
-  begin
-    FAnalysisState := asStopped;
-    lblStatus.Caption := 'Status: Stopping...';
-    btnBtn.Enabled := False;
-    CanClose := False;
-  end;
+  CanClose := FAnalysisState <> asRunning;
 end;
 
 procedure TfmAnalysis.FormShow(Sender: TObject);
@@ -105,7 +101,7 @@ end;
 
 procedure TfmAnalysis.Start;
 begin
-  TTask.Run(
+  FTask := TTask.Run(
     procedure
     var
       I: Integer;
@@ -117,34 +113,37 @@ begin
     begin
       for I := 0 to FFilesCount - 1 do
       begin
-        if FAnalysisState = asStopped then
-          Exit;
+        if (FAnalysisState = asStopped) or FClosing then
+          Break;
+
         FileItem := FFileItemList[I];
-        // 1. UI: mark processing (SYNC, not queue)
+
         TThread.Synchronize(nil,
           procedure
           begin
             if FClosing then Exit;
+
             FIndex := I;
             lblFileName.Caption := Format('Analysing: %s', [FileItem.Path]);
             lblFileSize.Caption := Format('Size: %s',
-              [TFileSystemService.FormatFileSize(FileItem.Size)]
-            );
+              [TFileSystemService.FormatFileSize(FileItem.Size)]);
             lblStatus.Caption := 'Status: Processing...';
             lblProgress.Caption := Format('%d / %d', [I + 1, FFilesCount]);
             pgbMain.Position := I + 1;
             memoLog.Lines.Add(Format('File %d: %s - Processing...',
               [I + 1, FileItem.Path]));
           end);
-        // 2. Work
+
         FileExtractor := TFileExtractor.Create(FileItem.Path);
         try
           FileContent := FileExtractor.GetFileContent;
           AnalysisRecord := TAppServices.InitAIModel.AnalyzeContent(FileContent);
+
           FileItem.Status := fsDone;
           FileItem.Topic := AnalysisRecord.Topic;
           FileItem.Summary := AnalysisRecord.Summary;
           FileItem.Keywords := JoinString(AnalysisRecord.Keywords, ', ');
+
           TThread.Synchronize(nil,
             procedure
             begin
@@ -155,12 +154,12 @@ begin
         finally
           FileExtractor.Free;
         end;
-        // 3. Prepare full result BEFORE UI
+
         LogText :=
           'Topic: ' + FileItem.Topic + sLineBreak +
           'Summary: ' + FileItem.Summary + sLineBreak +
           'Keywords: ' + FileItem.Keywords + sLineBreak;
-        // 4. UI: final result (SYNC, atomic)
+
         TThread.Synchronize(nil,
           procedure
           begin
@@ -171,10 +170,11 @@ begin
             memoLog.Lines.Add('');
           end);
       end;
-      // final state
+
       TThread.Synchronize(nil,
         procedure
         begin
+          if FClosing then Exit;
           lblStatus.Caption := 'Status: Done';
           memoLog.Lines.Add('Done.');
           btnBtn.Enabled := True;

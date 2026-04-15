@@ -4,8 +4,8 @@ object fmViewer: TfmViewer
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'AI File Analyzer v1.0 - Content Viewer'
-  ClientHeight = 601
-  ClientWidth = 464
+  ClientHeight = 461
+  ClientWidth = 784
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,13 +20,15 @@ object fmViewer: TfmViewer
     AlignWithMargins = True
     Left = 3
     Top = 3
-    Width = 458
-    Height = 595
+    Width = 778
+    Height = 455
     Align = alClient
     Lines.Strings = (
       '')
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
+    ExplicitWidth = 458
+    ExplicitHeight = 595
   end
 end

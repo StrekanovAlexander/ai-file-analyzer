@@ -2,10 +2,10 @@ object fmAnalysis: TfmAnalysis
   Left = 0
   Top = 0
   Margins.Right = 2
-  BorderIcons = []
-  BorderStyle = bsDialog
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
   Caption = 'AI File Analyzer v1.0 - Analysis'
-  ClientHeight = 561
+  ClientHeight = 461
   ClientWidth = 784
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,11 +23,12 @@ object fmAnalysis: TfmAnalysis
     Left = 5
     Top = 140
     Width = 774
-    Height = 374
+    Height = 274
     Align = alClient
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
+    ExplicitHeight = 374
   end
   object pnlTop: TPanel
     Left = 5
@@ -102,12 +103,13 @@ object fmAnalysis: TfmAnalysis
   object pnlBottom: TPanel
     AlignWithMargins = True
     Left = 8
-    Top = 517
+    Top = 417
     Width = 768
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 3
+    ExplicitTop = 517
     object btnBtn: TBitBtn
       Left = 347
       Top = 8

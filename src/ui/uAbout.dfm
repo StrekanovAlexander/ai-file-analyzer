@@ -3,7 +3,7 @@ object fmAbout: TfmAbout
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
+  BorderStyle = bsSingle
   Caption = 'AI File Analyzer v1.0 - About'
   ClientHeight = 211
   ClientWidth = 384
@@ -64,9 +64,7 @@ object fmAbout: TfmAbout
       'Analyze folders of files with AI to instantly extract topics, su' +
       'mmaries, and keywords.'
     WordWrap = True
-    ExplicitLeft = 3
-    ExplicitTop = 106
-    ExplicitWidth = 364
+    ExplicitWidth = 300
   end
   object lblDeveloper: TLabel
     AlignWithMargins = True
@@ -78,8 +76,6 @@ object fmAbout: TfmAbout
     Align = alTop
     Alignment = taCenter
     Caption = 'Developed by an independent developer.'
-    ExplicitLeft = 0
-    ExplicitTop = 86
     ExplicitWidth = 216
   end
   object lblYear: TLabel
@@ -91,7 +87,6 @@ object fmAbout: TfmAbout
     Align = alTop
     Alignment = taCenter
     Caption = #169' 2026'
-    ExplicitTop = 104
     ExplicitWidth = 38
   end
   object lblAppName: TLabel
@@ -109,7 +104,6 @@ object fmAbout: TfmAbout
     Font.Name = 'Segoe UI Semibold'
     Font.Style = [fsBold]
     ParentFont = False
-    ExplicitTop = 68
     ExplicitWidth = 93
   end
   object lblVersion: TLabel
@@ -120,7 +114,7 @@ object fmAbout: TfmAbout
     Align = alTop
     Alignment = taCenter
     Caption = 'Version 1.0'
-    ExplicitTop = 88
+    ExplicitWidth = 56
   end
   object btnOk: TButton
     Left = 159
