@@ -140,12 +140,12 @@ object fmMain: TfmMain
       ImageIndex = 3
       ImageName = 'bar_chart'
       Images = svgBtns
-      TabOrder = 2
+      TabOrder = 1
       OnClick = btnAnalyseClick
     end
     object btnBrowse: TBitBtn
       AlignWithMargins = True
-      Left = 714
+      Left = 805
       Top = 3
       Width = 85
       Height = 30
@@ -156,34 +156,22 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 0
       OnClick = btnBrowseClick
-    end
-    object btnScan: TBitBtn
-      AlignWithMargins = True
-      Left = 805
-      Top = 3
-      Width = 85
-      Height = 30
-      Align = alRight
-      Caption = 'Scan'
-      ImageIndex = 1
-      ImageName = 'search'
-      Images = svgBtns
-      TabOrder = 1
-      OnClick = btnScanClick
+      ExplicitLeft = 714
     end
     object pnlPath: TPanel
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 705
+      Width = 796
       Height = 30
       Align = alClient
-      TabOrder = 3
+      TabOrder = 2
+      ExplicitWidth = 598
       object edSourcePath: TEdit
         AlignWithMargins = True
         Left = 4
         Top = 7
-        Width = 697
+        Width = 788
         Height = 19
         Margins.Top = 6
         Align = alClient
@@ -199,7 +187,8 @@ object fmMain: TfmMain
         ParentFont = False
         ReadOnly = True
         TabOrder = 0
-        Text = 'Source path...'
+        Text = 'Choose a folder to analyze files'
+        ExplicitWidth = 565
       end
     end
   end
@@ -448,6 +437,7 @@ object fmMain: TfmMain
           'rect height="11" width="4" x="4" y="9"/><rect height="7" width="' +
           '4" x="16" y="13"/><rect height="16" width="4" x="10" y="4"/></g>' +
           '</g></svg>'
+        FixedColor = clCadetblue
       end
       item
         IconName = 'info'

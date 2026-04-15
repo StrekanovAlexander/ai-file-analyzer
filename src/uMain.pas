@@ -23,7 +23,6 @@ type
     lvwMain: TListView;
     svgBtns: TSVGIconImageList;
     btnBrowse: TBitBtn;
-    btnScan: TBitBtn;
     svgExts: TSVGIconImageList;
     pnlFilters: TPanel;
     chkDocx: TCheckBox;
@@ -45,7 +44,6 @@ type
     procedure btnAnalyseClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure btnScanClick(Sender: TObject);
     procedure chkDocxClick(Sender: TObject);
     procedure chkUnsupportedClick(Sender: TObject);
     procedure lvwMainDblClick(Sender: TObject);
@@ -121,17 +119,14 @@ begin
     OpenDialog.Title := 'Select source folder';
     OpenDialog.Options := OpenDialog.Options + [fdoPickFolders];
     if OpenDialog.Execute then
-      edSourcePath.Text := OpenDialog.FileName;
+      begin
+        edSourcePath.Text := OpenDialog.FileName;
+        ShowWait('Scanning folder...');
+        FFolderScanner.Start(edSourcePath.Text);
+      end;
   finally
     OpenDialog.Free;
   end;
-end;
-
-procedure TfmMain.btnScanClick(Sender: TObject);
-begin
-  btnScan.Enabled := False;
-  ShowWait('Scanning folder...');
-  FFolderScanner.Start(edSourcePath.Text);
 end;
 
 procedure TfmMain.FormCreate(Sender: TObject);
@@ -140,7 +135,6 @@ begin
   FFolderScanner := TFolderScanner.Create;
   FFolderScanner.OnScanDone := OnScanDone;
   FFileListController := TFileListController.Create(lvwMain, stbMain);
-  edSourcePath.Text := 'D:\ai-alanysis-examples';
   FFileFilter := TFileFilter.Create;
 end;
 
@@ -215,7 +209,6 @@ begin
     FileItemList := nil;
     FFileListController.Bind(FFileItemList, FFileFilter);
   finally
-    btnScan.Enabled := True;
   end;
 end;
 

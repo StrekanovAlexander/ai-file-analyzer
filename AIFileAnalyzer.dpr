@@ -37,6 +37,7 @@ begin
     Exit;
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
+  Application.Title := 'AI File Analyzer v1.0';
   TStyleManager.TrySetStyle('Light');
   Application.CreateForm(TfmMain, fmMain);
   Application.CreateForm(TfmWait, fmWait);
