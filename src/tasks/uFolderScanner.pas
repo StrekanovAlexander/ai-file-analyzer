@@ -7,7 +7,8 @@ uses
   uFileItem, uFileSystemService;
 
 type
-  TOnScanDone = procedure(Sender: TObject; FileItemList: TObjectList<TFileItem>) of object;
+//  TOnScanDone = procedure(Sender: TObject; FileItemList: TObjectList<TFileItem>) of object;
+  TOnScanDone = procedure(Sender: TObject; var FileItemList: TObjectList<TFileItem>) of object;
   TFolderScanner = class
   private
     FThread: TThread;
@@ -35,9 +36,15 @@ begin
           begin
             try
               if Assigned(FOnScanDone) then
+                FOnScanDone(Self, FileItemList);
+              if Assigned(FileItemList) then
+                FileItemList.Free;
+              {
+              if Assigned(FOnScanDone) then
                 FOnScanDone(Self, FileItemList)
               else
                 FileItemList.Free;
+              }
             finally
               FThread := nil;
             end;

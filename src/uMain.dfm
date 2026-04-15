@@ -113,7 +113,7 @@ object fmMain: TfmMain
       TabOrder = 0
       TabStop = False
       StyleName = 'Light'
-      ExplicitLeft = 883
+      OnClick = btnAboutClick
     end
   end
   object pnlControls: TPanel
@@ -128,7 +128,6 @@ object fmMain: TfmMain
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 59
     object btnAnalyse: TBitBtn
       AlignWithMargins = True
       Left = 896
@@ -156,6 +155,7 @@ object fmMain: TfmMain
       ImageName = 'folder_open'
       Images = svgBtns
       TabOrder = 0
+      OnClick = btnBrowseClick
     end
     object btnScan: TBitBtn
       AlignWithMargins = True
@@ -277,9 +277,6 @@ object fmMain: TfmMain
     OnColumnClick = lvwMainColumnClick
     OnCompare = lvwMainCompare
     OnDblClick = lvwMainDblClick
-    ExplicitLeft = 8
-    ExplicitTop = 137
-    ExplicitHeight = 498
   end
   object pnlFilters: TPanel
     AlignWithMargins = True
@@ -294,7 +291,6 @@ object fmMain: TfmMain
     TabOrder = 4
     StyleName = 'Windows'
     OnClick = chkDocxClick
-    ExplicitTop = 98
     object bvlPdf: TBevel
       AlignWithMargins = True
       Left = 177

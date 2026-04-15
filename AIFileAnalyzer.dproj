@@ -160,6 +160,10 @@
             <Form>fmAnalysis</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\ui\uAbout.pas">
+            <Form>fmAbout</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

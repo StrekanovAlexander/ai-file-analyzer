@@ -23,7 +23,8 @@ uses
   uFileReader in 'src\tasks\uFileReader.pas',
   uFileFilter in 'src\core\uFileFilter.pas',
   uViewer in 'src\ui\uViewer.pas' {fmViewer},
-  uAnalysis in 'src\ui\uAnalysis.pas' {fmAnalysis};
+  uAnalysis in 'src\ui\uAnalysis.pas' {fmAnalysis},
+  uAbout in 'src\ui\uAbout.pas' {fmAbout};
 
 var
   hMutex: THandle;
@@ -41,5 +42,6 @@ begin
   Application.CreateForm(TfmWait, fmWait);
   Application.CreateForm(TfmViewer, fmViewer);
   Application.CreateForm(TfmAnalysis, fmAnalysis);
+  Application.CreateForm(TfmAbout, fmAbout);
   Application.Run;
 end.

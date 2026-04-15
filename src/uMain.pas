@@ -8,11 +8,11 @@ uses
   Classes, Graphics,
   Controls, Vcl.Forms, Dialogs, StdCtrls, Vcl.Buttons,
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, Vcl.ComCtrls,
-  SVGIconImageListBase, SVGIconImageList,
+  SVGIconImageListBase, SVGIconImageList, SVGIconImage,
   uGlobal, uConsts, uCLIRunner,
   uFolderScanner, uFileItem, uFileFilter,
   uFileListController, uStringUtils,
-  uViewer, uAnalysis, uWait, SVGIconImage;
+  uViewer, uAnalysis, uWait, uAbout;
 
 type
   TfmMain = class(TForm)
@@ -52,6 +52,8 @@ type
     procedure lvwMainCompare(Sender: TObject; Item1, Item2: TListItem;
       Data: Integer; var Compare: Integer);
     procedure lvwMainColumnClick(Sender: TObject; Column: TListColumn);
+    procedure btnAboutClick(Sender: TObject);
+    procedure btnBrowseClick(Sender: TObject);
   private
     FFolderScanner: TFolderScanner;
     FFileListController: TFileListController;
@@ -60,11 +62,13 @@ type
     FFileFilter: TFileFilter;
     FSortColumn: Integer;
     FSortAsc: Boolean;
-    procedure OnScanDone(Sender: TObject; FileItemList: TObjectList<TFileItem>);
+    procedure OnScanDone(Sender: TObject; var FileItemList: TObjectList<TFileItem>);
     procedure ShowWait(const Msg: string);
     procedure HideWait;
     procedure UpdateListViewItem(AFileItem: TFileItem);
     function GetFilteredFileItemList: TObjectList<TFileItem>;
+    function IsListViewEmpty: Boolean;
+    procedure ClearData;
   public
   end;
 
@@ -75,9 +79,22 @@ implementation
 
 {$R *.dfm}
 
+procedure TfmMain.btnAboutClick(Sender: TObject);
+var fmAbout: TfmAbout;
+begin
+  fmAbout := TfmAbout.Create(nil);
+  try
+    fmAbout.ShowModal;
+  finally
+    fmAbout.Free;
+  end;
+end;
+
 procedure TfmMain.btnAnalyseClick(Sender: TObject);
 var FilteredFileItemList: TObjectList<TFileItem>;
 begin
+  if IsListViewEmpty then
+    Exit;
   FilteredFileItemList := GetFilteredFileItemList;
   if FilteredFileItemList.Count = 0 then
   begin
@@ -92,6 +109,21 @@ begin
     FilteredFileItemList.Free;
     fmAnalysis.Free;
     lvwMain.Invalidate;
+  end;
+end;
+
+procedure TfmMain.btnBrowseClick(Sender: TObject);
+var OpenDialog: TFileOpenDialog;
+begin
+  ClearData;
+  OpenDialog := TFileOpenDialog.Create(Self);
+  try
+    OpenDialog.Title := 'Select source folder';
+    OpenDialog.Options := OpenDialog.Options + [fdoPickFolders];
+    if OpenDialog.Execute then
+      edSourcePath.Text := OpenDialog.FileName;
+  finally
+    OpenDialog.Free;
   end;
 end;
 
@@ -123,7 +155,9 @@ end;
 
 procedure TfmMain.lvwMainColumnClick(Sender: TObject; Column: TListColumn);
 begin
- if FSortColumn = Column.Index then
+  if IsListViewEmpty then
+    Exit;
+  if FSortColumn = Column.Index then
     FSortAsc := not FSortAsc
   else
   begin
@@ -158,6 +192,8 @@ var
   Item: TListItem;
   FileItem: TFileItem;
 begin
+  if IsListViewEmpty then
+    Exit;
   Item := lvwMain.Selected;
   if not Assigned(Item) then Exit;
   FileItem := TFileItem(Item.Data);
@@ -171,11 +207,12 @@ begin
   end;
 end;
 
-procedure TfmMain.OnScanDone(Sender: TObject; FileItemList: TObjectList<TFileItem>);
+procedure TfmMain.OnScanDone(Sender: TObject; var FileItemList: TObjectList<TFileItem>);
 begin
   try
     HideWait;
     FFileItemList := FileItemList;
+    FileItemList := nil;
     FFileListController.Bind(FFileItemList, FFileFilter);
   finally
     btnScan.Enabled := True;
@@ -205,7 +242,7 @@ var
   CheckBox: TCheckBox;
   Ext: string;
 begin
-  if lvwMain.Items.Count = 0 then
+  if IsListViewEmpty then
     Exit;
   CheckBox := (Sender as TCheckBox);
   Ext := CheckBox.Hint;
@@ -218,6 +255,8 @@ end;
 
 procedure TfmMain.chkUnsupportedClick(Sender: TObject);
 begin
+  if IsListViewEmpty then
+    Exit;
   FFileFilter.ShowUnsupported := (Sender as TCheckBox).Checked;
   FFileListController.Bind(FFileItemList, FFileFilter);
 end;
@@ -256,6 +295,22 @@ begin
     Item.Update;
     Exit;
   end;
+end;
+
+function TfmMain.IsListViewEmpty: Boolean;
+begin
+  Result := (lvwMain.Items.Count = 0);
+end;
+
+procedure TfmMain.ClearData;
+begin
+  lvwMain.Items.BeginUpdate;
+  try
+    lvwMain.Items.Clear;
+  finally
+    lvwMain.Items.EndUpdate;
+  end;
+  FreeAndNil(FFileItemList);
 end;
 
 end.
