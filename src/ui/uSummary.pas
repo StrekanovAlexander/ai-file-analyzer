@@ -20,6 +20,7 @@ type
     lblLastModified: TLabel;
     lblSize: TLabel;
     lblInsight: TLabel;
+    bvlMain: TBevel;
     procedure FormShow(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
   private

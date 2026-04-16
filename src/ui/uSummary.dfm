@@ -83,7 +83,6 @@ object fmSummary: TfmSummary
     Align = alTop
     Caption = 'lblKeywords'
     WordWrap = True
-    ExplicitTop = 174
     ExplicitWidth = 64
   end
   object lblLastModified: TLabel
@@ -114,7 +113,15 @@ object fmSummary: TfmSummary
     Height = 15
     Align = alTop
     Caption = 'lblInsight'
+    WordWrap = True
     ExplicitLeft = 8
+  end
+  object bvlMain: TBevel
+    Left = 4
+    Top = 392
+    Width = 615
+    Height = 1
+    Shape = bsTopLine
   end
   object btnOK: TBitBtn
     Left = 280
