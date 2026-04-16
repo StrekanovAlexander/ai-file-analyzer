@@ -41,15 +41,34 @@ var
   AnalysisRecord: TAnalysisRecord;
   KeywordsStr: string;
 begin
-  Prompt := GetAnalysisPrompt + FileContent;
+  Prompt := GetAnalysisPrompt2 + FileContent;
   OutputStr := RunPrompt(Prompt);
   AnalysisRecord.Summary := ExtractField(OutputStr, FIELD_SUMMARY);
   AnalysisRecord.Topic := ExtractField(OutputStr, FIELD_TOPIC);
   KeywordsStr := ExtractField(OutputStr, FIELD_KEYWORDS);
   AnalysisRecord.Keywords := SplitString(KeywordsStr, ',');
+  AnalysisRecord.Insight := ExtractField(OutputStr, FIELD_INSIGHT);
   Result := AnalysisRecord;
 end;
 
+function TAIModel.RunPrompt(Prompt: string): string;
+var
+  CmdLine: string;
+begin
+  // sanitize prompt
+  Prompt := StringReplace(Prompt, '"', '\"', [rfReplaceAll]);
+  Prompt := StringReplace(Prompt, sLineBreak, ' ', [rfReplaceAll]);
+
+  CmdLine := Format(
+    '"%s" --model "%s" --prompt "%s" --n_predict 160 --temp 0.3',
+    [FLlamaPath, FModelPath, Prompt]
+  );
+
+  Result := CLIRunner.RunCommand(CmdLine);
+end;
+
+{
+Base Version
 function TAIModel.RunPrompt(Prompt: string): string;
 var
   CmdLine: string;
@@ -60,19 +79,6 @@ begin
   );
   Result := CLIRunner.RunCommand(CmdLine);
 end;
-
-{
-  EXAMPLE
-  FileUnit := TFileUnit.Create(FilePath);
-  try
-    FileContent := FileUnit.GetFileContent;
-    AnalysisRecord := FAIModel.AnalyzeContent(FileContent);
-    MemoOutput.Lines.Add('Topic: ' + AnalysisRecord.Topic);
-    MemoOutput.Lines.Add('Summary: ' + AnalysisRecord.Summary);
-    MemoOutput.Lines.Add('Keywords: ' + JoinString(AnalysisRecord.Keywords, ', '));
-  finally
-    FileUnit.Free;
-  end;
 }
 
 end.

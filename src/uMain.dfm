@@ -205,7 +205,6 @@ object fmMain: TfmMain
         Text = 'Analysing: 0'
         Width = 100
       end>
-    ExplicitTop = 641
   end
   object lvwMain: TListView
     AlignWithMargins = True
@@ -253,8 +252,14 @@ object fmMain: TfmMain
         Width = 100
       end
       item
+        Caption = 'Insight'
+        Width = 100
+      end
+      item
         AutoSize = True
         Caption = 'Folder'
+        WidthType = (
+          -47)
       end>
     GridLines = True
     ReadOnly = True
@@ -266,7 +271,6 @@ object fmMain: TfmMain
     OnColumnClick = lvwMainColumnClick
     OnCompare = lvwMainCompare
     OnDblClick = lvwMainDblClick
-    ExplicitHeight = 494
   end
   object pnlTools: TPanel
     Left = 0
@@ -471,9 +475,6 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 8
       OnClick = btnPreviewClick
-      ExplicitLeft = 672
-      ExplicitTop = 8
-      ExplicitHeight = 25
     end
   end
   object svgBtns: TSVGIconImageList

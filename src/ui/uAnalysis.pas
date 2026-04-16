@@ -142,7 +142,8 @@ begin
           FileItem.Status := fsDone;
           FileItem.Topic := AnalysisRecord.Topic;
           FileItem.Summary := AnalysisRecord.Summary;
-          FileItem.Keywords := JoinString(AnalysisRecord.Keywords, ', ');
+          FileItem.Insight := AnalysisRecord.Insight;
+          FileItem.Keywords := RemoveAllQuotes(JoinString(AnalysisRecord.Keywords, ', '));
 
           TThread.Synchronize(nil,
             procedure
@@ -158,6 +159,7 @@ begin
         LogText :=
           'Topic: ' + FileItem.Topic + sLineBreak +
           'Summary: ' + FileItem.Summary + sLineBreak +
+          'Insight: ' + FileItem.Insight + sLineBreak +
           'Keywords: ' + FileItem.Keywords + sLineBreak;
 
         TThread.Synchronize(nil,

@@ -329,6 +329,7 @@ begin
     Item.SubItems[4] := AFileItem.Topic;
     Item.SubItems[5] := AFileItem.Keywords;
     Item.SubItems[6] := AFileItem.Summary;
+    Item.SubItems[7] := AFileItem.Insight;
     Item.Update;
     Exit;
   end;
@@ -369,21 +370,22 @@ begin
     SaveDialog.FileTypes.Add.DisplayName := 'CSV files';
     if not SaveDialog.Execute then
       Exit;
-    StringList.Add('File,Size,Extension,Modified,Status,Topic,Keywords,Summary,Folder');
+    StringList.Add('File,Size,Extension,Modified,Status,Topic,Keywords,Summary,Insight,Folder');
     for var I := 0 to lvwMain.Items.Count - 1 do
     begin
       ListItem := lvwMain.Items[I];
       Line :=
-        '"' + ListItem.Caption + '",' +
-        '"' + ListItem.SubItems[0] + '",' +
-        '"' + ListItem.SubItems[1] + '",' +
-        '"' + ListItem.SubItems[2] + '",' +
-        '"' + ListItem.SubItems[3] + '",' +
-        '"' + ListItem.SubItems[4] + '",' +
-        '"' + ListItem.SubItems[5] + '",' +
-        '"' + ListItem.SubItems[6] + '",' +
-        '"' + ListItem.SubItems[7] + '"';
-      StringList.Add(Line);
+        '"' + EscapeCSV(ListItem.Caption) + '",' +
+        '"' + EscapeCSV(ListItem.SubItems[0]) + '",' +
+        '"' + EscapeCSV(ListItem.SubItems[1]) + '",' +
+        '"' + EscapeCSV(ListItem.SubItems[2]) + '",' +
+        '"' + EscapeCSV(ListItem.SubItems[3]) + '",' +
+        '"' + EscapeCSV(ListItem.SubItems[4]) + '",' +
+        '"' + EscapeCSV(NormalizeKeywords(ListItem.SubItems[5])) + '",' +
+        '"' + EscapeCSV(ListItem.SubItems[6]) + '",' +
+        '"' + EscapeCSV(ListItem.SubItems[7]) + '",' +
+        '"' + EscapeCSV(ListItem.SubItems[8]) + '"';
+        StringList.Add(Line);
     end;
     StringList.SaveToFile(SaveDialog.FileName, TEncoding.UTF8);
   finally
@@ -432,7 +434,8 @@ begin
         KeywordsArray.Add(CleanQuotes(K));
       JsonObject.AddPair('keywords', KeywordsArray);
       JsonObject.AddPair('summary', ListItem.SubItems[6]);
-      JsonObject.AddPair('folder', ListItem.SubItems[7]);
+      JsonObject.AddPair('insight', ListItem.SubItems[7]);
+      JsonObject.AddPair('folder', ListItem.SubItems[8]);
       JsonArray.AddElement(JsonObject);
     end;
     TFile.WriteAllText(

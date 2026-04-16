@@ -8,15 +8,19 @@ uses
 
 const FIELD_TOPIC = 'TOPIC:';
 const FIELD_SUMMARY = 'SUMMARY:';
+const FIELD_INSIGHT = 'INSIGHT:';
 const FIELD_KEYWORDS = 'KEYWORDS:';
 
 function ExtractField(const Source: string; const Field: string): string;
 function JoinString(const Arr: TArray<string>; const Delimiter: string): string;
 function SplitString(const S, Delimiter: string): TArray<string>;
 function CleanQuotes(const S: string): string;
+function RemoveAllQuotes(const S: string): string;
 function FileStatusToStr(FileStatus: TFileStatus): string;
-
 function GetAnalysisPrompt: string;
+function GetAnalysisPrompt2: string;
+function EscapeCSV(const S: string): string;
+function NormalizeKeywords(const S: string): string;
 
 implementation
 
@@ -59,6 +63,11 @@ function CleanQuotes(const S: string): string;
 begin
   Result := Trim(S);
   Result := Result.Replace('"', '');
+end;
+
+function RemoveAllQuotes(const S: string): string;
+begin
+  Result := StringReplace(S, '"', '', [rfReplaceAll]);
 end;
 
 function ExtractField(const Source: string; const Field: string): string;
@@ -105,6 +114,31 @@ begin
     sLineBreak;
 end;
 
+
+function GetAnalysisPrompt2: string;
+begin
+  Result :=
+    'Analyze the following text and extract information.' + sLineBreak +
+    sLineBreak +
+    'Return EXACTLY 4 lines:' + sLineBreak +
+    FIELD_SUMMARY + ' <one concise sentence (up to 20 words) describing the main point or conclusion>' + sLineBreak +
+    FIELD_TOPIC + ' <1-5 words, specific and descriptive>' + sLineBreak +
+    FIELD_KEYWORDS + ' <3-7 specific keywords, comma-separated>' + sLineBreak +
+    FIELD_INSIGHT + ' <one short sentence describing the key takeaway or implication>' + sLineBreak +
+    sLineBreak +
+    'Rules:' + sLineBreak +
+    '- Do not change field names (SUMMARY, TOPIC, KEYWORDS, INSIGHT)' + sLineBreak +
+    '- Each field must be on one line' + sLineBreak +
+    '- Keep output concise but meaningful' + sLineBreak +
+    '- Avoid generic terms and vague language' + sLineBreak +
+    '- Avoid overly generic topics like "Finance", "Technology", "Data"' + sLineBreak +
+    '- Focus on the main point or outcome, not just general description' + sLineBreak +
+    '- Insight must provide a meaningful takeaway, not repeat the summary' + sLineBreak +
+    '- Prefer specific keyword phrases over single generic words' + sLineBreak +
+    '- Do not write anything else' + sLineBreak +
+    sLineBreak;
+end;
+
 function FileStatusToStr(FileStatus: TFileStatus): string;
 begin
   case FileStatus of
@@ -114,6 +148,16 @@ begin
     fsError: Result := 'Error';
     fsSkipped: Result := 'Skipped';
   end;
+end;
+
+function EscapeCSV(const S: string): string;
+begin
+  Result := StringReplace(S, '"', '""', [rfReplaceAll]);
+end;
+
+function NormalizeKeywords(const S: string): string;
+begin
+  Result := StringReplace(S, ',', ';', [rfReplaceAll]);
 end;
 
 end.

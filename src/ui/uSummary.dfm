@@ -50,7 +50,6 @@ object fmSummary: TfmSummary
     Margins.Top = 15
     Align = alTop
     Caption = 'lblStatus'
-    ExplicitTop = 45
     ExplicitWidth = 45
   end
   object lblTopic: TLabel
@@ -62,7 +61,6 @@ object fmSummary: TfmSummary
     Margins.Top = 15
     Align = alTop
     Caption = 'lblTopic'
-    ExplicitTop = 78
     ExplicitWidth = 41
   end
   object lblSummary: TLabel
@@ -74,19 +72,18 @@ object fmSummary: TfmSummary
     Align = alTop
     Caption = 'lblSummary'
     WordWrap = True
-    ExplicitTop = 99
     ExplicitWidth = 64
   end
   object lblKeywords: TLabel
     AlignWithMargins = True
     Left = 3
-    Top = 174
+    Top = 195
     Width = 618
     Height = 15
     Align = alTop
     Caption = 'lblKeywords'
     WordWrap = True
-    ExplicitTop = 120
+    ExplicitTop = 174
     ExplicitWidth = 64
   end
   object lblLastModified: TLabel
@@ -107,9 +104,17 @@ object fmSummary: TfmSummary
     Height = 15
     Align = alTop
     Caption = 'lblSize'
+    ExplicitWidth = 33
+  end
+  object lblInsight: TLabel
+    AlignWithMargins = True
+    Left = 3
+    Top = 174
+    Width = 618
+    Height = 15
+    Align = alTop
+    Caption = 'lblInsight'
     ExplicitLeft = 8
-    ExplicitTop = 59
-    ExplicitWidth = 624
   end
   object btnOK: TBitBtn
     Left = 280

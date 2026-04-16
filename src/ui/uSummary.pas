@@ -19,6 +19,7 @@ type
     btnOK: TBitBtn;
     lblLastModified: TLabel;
     lblSize: TLabel;
+    lblInsight: TLabel;
     procedure FormShow(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
   private
@@ -62,6 +63,7 @@ begin
   begin
     lblTopic.Caption := Format('Topic: %s', [FFileItem.Topic]);
     lblSummary.Caption := Format('Summary: %s', [FFileItem.Summary]);
+    lblInsight.Caption := Format('Insight: %s', [FFileItem.Insight]);
     Keywords := StringReplace(FFileItem.Keywords, '"', '', [rfReplaceAll]);
     lblKeywords.Caption := 'Keywords: ' + StringReplace(
       Keywords, ',', ', ', [rfReplaceAll]

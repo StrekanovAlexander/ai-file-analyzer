@@ -20,6 +20,7 @@ type TFileItem = class
     FTopic: string;
     FSummary: string;
     FKeywords: string;
+    FInsight: string;
     function IsSupportedExt(const Ext: string): Boolean;
   public
     constructor Create(const APath: string);
@@ -34,6 +35,7 @@ type TFileItem = class
     property Topic: string read FTopic write FTopic;
     property Summary: string read FSummary write FSummary;
     property Keywords: string read FKeywords write FKeywords;
+    property Insight: string read FInsight write FInsight;
 end;
 
 implementation
@@ -55,6 +57,7 @@ begin
   FTopic := '';
   FSummary := '';
   FKeywords := '';
+  FInsight := '';
 end;
 
 function TFileItem.IsSupportedExt(const Ext: string): Boolean;

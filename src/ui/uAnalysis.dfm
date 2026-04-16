@@ -28,8 +28,6 @@ object fmAnalysis: TfmAnalysis
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
-    ExplicitTop = 224
-    ExplicitHeight = 190
   end
   object pnlTop: TPanel
     Left = 5
@@ -90,24 +88,20 @@ object fmAnalysis: TfmAnalysis
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 3
-    ExplicitTop = 49
     object lblStatus: TLabel
       AlignWithMargins = True
       Left = 3
       Top = 3
-      Width = 45
+      Width = 35
       Height = 15
       Align = alLeft
       Caption = 'Status:'
-      ExplicitLeft = 4
-      ExplicitTop = 4
-      ExplicitHeight = 33
     end
     object lblProgress: TLabel
       AlignWithMargins = True
-      Left = 704
+      Left = 723
       Top = 3
-      Width = 67
+      Width = 48
       Height = 15
       Align = alRight
       Alignment = taRightJustify
@@ -124,7 +118,6 @@ object fmAnalysis: TfmAnalysis
     Margins.Right = 0
     Align = alTop
     TabOrder = 4
-    ExplicitTop = 99
   end
   object svgBtns: TSVGIconImageList
     SVGIconItems = <
