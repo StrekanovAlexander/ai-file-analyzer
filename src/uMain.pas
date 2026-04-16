@@ -12,7 +12,9 @@ uses
   uGlobal, uConsts, uCLIRunner,
   uFolderScanner, uFileItem, uFileFilter,
   uFileListController, uStringUtils,
-  uViewer, uAnalysis, uWait, uAbout;
+  uViewer, uAnalysis,
+  uSummary,
+  uWait, uAbout;
 
 type
   TfmMain = class(TForm)
@@ -46,6 +48,7 @@ type
     chkJson: TCheckBox;
     chkOdt: TCheckBox;
     chkUnsupported: TCheckBox;
+    btnPreview: TBitBtn;
     procedure btnAnalyseClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -58,6 +61,7 @@ type
     procedure btnAboutClick(Sender: TObject);
     procedure btnBrowseClick(Sender: TObject);
     procedure btnSaveClick(Sender: TObject);
+    procedure btnPreviewClick(Sender: TObject);
   private
     FFolderScanner: TFolderScanner;
     FFileListController: TFileListController;
@@ -137,6 +141,26 @@ begin
   end;
 end;
 
+procedure TfmMain.btnPreviewClick(Sender: TObject);
+var
+  Item: TListItem;
+  FileItem: TFileItem;
+begin
+  if IsListViewEmpty then
+    Exit;
+  Item := lvwMain.Selected;
+  if not Assigned(Item) then Exit;
+  FileItem := TFileItem(Item.Data);
+  if not Assigned(FileItem) then Exit;
+  if FileItem.Status = fsSkipped then Exit;
+  fmViewer := TfmViewer.Create(nil, FileItem);
+  try
+    fmViewer.ShowModal;
+  finally
+    fmViewer.Free;
+  end;
+end;
+
 procedure TfmMain.btnSaveClick(Sender: TObject);
 begin
   if IsListViewEmpty then
@@ -204,20 +228,21 @@ procedure TfmMain.lvwMainDblClick(Sender: TObject);
 var
   Item: TListItem;
   FileItem: TFileItem;
+  fmSummary: TfmSummary;
 begin
   if IsListViewEmpty then
     Exit;
-  Item := lvwMain.Selected;
-  if not Assigned(Item) then Exit;
-  FileItem := TFileItem(Item.Data);
-  if not Assigned(FileItem) then Exit;
-  if FileItem.Status = fsSkipped then Exit;
-  fmViewer := TfmViewer.Create(nil, FileItem);
-  try
-    fmViewer.ShowModal;
-  finally
-    fmViewer.Free;
-  end;
+    Item := lvwMain.Selected;
+    if not Assigned(Item) then Exit;
+    FileItem := TFileItem(Item.Data);
+    if not Assigned(FileItem) then Exit;
+    if not FileItem.IsSupported then Exit;
+    fmSummary := TfmSummary.Create(nil, FileItem);
+    try
+      fmSummary.ShowModal;
+    finally
+      fmSummary.Free;
+    end;
 end;
 
 procedure TfmMain.OnScanDone(Sender: TObject; var FileItemList: TObjectList<TFileItem>);

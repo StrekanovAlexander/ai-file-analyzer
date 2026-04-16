@@ -41,7 +41,7 @@ end;
 procedure TfmViewer.OnFileReadDone(Sender: TObject; FileContent: string);
 begin
   if FIsClosing then Exit;
-  memoContent.Lines.Text := FileContent;
+  memoContent.Lines.Text := FFileItem.FileName + sLineBreak + sLineBreak + FileContent;;
 end;
 
 procedure TfmViewer.FormDestroy(Sender: TObject);

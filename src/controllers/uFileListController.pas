@@ -78,6 +78,12 @@ begin
           Inc(FFilesForAnalyseCount);
       end;
     end;
+    if FListView.Items.Count > 0 then
+    begin
+      FListView.ItemIndex := 0;
+      FListView.Selected := FListView.Items[0];
+      FListView.Items[0].MakeVisible(False);
+    end;
   finally
     FListView.Items.EndUpdate;
   end;
@@ -111,8 +117,8 @@ end;
 
 procedure TFileListController.UpdateStatusBar;
 begin
-  FStatusBar.Panels[0].Text := Format('Files: %d', [FListView.Items.Count]);
-  FStatusBar.Panels[1].Text := Format('Files for analyse: %d', [FFilesForAnalyseCount]);
+  FStatusBar.Panels[0].Text := Format('All Files: %d', [FListView.Items.Count]);
+  FStatusBar.Panels[1].Text := Format('Analysing: %d', [FFilesForAnalyseCount]);
 end;
 
 procedure TFileListController.OnDraw(Sender: TCustomListView; Item: TListItem;

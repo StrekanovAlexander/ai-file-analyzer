@@ -24,7 +24,8 @@ uses
   uFileFilter in 'src\core\uFileFilter.pas',
   uViewer in 'src\ui\uViewer.pas' {fmViewer},
   uAnalysis in 'src\ui\uAnalysis.pas' {fmAnalysis},
-  uAbout in 'src\ui\uAbout.pas' {fmAbout};
+  uAbout in 'src\ui\uAbout.pas' {fmAbout},
+  uSummary in 'src\ui\uSummary.pas' {fmSummary};
 
 var
   hMutex: THandle;
@@ -44,5 +45,6 @@ begin
   Application.CreateForm(TfmViewer, fmViewer);
   Application.CreateForm(TfmAnalysis, fmAnalysis);
   Application.CreateForm(TfmAbout, fmAbout);
+  Application.CreateForm(TfmSummary, fmSummary);
   Application.Run;
 end.

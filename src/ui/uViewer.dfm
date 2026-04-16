@@ -28,7 +28,5 @@ object fmViewer: TfmViewer
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
-    ExplicitWidth = 458
-    ExplicitHeight = 595
   end
 end

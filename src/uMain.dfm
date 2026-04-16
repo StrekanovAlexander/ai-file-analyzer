@@ -2,7 +2,7 @@ object fmMain: TfmMain
   Left = 0
   Top = 0
   Caption = 'AI File Analyzer v1.0'
-  ClientHeight = 663
+  ClientHeight = 711
   ClientWidth = 984
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -192,26 +192,27 @@ object fmMain: TfmMain
   object stbMain: TStatusBar
     AlignWithMargins = True
     Left = 3
-    Top = 641
+    Top = 689
     Width = 978
     Height = 19
     Enabled = False
     Panels = <
       item
-        Text = 'Files: 0'
+        Text = 'All Files: 0'
         Width = 100
       end
       item
-        Text = 'Files for analyse: 0'
+        Text = 'Analysing: 0'
         Width = 100
       end>
+    ExplicitTop = 641
   end
   object lvwMain: TListView
     AlignWithMargins = True
     Left = 1
     Top = 141
     Width = 982
-    Height = 494
+    Height = 542
     Margins.Left = 1
     Margins.Right = 1
     Align = alClient
@@ -265,7 +266,7 @@ object fmMain: TfmMain
     OnColumnClick = lvwMainColumnClick
     OnCompare = lvwMainCompare
     OnDblClick = lvwMainDblClick
-    ExplicitLeft = -4
+    ExplicitHeight = 494
   end
   object pnlTools: TPanel
     Left = 0
@@ -275,7 +276,6 @@ object fmMain: TfmMain
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 4
-    ExplicitTop = 142
     object Shape2: TShape
       AlignWithMargins = True
       Left = 775
@@ -390,9 +390,6 @@ object fmMain: TfmMain
       Images = svgBtns
       TabOrder = 1
       OnClick = btnSaveClick
-      ExplicitLeft = 884
-      ExplicitTop = 6
-      ExplicitHeight = 30
     end
     object cbExport: TComboBox
       Left = 779
@@ -461,6 +458,23 @@ object fmMain: TfmMain
       TabOrder = 7
       OnClick = chkUnsupportedClick
     end
+    object btnPreview: TBitBtn
+      AlignWithMargins = True
+      Left = 669
+      Top = 3
+      Width = 100
+      Height = 29
+      Align = alRight
+      Caption = 'Preview'
+      ImageIndex = 5
+      ImageName = 'preview'
+      Images = svgBtns
+      TabOrder = 8
+      OnClick = btnPreviewClick
+      ExplicitLeft = 672
+      ExplicitTop = 8
+      ExplicitHeight = 25
+    end
   end
   object svgBtns: TSVGIconImageList
     SVGIconItems = <
@@ -509,10 +523,23 @@ object fmMain: TfmMain
           'h d="M18,15v3H6v-3H4v3c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2v-3H18z' +
           ' M17,11l-1.41-1.41L13,12.17V4h-2v8.17L8.41,9.59L7,11l5,5 L17,11z' +
           '"/></g></svg>'
+      end
+      item
+        IconName = 'preview'
+        SVGText = 
+          '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0' +
+          ' 0 24 24" width="24px" fill="#1f1f1f"><path d="M0 0h24v24H0V0z" ' +
+          'fill="none"/><path d="M12 6.5c3.79 0 7.17 2.13 8.82 5.5-1.65 3.3' +
+          '7-5.02 5.5-8.82 5.5S4.83 15.37 3.18 12C4.83 8.63 8.21 6.5 12 6.5' +
+          'm0-2C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.' +
+          '5c-1.73-4.39-6-7.5-11-7.5zm0 5c1.38 0 2.5 1.12 2.5 2.5s-1.12 2.5' +
+          '-2.5 2.5-2.5-1.12-2.5-2.5 1.12-2.5 2.5-2.5m0-2c-2.48 0-4.5 2.02-' +
+          '4.5 4.5s2.02 4.5 4.5 4.5 4.5-2.02 4.5-4.5-2.02-4.5-4.5-4.5z"/></' +
+          'svg>'
       end>
     Scaled = True
-    Left = 675
-    Top = 501
+    Left = 763
+    Top = 181
   end
   object svgExts: TSVGIconImageList
     Size = 20
@@ -583,7 +610,7 @@ object fmMain: TfmMain
         FixedColor = clSilver
       end>
     Scaled = True
-    Left = 128
-    Top = 528
+    Left = 40
+    Top = 184
   end
 end
